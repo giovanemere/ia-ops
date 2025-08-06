@@ -1,0 +1,282 @@
+# =============================================================================
+# BACKSTAGE PROXY CONFIGURATION - OPENAI INTEGRATION
+# =============================================================================
+# Descripción: Configuración del proxy de Backstage para integración con OpenAI
+# Versión: 1.0.0
+
+proxy:
+  # =============================================================================
+  # OPENAI SERVICE PROXY
+  # =============================================================================
+  '/openai':
+    target: ${OPENAI_SERVICE_URL}
+    changeOrigin: true
+    pathRewrite:
+      '^/api/proxy/openai': ''
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+      Content-Type: application/json
+      X-Forwarded-For: $remote_addr
+      X-Forwarded-Proto: $scheme
+      X-Forwarded-Host: $host
+    timeout: ${OPENAI_TIMEOUT}000  # Convert to milliseconds
+    secure: false
+    logLevel: ${LOG_LEVEL}
+    
+  # OpenAI Health Check
+  '/openai/health':
+    target: ${OPENAI_SERVICE_URL}/health
+    changeOrigin: true
+    timeout: 5000
+    
+  # OpenAI Models Endpoint
+  '/openai/models':
+    target: ${OPENAI_SERVICE_URL}/models
+    changeOrigin: true
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+    
+  # OpenAI Chat Completions
+  '/openai/chat/completions':
+    target: ${OPENAI_SERVICE_URL}/chat/completions
+    changeOrigin: true
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+      Content-Type: application/json
+    timeout: ${OPENAI_TIMEOUT}000
+
+  # =============================================================================
+  # ADDITIONAL SERVICES
+  # =============================================================================
+  
+  # Proxy Service Health Check
+  '/proxy-health':
+    target: ${PROXY_SERVICE_URL}/health
+    changeOrigin: true
+    timeout: 5000
+    
+  # Monitoring Services
+  '/prometheus':
+    target: ${PROMETHEUS_URL}
+    changeOrigin: true
+    secure: false
+    
+  '/grafana':
+    target: ${GRAFANA_URL}
+    changeOrigin: true
+    secure: false
+
+# =============================================================================
+# PROXY MIDDLEWARE CONFIGURATION
+# =============================================================================
+
+middleware:
+  # Rate Limiting
+  rateLimit:
+    windowMs: ${RATE_LIMIT_WINDOW}000  # Convert minutes to milliseconds
+    max: ${RATE_LIMIT_MAX_REQUESTS}
+    message: "Too many requests from this IP"
+    standardHeaders: true
+    legacyHeaders: false
+    
+  # CORS Configuration
+  cors:
+    origin: 
+      - ${BACKSTAGE_BASE_URL}
+      - ${BACKSTAGE_FRONTEND_URL}
+      - http://localhost:3000
+      - http://localhost:7007
+      - http://localhost:8080
+    methods: 
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allowedHeaders:
+      - Content-Type
+      - Authorization
+      - X-Requested-With
+      - Accept
+      - Origin
+    credentials: true
+    maxAge: 86400  # 24 hours
+    
+  # Security Headers
+  security:
+    contentSecurityPolicy:
+      directives:
+        defaultSrc: ["'self'"]
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"]
+        styleSrc: ["'self'", "'unsafe-inline'"]
+        imgSrc: ["'self'", "data:", "https:"]
+        connectSrc: ["'self'", "ws:", "wss:", "http:", "https:"]
+        fontSrc: ["'self'", "https:", "data:"]
+        objectSrc: ["'none'"]
+        mediaSrc: ["'self'"]
+        frameSrc: ["'none'"]
+    hsts:
+      maxAge: 31536000
+      includeSubDomains: true
+      preload: true
+    noSniff: true
+    frameguard:
+      action: 'deny'
+    xssFilter: true
+    
+  # Request/Response Logging
+  logging:
+    level: ${LOG_LEVEL}
+    format: 'combined'
+    skip: (req, res) => res.statusCode < 400
+    
+  # Request Timeout
+  timeout: ${PROXY_TIMEOUT}000  # Convert to milliseconds
+
+# =============================================================================
+# ERROR HANDLING
+# =============================================================================
+
+errorHandling:
+  # Custom error pages
+  404:
+    message: "API endpoint not found"
+    redirect: "/docs"
+    
+  500:
+    message: "Internal server error"
+    logError: true
+    
+  502:
+    message: "Service temporarily unavailable"
+    retry: true
+    retryDelay: 1000
+    maxRetries: 3
+    
+  timeout:
+    message: "Request timeout"
+    statusCode: 504
+
+# =============================================================================
+# HEALTH CHECKS
+# =============================================================================
+
+healthChecks:
+  enabled: true
+  interval: 30000  # 30 seconds
+  timeout: 5000    # 5 seconds
+  
+  services:
+    openai:
+      url: ${OPENAI_SERVICE_URL}/health
+      method: GET
+      expectedStatus: 200
+      
+    postgres:
+      url: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      type: database
+      
+    redis:
+      url: redis://${REDIS_HOST}:${REDIS_PORT}
+      type: cache
+
+# =============================================================================
+# CACHING
+# =============================================================================
+
+caching:
+  enabled: true
+  defaultTTL: 300  # 5 minutes
+  
+  rules:
+    # Cache OpenAI models list for longer
+    '/openai/models':
+      ttl: 3600  # 1 hour
+      
+    # Don't cache chat completions
+    '/openai/chat/completions':
+      ttl: 0
+      
+    # Cache health checks briefly
+    '/health':
+      ttl: 30  # 30 seconds
+
+# =============================================================================
+# MONITORING & METRICS
+# =============================================================================
+
+monitoring:
+  enabled: true
+  
+  metrics:
+    # Request metrics
+    requests:
+      total: true
+      duration: true
+      size: true
+      
+    # Response metrics  
+    responses:
+      total: true
+      duration: true
+      size: true
+      status: true
+      
+    # Service-specific metrics
+    openai:
+      requests: true
+      tokens: true
+      errors: true
+      latency: true
+      
+  # Prometheus metrics endpoint
+  prometheus:
+    enabled: true
+    endpoint: '/metrics'
+    
+  # Custom labels
+  labels:
+    service: 'backstage-proxy'
+    environment: ${NODE_ENV}
+    version: ${PROJECT_VERSION}
+
+# =============================================================================
+# DEVELOPMENT SETTINGS
+# =============================================================================
+
+development:
+  # Enable detailed logging in development
+  verbose: ${DEBUG_MODE}
+  
+  # Mock responses when services are unavailable
+  mockResponses:
+    enabled: ${OPENAI_DEMO_MODE}
+    
+    '/openai/chat/completions':
+      status: 200
+      body:
+        id: "chatcmpl-mock-123"
+        object: "chat.completion"
+        created: 1234567890
+        model: ${OPENAI_MODEL}
+        choices:
+          - index: 0
+            message:
+              role: "assistant"
+              content: "[MOCK] This is a mock response for development"
+            finish_reason: "stop"
+        usage:
+          prompt_tokens: 10
+          completion_tokens: 20
+          total_tokens: 30
+          
+    '/openai/models':
+      status: 200
+      body:
+        object: "list"
+        data:
+          - id: ${OPENAI_MODEL}
+            object: "model"
+            created: 1234567890
+            owned_by: "openai"

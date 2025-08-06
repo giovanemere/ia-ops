@@ -1,0 +1,174 @@
+app:
+  title: IA-Ops Platform
+  baseUrl: http://localhost:3000
+  support:
+    url: https://github.com/tu-organizacion/ia-ops/issues
+    items:
+      - title: Issues
+        icon: github
+        links:
+          - url: https://github.com/tu-organizacion/ia-ops/issues
+            title: GitHub Issues
+
+organization:
+  name: IA-Ops Organization
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+    host: 0.0.0.0
+  csp:
+    connect-src: ["'self'", 'http:', 'https:', 'ws:', 'wss:']
+    img-src: ["'self'", 'data:', 'https:']
+  cors:
+    origin: 
+      - http://localhost:3000
+      - http://localhost:7007
+      - http://localhost:8080
+      - ${BACKSTAGE_BASE_URL}
+      - ${BACKSTAGE_FRONTEND_URL}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  
+  # Database configuration for PostgreSQL
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+      ssl: false
+  
+  # Cache configuration for Redis
+  cache:
+    store: redis
+    connection: redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+proxy:
+  endpoints:
+    '/openai':
+      target: ${OPENAI_SERVICE_URL}
+      changeOrigin: true
+      headers:
+        Authorization: Bearer ${OPENAI_API_KEY}
+    
+    '/proxy-health':
+      target: http://proxy-service:8080/health
+      changeOrigin: true
+    
+    '/prometheus':
+      target: http://prometheus:9090
+      changeOrigin: true
+    
+    '/grafana':
+      target: http://grafana:3001
+      changeOrigin: true
+
+# Reference documentation http://backstage.io/docs/features/techdocs/configuration
+# Note: After experimenting with basic setup, use CI/CD to generate docs
+# and an external cloud storage when deploying TechDocs for production use-case.
+# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+techdocs:
+  builder: 'local' # Alternatives - 'external'
+  generator:
+    runIn: 'local' # Alternatives - 'docker'
+  publisher:
+    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
+auth:
+  environment: development
+  session:
+    secret: ${BACKEND_SECRET}
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+            - resolver: emailMatchingUserEntityProfileEmail
+            - resolver: emailLocalPartMatchingUserEntityName
+
+scaffolder:
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  defaultAuthor:
+    name: IA-Ops Platform
+    email: devops@ia-ops.local
+  defaultCommitMessage: 'Initial commit from Backstage Scaffolder'
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Domain]
+  locations:
+    # Local example data, file locations are relative to the backend process, typically `packages/backend`
+    - type: file
+      target: ../../examples/entities.yaml
+
+    # Local example template
+    - type: file
+      target: ../../examples/template/template.yaml
+      rules:
+        - allow: [Template]
+
+    # Local example organizational data
+    - type: file
+      target: ../../examples/org.yaml
+      rules:
+        - allow: [User, Group]
+
+    # Catálogo principal del proyecto
+    - type: file
+      target: ../../catalog-info.yaml
+    
+    # Ubicaciones remotas
+    - type: url
+      target: ${CATALOG_LOCATIONS}
+  
+  providers:
+    github:
+      providerId:
+        organization: ${GITHUB_ORG}
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: http://localhost:8001
+          name: local-cluster
+          authProvider: 'serviceAccount'
+          skipTLSVerify: true
+          skipMetricsLookup: false
+
+# Configuración de plugins adicionales
+enabled:
+  kubernetes: true
+  techdocs: true
+  scaffolder: true
+  catalog-import: true
+  api-docs: true
+  search: true

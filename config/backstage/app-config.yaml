@@ -1,0 +1,74 @@
+app:
+  title: IA-Ops Platform
+  baseUrl: ${BACKSTAGE_BASE_URL}
+
+organization:
+  name: IA-Ops Organization
+
+backend:
+  baseUrl: ${BACKSTAGE_BASE_URL}/api
+  listen:
+    port: 7007
+    host: 0.0.0.0
+  csp:
+    connect-src: ["'self'", 'http:', 'https:', 'ws:', 'wss:']
+  cors:
+    origin: 
+      - ${BACKSTAGE_BASE_URL}
+      - ${BACKSTAGE_FRONTEND_URL}
+      - http://localhost:8080
+      - http://localhost:3000
+      - http://localhost:7007
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location]
+  locations:
+    - type: file
+      target: ../../catalog-info.yaml
+    - type: url
+      target: ${CATALOG_LOCATIONS}
+
+proxy:
+  '/openai':
+    target: ${OPENAI_SERVICE_URL}
+    changeOrigin: true
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+      
+  '/proxy-health':
+    target: http://proxy-service:8080/health
+    changeOrigin: true

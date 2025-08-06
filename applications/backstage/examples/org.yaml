@@ -1,0 +1,54 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Administrator
+  description: Administrador de la plataforma IA-Ops
+spec:
+  profile:
+    displayName: Administrator
+    email: admin@ia-ops.local
+    picture: https://avatars.githubusercontent.com/u/1?v=4
+  memberOf: [devops-team, platform-admins]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: developer
+  title: Developer
+  description: Desarrollador de la plataforma IA-Ops
+spec:
+  profile:
+    displayName: Developer
+    email: developer@ia-ops.local
+    picture: https://avatars.githubusercontent.com/u/2?v=4
+  memberOf: [devops-team]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-admins
+  title: Platform Administrators
+  description: Administradores de la plataforma con permisos completos
+spec:
+  type: team
+  profile:
+    displayName: Platform Administrators
+    email: platform-admins@ia-ops.local
+  parent: devops-team
+  children: []
+  members: [admin]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: devops-team
+  title: DevOps Team
+  description: Equipo de DevOps responsable de la plataforma IA-Ops
+spec:
+  type: team
+  profile:
+    displayName: DevOps Team
+    email: devops@ia-ops.local
+  children: [platform-admins]
+  members: [admin, developer]

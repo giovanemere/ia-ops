@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ia-ops
+  labels:
+    name: ia-ops
+    environment: development
+    project: ia-ops-platform
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ia-ops-config
+  namespace: ia-ops
+data:
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "backstage"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  OPENAI_SERVICE_HOST: "openai-service"
+  OPENAI_SERVICE_PORT: "8000"
+  BACKSTAGE_BACKEND_URL: "http://backstage:7007"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ia-ops-secrets
+  namespace: ia-ops
+type: Opaque
+stringData:
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "postgres123"
+  REDIS_PASSWORD: "redis123"
+  GITHUB_TOKEN: "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"
+  OPENAI_API_KEY: "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"
+  BACKEND_SECRET: "f6a09f6db3f1bc6241910cbe6402b979bff01ed41b4f4607fac1a6a7569114e1"

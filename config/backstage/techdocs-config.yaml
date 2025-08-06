@@ -1,0 +1,63 @@
+# =============================================================================
+# BACKSTAGE TECHDOCS CONFIGURATION
+# =============================================================================
+# Configuración completa para documentación técnica
+
+techdocs:
+  builder: 'local' # local, external
+  generator:
+    runIn: 'local' # local, docker
+    dockerImage: 'spotify/techdocs'
+    pullImage: true
+  publisher:
+    type: 'local' # local, googleGcs, awsS3, azureBlobStorage
+    local:
+      publishDirectory: '/tmp/techdocs'
+  cache:
+    ttl: 3600000 # 1 hour in milliseconds
+    readTimeout: 5000
+  
+  # Configuración adicional
+  requestUrl: http://localhost:7007/api/techdocs
+  storageUrl: http://localhost:7007/api/techdocs/static/docs
+  
+  # Configuración de MkDocs
+  mkdocs:
+    defaultPlugins:
+      - techdocs-core
+      - search
+      - mkdocs-material
+    
+    # Configuración del tema
+    theme:
+      name: material
+      palette:
+        primary: blue
+        accent: blue
+      features:
+        - navigation.tabs
+        - navigation.sections
+        - navigation.expand
+        - navigation.top
+        - search.highlight
+        - search.share
+    
+    # Plugins adicionales
+    plugins:
+      - search:
+          lang: 
+            - en
+            - es
+      - techdocs-core:
+          strict: false
+      - mkdocs-material/search
+    
+    # Configuración de Markdown
+    markdown_extensions:
+      - admonition
+      - codehilite
+      - pymdownx.superfences
+      - pymdownx.tabbed
+      - pymdownx.details
+      - toc:
+          permalink: true

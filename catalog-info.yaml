@@ -1,0 +1,148 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-platform
+  title: IA-Ops Platform
+  description: Plataforma integrada de IA y DevOps con Backstage
+  tags:
+    - platform
+    - ai
+    - devops
+    - backstage
+  annotations:
+    github.com/project-slug: tu-organizacion/ia-ops
+    backstage.io/techdocs-ref: dir:.
+spec:
+  owner: devops-team
+  domain: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-portal
+  title: Backstage Portal
+  description: Portal de desarrolladores basado en Backstage
+  tags:
+    - frontend
+    - portal
+    - react
+  annotations:
+    github.com/project-slug: tu-organizacion/ia-ops
+    backstage.io/techdocs-ref: dir:./applications/backstage
+spec:
+  type: website
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+  providesApis:
+    - backstage-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: openai-service
+  title: OpenAI Service
+  description: Servicio nativo de IA compatible con OpenAI API
+  tags:
+    - backend
+    - ai
+    - api
+    - fastapi
+  annotations:
+    github.com/project-slug: tu-organizacion/ia-ops
+    backstage.io/techdocs-ref: dir:./applications/openai-service
+spec:
+  type: service
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+  providesApis:
+    - openai-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: proxy-service
+  title: Proxy Service
+  description: Gateway y proxy para comunicación entre servicios
+  tags:
+    - backend
+    - proxy
+    - gateway
+    - nodejs
+  annotations:
+    github.com/project-slug: tu-organizacion/ia-ops
+    backstage.io/techdocs-ref: dir:./applications/proxy-service
+spec:
+  type: service
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+  dependsOn:
+    - component:backstage-portal
+    - component:openai-service
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: backstage-api
+  title: Backstage API
+  description: API del portal Backstage
+  tags:
+    - api
+    - rest
+spec:
+  type: openapi
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Backstage API
+      version: 1.0.0
+    paths:
+      /api/catalog/entities:
+        get:
+          summary: Get catalog entities
+          responses:
+            '200':
+              description: List of entities
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openai-api
+  title: OpenAI API
+  description: API compatible con OpenAI para servicios de IA
+  tags:
+    - api
+    - ai
+    - rest
+spec:
+  type: openapi
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: OpenAI Compatible API
+      version: 1.0.8
+    paths:
+      /chat/completions:
+        post:
+          summary: Create chat completion
+          responses:
+            '200':
+              description: Chat completion response
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: devops-team
+  title: DevOps Team
+  description: Equipo de DevOps responsable de la plataforma IA-Ops
+spec:
+  type: team
+  children: []

@@ -1,0 +1,14 @@
+{"level":"info","message":"🚀 IA-Ops Proxy Service started","timestamp":"2025-08-06T13:18:50.027Z"}
+{"level":"info","message":"📡 Server running on http://0.0.0.0:8080","timestamp":"2025-08-06T13:18:50.029Z"}
+{"level":"info","message":"🏛️ Backstage Frontend: undefined","timestamp":"2025-08-06T13:18:50.030Z"}
+{"level":"info","message":"🔧 Backstage Backend: undefined","timestamp":"2025-08-06T13:18:50.030Z"}
+{"level":"info","message":"🤖 OpenAI Service: undefined","timestamp":"2025-08-06T13:18:50.030Z"}
+{"level":"info","message":"📊 Rate Limit: 200 requests/15min","timestamp":"2025-08-06T13:18:50.031Z"}
+{"level":"info","message":"SIGINT received, shutting down gracefully","timestamp":"2025-08-06T13:22:30.821Z"}
+{"level":"info","message":"🚀 IA-Ops Proxy Service started","timestamp":"2025-08-06T13:27:23.572Z"}
+{"level":"info","message":"📡 Server running on http://0.0.0.0:8080","timestamp":"2025-08-06T13:27:23.574Z"}
+{"level":"info","message":"🏛️ Backstage Frontend: undefined","timestamp":"2025-08-06T13:27:23.574Z"}
+{"level":"info","message":"🔧 Backstage Backend: undefined","timestamp":"2025-08-06T13:27:23.575Z"}
+{"level":"info","message":"🤖 OpenAI Service: undefined","timestamp":"2025-08-06T13:27:23.575Z"}
+{"level":"info","message":"📊 Rate Limit: 200 requests/15min","timestamp":"2025-08-06T13:27:23.575Z"}
+{"level":"info","message":"SIGTERM received, shutting down gracefully","timestamp":"2025-08-06T13:27:33.420Z"}

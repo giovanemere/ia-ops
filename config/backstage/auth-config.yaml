@@ -1,0 +1,49 @@
+# =============================================================================
+# BACKSTAGE AUTHENTICATION CONFIGURATION
+# =============================================================================
+# Configuración específica para autenticación GitHub OAuth
+
+auth:
+  environment: development
+  session:
+    secret: ${BACKEND_SECRET}
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+            - resolver: emailMatchingUserEntityProfileEmail
+            - resolver: emailLocalPartMatchingUserEntityName
+
+# Configuración de permisos
+permission:
+  enabled: true
+  policy:
+    - resource: 'catalog-entity'
+      actions: ['read']
+      effect: allow
+    - resource: 'catalog-entity'
+      actions: ['create', 'update', 'delete']
+      effect: allow
+      conditions:
+        rule: IS_ENTITY_OWNER
+        resourceType: 'catalog-entity'
+        params:
+          claims: ['group:devops-team']
+
+# Configuración de usuarios y grupos
+catalog:
+  providers:
+    github:
+      providerId:
+        organization: ${GITHUB_ORG}
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
