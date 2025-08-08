@@ -1,0 +1,298 @@
+# =============================================================================
+# BACKSTAGE + OPENAI INTEGRATION CONFIGURATION
+# =============================================================================
+# Configuración de ejemplo para integrar OpenAI con Backstage
+# Usar junto con app-config.yaml principal
+
+app:
+  title: IA-Ops Platform
+  baseUrl: ${BACKSTAGE_BASE_URL}
+
+backend:
+  baseUrl: ${BACKSTAGE_BACKEND_URL}
+  
+  # Configuración del proxy para OpenAI
+  proxy:
+    '/openai':
+      target: ${OPENAI_SERVICE_URL}
+      changeOrigin: true
+      headers:
+        Authorization: 'Bearer ${OPENAI_API_KEY}'
+      pathRewrite:
+        '^/openai': ''
+
+# =============================================================================
+# OPENAI PLUGIN CONFIGURATION
+# =============================================================================
+openai:
+  # Configuración básica
+  apiKey: ${OPENAI_API_KEY}
+  baseUrl: ${OPENAI_API_BASE}
+  organization: ${OPENAI_ORG_ID}
+  project: ${OPENAI_PROJECT_ID}
+  
+  # Modelos
+  models:
+    chat: ${OPENAI_MODEL}
+    embeddings: ${OPENAI_EMBEDDINGS_MODEL}
+    code: ${OPENAI_CODE_MODEL}
+    docs: ${OPENAI_DOCS_MODEL}
+  
+  # Parámetros de generación
+  generation:
+    maxTokens: ${OPENAI_MAX_TOKENS}
+    temperature: ${OPENAI_TEMPERATURE}
+    topP: ${OPENAI_TOP_P}
+    frequencyPenalty: ${OPENAI_FREQUENCY_PENALTY}
+    presencePenalty: ${OPENAI_PRESENCE_PENALTY}
+  
+  # Configuración de servicio
+  service:
+    timeout: ${OPENAI_TIMEOUT}
+    maxRetries: ${OPENAI_MAX_RETRIES}
+    retryDelay: ${OPENAI_RETRY_DELAY}
+    rateLimit: ${OPENAI_RATE_LIMIT}
+  
+  # Funcionalidades
+  features:
+    functionCalling: ${OPENAI_FUNCTION_CALLING_ENABLED}
+    streaming: ${OPENAI_STREAMING_ENABLED}
+    embeddings: ${OPENAI_EMBEDDINGS_ENABLED}
+    moderation: ${OPENAI_MODERATION_ENABLED}
+    sentimentAnalysis: ${OPENAI_SENTIMENT_ANALYSIS_ENABLED}
+  
+  # Integración con Backstage
+  backstage:
+    enabled: ${OPENAI_BACKSTAGE_ENABLED}
+    proxyPath: ${OPENAI_BACKSTAGE_PROXY_PATH}
+    autoDocs: ${OPENAI_AUTO_DOCS_ENABLED}
+    codeAnalysis: ${OPENAI_CODE_ANALYSIS_ENABLED}
+    autoReadme: ${OPENAI_AUTO_README_ENABLED}
+    bestPractices: ${OPENAI_BEST_PRACTICES_ENABLED}
+  
+  # Base de conocimiento (RAG)
+  knowledgeBase:
+    enabled: ${OPENAI_KNOWLEDGE_BASE_ENABLED}
+    path: ${OPENAI_KNOWLEDGE_BASE_PATH}
+    updateInterval: ${OPENAI_KNOWLEDGE_BASE_UPDATE_INTERVAL}
+    contextSize: ${OPENAI_RAG_CONTEXT_SIZE}
+    topK: ${OPENAI_RAG_TOP_K}
+    similarityThreshold: ${OPENAI_RAG_SIMILARITY_THRESHOLD}
+  
+  # Prompts personalizados
+  prompts:
+    directory: ${OPENAI_PROMPTS_DIR}
+    codeAnalysis: ${OPENAI_CODE_ANALYSIS_PROMPT}
+    documentation: ${OPENAI_DOCS_PROMPT}
+    prReview: ${OPENAI_PR_REVIEW_PROMPT}
+  
+  # Seguridad
+  security:
+    piiFiltering: ${OPENAI_PII_FILTERING_ENABLED}
+    logEncryption: ${OPENAI_LOG_ENCRYPTION_ENABLED}
+    logRetention: ${OPENAI_LOG_RETENTION_DAYS}
+    audit: ${OPENAI_AUDIT_ENABLED}
+  
+  # Métricas y monitoreo
+  monitoring:
+    metrics: ${OPENAI_METRICS_ENABLED}
+    costTracking: ${OPENAI_COST_TRACKING_ENABLED}
+    dailyCostLimit: ${OPENAI_DAILY_COST_LIMIT}
+    usageAlerts: ${OPENAI_USAGE_ALERTS_ENABLED}
+    tokenAlertThreshold: ${OPENAI_TOKEN_ALERT_THRESHOLD}
+  
+  # Health check
+  healthCheck:
+    enabled: ${OPENAI_HEALTH_CHECK_ENABLED}
+    endpoint: ${OPENAI_HEALTH_CHECK_ENDPOINT}
+    interval: ${OPENAI_HEALTH_CHECK_INTERVAL}
+    timeout: ${OPENAI_HEALTH_CHECK_TIMEOUT}
+
+# =============================================================================
+# CATALOG CONFIGURATION
+# =============================================================================
+catalog:
+  providers:
+    github:
+      # Configuración existente de GitHub
+      providerId:
+        organization: ${GITHUB_ORG}
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: ${GITHUB_DEFAULT_BRANCH}
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+    
+    # Proveedor OpenAI para análisis automático
+    openai:
+      enabled: ${OPENAI_BACKSTAGE_ENABLED}
+      autoAnalysis: ${OPENAI_CODE_ANALYSIS_ENABLED}
+      autoDocumentation: ${OPENAI_AUTO_DOCS_ENABLED}
+      schedule:
+        frequency: { hours: 6 }
+        timeout: { minutes: 10 }
+
+# =============================================================================
+# TECHDOCS CONFIGURATION
+# =============================================================================
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+    local:
+      publishDirectory: './techdocs'
+  
+  # Integración con OpenAI para generación automática
+  openai:
+    enabled: ${OPENAI_AUTO_DOCS_ENABLED}
+    autoGenerate: true
+    updateOnPush: true
+    formats:
+      - markdown
+      - openapi
+    
+# =============================================================================
+# SCAFFOLDER CONFIGURATION
+# =============================================================================
+scaffolder:
+  # Plantillas con IA
+  openai:
+    enabled: ${OPENAI_BACKSTAGE_ENABLED}
+    templates:
+      - name: 'AI-Generated Microservice'
+        description: 'Genera un microservicio completo usando IA'
+        type: 'service'
+        parameters:
+          - title: 'Service Name'
+            type: 'string'
+            description: 'Nombre del servicio'
+          - title: 'Technology Stack'
+            type: 'string'
+            enum: ['nodejs', 'python', 'java', 'go']
+          - title: 'Features'
+            type: 'array'
+            items:
+              type: 'string'
+              enum: ['api', 'database', 'cache', 'messaging']
+
+# =============================================================================
+# SEARCH CONFIGURATION
+# =============================================================================
+search:
+  pg:
+    highlightOptions:
+      useHighlight: true
+      maxWord: 35
+      minWord: 15
+      shortWord: 3
+      highlightAll: false
+      maxFragments: 3
+      fragmentDelimiter: ' ... '
+  
+  # Búsqueda semántica con OpenAI
+  openai:
+    enabled: ${OPENAI_EMBEDDINGS_ENABLED}
+    model: ${OPENAI_EMBEDDINGS_MODEL}
+    indexing:
+      batchSize: 100
+      updateInterval: 3600
+    search:
+      topK: ${OPENAI_RAG_TOP_K}
+      threshold: ${OPENAI_RAG_SIMILARITY_THRESHOLD}
+
+# =============================================================================
+# KUBERNETES PLUGIN
+# =============================================================================
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: ${KUBE_API_SERVER_URL}
+          name: ${KUBE_CONTEXT}
+          authProvider: 'serviceAccount'
+          skipTLSVerify: false
+          skipMetricsLookup: false
+  
+  # Análisis de recursos con IA
+  openai:
+    enabled: ${OPENAI_BACKSTAGE_ENABLED}
+    resourceAnalysis: true
+    costOptimization: true
+    securityScanning: true
+
+# =============================================================================
+# GITHUB ACTIONS PLUGIN
+# =============================================================================
+githubActions:
+  # Integración con OpenAI para análisis de workflows
+  openai:
+    enabled: ${OPENAI_CODE_ANALYSIS_ENABLED}
+    workflowAnalysis: true
+    optimizationSuggestions: true
+    securityChecks: true
+
+# =============================================================================
+# COST INSIGHTS PLUGIN
+# =============================================================================
+costInsights:
+  engineerCost: 200000
+  products:
+    computeEngine:
+      name: Compute Engine
+      icon: compute
+    cloudDataflow:
+      name: Cloud Dataflow
+      icon: data
+  
+  # Análisis de costos con IA
+  openai:
+    enabled: ${OPENAI_COST_TRACKING_ENABLED}
+    costPrediction: true
+    optimizationRecommendations: true
+    budgetAlerts: true
+
+# =============================================================================
+# PROMETHEUS PLUGIN
+# =============================================================================
+prometheus:
+  proxyPath: /prometheus/api
+  
+  # Análisis de métricas con IA
+  openai:
+    enabled: ${OPENAI_METRICS_ENABLED}
+    anomalyDetection: true
+    alertOptimization: true
+    dashboardGeneration: true
+
+# =============================================================================
+# CUSTOM PLUGINS
+# =============================================================================
+# Plugin personalizado de IA-Ops
+iaOps:
+  openai:
+    enabled: ${OPENAI_BACKSTAGE_ENABLED}
+    features:
+      chatBot: true
+      codeReview: ${OPENAI_PR_REVIEW_ENABLED}
+      autoTesting: ${OPENAI_AUTO_TESTS_ENABLED}
+      securityAnalysis: ${OPENAI_SECURITY_ANALYSIS_ENABLED}
+      performanceOptimization: true
+      documentationGeneration: ${OPENAI_AUTO_DOCUMENTATION_ENABLED}
+    
+    # Configuración del chatbot
+    chatBot:
+      name: 'IA-Ops Assistant'
+      avatar: '/static/ai-avatar.png'
+      welcomeMessage: '¡Hola! Soy tu asistente de IA para DevOps. ¿En qué puedo ayudarte?'
+      contexts:
+        - 'code-review'
+        - 'deployment'
+        - 'monitoring'
+        - 'troubleshooting'
+        - 'best-practices'

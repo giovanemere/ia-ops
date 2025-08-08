@@ -1,0 +1,38 @@
+site_name: IA-Ops Platform Documentation
+site_description: Plataforma integrada de IA y DevOps con Backstage
+site_author: DevOps Team
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Architecture: architecture.md
+  - Services:
+    - Backstage: services/backstage.md
+    - OpenAI Service: services/openai.md
+    - Monitoring: services/monitoring.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - techdocs-core

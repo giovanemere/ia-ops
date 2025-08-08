@@ -1,0 +1,468 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ia-ops-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ia-ops-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-backstage}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7.2-alpine
+    container_name: ia-ops-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - ia-ops-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "auth", "${REDIS_PASSWORD:-redis123}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+
+
+  # Backstage Backend - Servidor mock simple
+  backstage-backend:
+    build:
+      context: ./applications/backstage
+      dockerfile: Dockerfile.simple-mock
+    container_name: ia-ops-backstage-backend
+    restart: unless-stopped
+    environment:
+      # Database Configuration
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+      
+      # Redis Configuration
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis123}
+      REDIS_DB: ${REDIS_DB:-0}
+      
+      # GitHub Integration
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
+      AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
+      GITHUB_ORG: ${GITHUB_ORG:-tu-organizacion}
+      
+      # OpenAI Integration
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_SERVICE_URL: http://openai-service:8000
+      
+      # Base URLs
+      BACKSTAGE_BASE_URL: ${BACKSTAGE_BASE_URL:-http://localhost:8080}
+      BACKSTAGE_FRONTEND_URL: ${BACKSTAGE_FRONTEND_URL:-http://localhost:3000}
+      
+      # Security
+      BACKEND_SECRET: ${BACKEND_SECRET:-your-secret-key-here}
+      
+      # TechDocs Configuration
+      TECHDOCS_BUILDER: "local"
+      TECHDOCS_GENERATOR_RUNIN: "local"
+      TECHDOCS_PUBLISHER_TYPE: "local"
+      TECHDOCS_STORAGE_PATH: "/tmp/techdocs"
+      
+      # Catalog locations
+      CATALOG_LOCATIONS: ${CATALOG_LOCATIONS:-}
+    ports:
+      - "7007:7007"
+    volumes:
+      - ./config/backstage:/app/config:ro
+      - ./docs:/app/docs:ro
+      - ./mkdocs.yml:/app/mkdocs.yml:ro
+      - techdocs_storage:/tmp/techdocs
+    networks:
+      - ia-ops-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7007/api/catalog/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+
+  # Backstage Frontend
+  backstage-frontend:
+    build:
+      context: ./applications/backstage
+      dockerfile: Dockerfile.frontend.prebuilt
+    container_name: ia-ops-backstage-frontend
+    restart: unless-stopped
+    environment:
+      # Base URLs
+      APP_BASE_URL: http://localhost:3000
+      BACKEND_BASE_URL: http://localhost:7007
+    ports:
+      - "3002:3000"
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # TechDocs Builder Service (for Backstage integration)
+  techdocs-builder:
+    image: spotify/techdocs:latest
+    container_name: ia-ops-techdocs-builder
+    restart: unless-stopped
+    environment:
+      # TechDocs Configuration
+      TECHDOCS_PUBLISHER_TYPE: "local"
+      TECHDOCS_STORAGE_PATH: "/tmp/techdocs"
+      MKDOCS_DEFAULT_PLUGINS: "techdocs-core"
+    volumes:
+      - ./docs:/content/docs:ro
+      - ./mkdocs.yml:/content/mkdocs.yml:ro
+      - techdocs_storage:/tmp/techdocs
+    networks:
+      - ia-ops-network
+    working_dir: /content
+    command: 
+      - sh
+      - -c
+      - |
+        echo 'TechDocs Builder ready for Backstage integration' &&
+        tail -f /dev/null
+    healthcheck:
+      test: ["CMD", "test", "-f", "/content/mkdocs.yml"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MkDocs Documentation with TechDocs support
+  mkdocs:
+    image: squidfunk/mkdocs-material:latest
+    container_name: ia-ops-mkdocs
+    restart: unless-stopped
+    environment:
+      # MkDocs Configuration
+      MKDOCS_DEV_ADDR: "0.0.0.0:8000"
+      MKDOCS_STRICT: "false"
+      MKDOCS_VERBOSE: "true"
+    volumes:
+      - .:/docs:ro
+      - ./requirements-docs.txt:/tmp/requirements-docs.txt:ro
+    ports:
+      - "8005:8000"
+    networks:
+      - ia-ops-network
+    working_dir: /docs
+    entrypoint: sh
+    command: 
+      - -c
+      - |
+        pip install -r /tmp/requirements-docs.txt &&
+        if [ ! -f mkdocs.yml ]; then 
+          echo 'Error: mkdocs.yml not found' && exit 1; 
+        fi &&
+        mkdocs serve --dev-addr=0.0.0.0:8000 --verbose
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: ia-ops-prometheus
+    restart: unless-stopped
+    user: "65534:65534"
+    volumes:
+      - ./config/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - ia-ops-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--log.level=info'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana Dashboards
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: ia-ops-grafana
+    restart: unless-stopped
+    environment:
+      # Admin Configuration
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+      
+      # General Configuration
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_ORG_CREATE: "false"
+      GF_USERS_AUTO_ASSIGN_ORG: "true"
+      GF_USERS_AUTO_ASSIGN_ORG_ROLE: "Viewer"
+      
+      # Server Configuration
+      GF_SERVER_ROOT_URL: http://localhost:3001
+      GF_SERVER_SERVE_FROM_SUB_PATH: "false"
+      
+      # Analytics
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      
+      # Logging
+      GF_LOG_LEVEL: ${GRAFANA_LOG_LEVEL:-info}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    networks:
+      - ia-ops-network
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Node Exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: ia-ops-node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "9100:9100"
+    networks:
+      - ia-ops-network
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.netdev.device-exclude=^(veth.*|docker.*|br-.*|lo)$$'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # cAdvisor for container metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: ia-ops-cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    ports:
+      - "8082:8080"
+    networks:
+      - ia-ops-network
+    command:
+      - '--housekeeping_interval=10s'
+      - '--docker_only=true'
+      - '--store_container_labels=false'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # OpenAI Service (FastAPI)
+  openai-service:
+    build:
+      context: ./applications/openai-service
+      dockerfile: Dockerfile
+    container_name: ia-ops-openai-service
+    restart: unless-stopped
+    environment:
+      # OpenAI Configuration
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      OPENAI_MAX_TOKENS: ${OPENAI_MAX_TOKENS:-2000}
+      OPENAI_TEMPERATURE: ${OPENAI_TEMPERATURE:-0.7}
+      
+      # FastAPI Configuration
+      FASTAPI_HOST: "0.0.0.0"
+      FASTAPI_PORT: 8000
+      FASTAPI_RELOAD: ${FASTAPI_RELOAD:-false}
+      FASTAPI_DEBUG: ${FASTAPI_DEBUG:-false}
+      
+      # Database Configuration (for logging/analytics)
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+      
+      # Redis Configuration (for caching)
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis123}
+      REDIS_DB: ${REDIS_DB:-1}
+      
+      # Security
+      API_SECRET_KEY: ${API_SECRET_KEY:-your-secret-key-here}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      
+      # Monitoring
+      ENABLE_METRICS: ${ENABLE_METRICS:-true}
+      METRICS_PORT: 8001
+    ports:
+      - "8003:8000"  # Main API
+      - "8004:8001"  # Metrics endpoint
+    volumes:
+      - ./config/openai:/app/config:ro
+      - ./logs:/app/logs
+    networks:
+      - ia-ops-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+
+  # Proxy Service (Gateway)
+  proxy-service:
+    build:
+      context: ./applications/proxy-service
+      dockerfile: Dockerfile
+    container_name: ia-ops-proxy-service
+    restart: unless-stopped
+    environment:
+      # Proxy Configuration
+      PROXY_PORT: 8080
+      PROXY_HOST: "0.0.0.0"
+      
+      # Service URLs
+      BACKSTAGE_FRONTEND_URL: http://backstage-frontend:3000
+      BACKSTAGE_BACKEND_URL: http://backstage-backend:7007
+      OPENAI_SERVICE_URL: http://openai-service:8000
+      MKDOCS_URL: http://mkdocs:8000
+      GRAFANA_URL: http://grafana:3000
+      PROMETHEUS_URL: http://prometheus:9090
+      
+      # Security
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS:-100}
+      RATE_LIMIT_WINDOW: ${RATE_LIMIT_WINDOW:-60}
+      
+      # Logging
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      ACCESS_LOG: ${ACCESS_LOG:-true}
+    ports:
+      - "8080:8080"
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-frontend
+      - backstage-backend
+      - openai-service
+      - mkdocs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Simple Nginx proxy for routing
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: ia-ops-nginx-proxy
+    restart: unless-stopped
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-frontend
+      - backstage-backend
+      - grafana
+      - prometheus
+      - mkdocs
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  techdocs_storage:
+    driver: local
+
+networks:
+  ia-ops-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16

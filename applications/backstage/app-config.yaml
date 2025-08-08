@@ -51,10 +51,10 @@ backend:
     store: redis
     connection: redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB}
 
-integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
+# integrations:
+#   github:
+#     - host: github.com
+#       token: ${GITHUB_TOKEN}
 
 proxy:
   endpoints:
@@ -92,15 +92,17 @@ auth:
   session:
     secret: ${BACKEND_SECRET}
   providers:
-    github:
-      development:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
-        signIn:
-          resolvers:
-            - resolver: usernameMatchingUserEntityName
-            - resolver: emailMatchingUserEntityProfileEmail
-            - resolver: emailLocalPartMatchingUserEntityName
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
+    # github:
+    #   development:
+    #     clientId: ${AUTH_GITHUB_CLIENT_ID}
+    #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+    #     signIn:
+    #       resolvers:
+    #         - resolver: usernameMatchingUserEntityName
+    #         - resolver: emailMatchingUserEntityProfileEmail
+    #         - resolver: emailLocalPartMatchingUserEntityName
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -132,25 +134,29 @@ catalog:
       rules:
         - allow: [User, Group]
 
-    # Catálogo principal del proyecto
+    # Catálogo principal del proyecto IA-Ops
     - type: file
-      target: ../../catalog-info.yaml
+      target: ../../config/backstage/catalog-info.yaml
+    
+    # Sistema BillPay
+    - type: file
+      target: ../../config/backstage/catalog/systems/billpay-system.yaml
     
     # Ubicaciones remotas
     - type: url
       target: ${CATALOG_LOCATIONS}
   
   providers:
-    github:
-      providerId:
-        organization: ${GITHUB_ORG}
-        catalogPath: '/catalog-info.yaml'
-        filters:
-          branch: 'main'
-          repository: '.*'
-        schedule:
-          frequency: { minutes: 30 }
-          timeout: { minutes: 3 }
+    # github:
+    #   providerId:
+    #     organization: ${GITHUB_ORG}
+    #     catalogPath: '/catalog-info.yaml'
+    #     filters:
+    #       branch: 'main'
+    #       repository: '.*'
+    #     schedule:
+    #       frequency: { minutes: 30 }
+    #       timeout: { minutes: 3 }
 
 kubernetes:
   serviceLocatorMethod:

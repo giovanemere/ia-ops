@@ -10,11 +10,53 @@ metadata:
     - devops
     - backstage
   annotations:
-    github.com/project-slug: tu-organizacion/ia-ops
+    github.com/project-slug: giovanemere/ia-ops
     backstage.io/techdocs-ref: dir:.
 spec:
   owner: devops-team
   domain: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: giovanemere
+  title: Giovanni Emere
+  description: DevOps Engineer and Platform Owner
+  annotations:
+    github.com/user-login: giovanemere
+spec:
+  profile:
+    displayName: Giovanni Emere
+    email: giovanemere@example.com
+    picture: https://github.com/giovanemere.png
+  memberOf:
+    - devops-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Admin User
+  description: Administrator user for the platform
+spec:
+  profile:
+    displayName: Admin User
+    email: admin@ia-ops.local
+  memberOf:
+    - devops-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: devops-team
+  title: DevOps Team
+  description: Equipo de DevOps responsable de la plataforma IA-Ops
+spec:
+  type: team
+  children: []
+  members:
+    - giovanemere
+    - admin
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -27,7 +69,7 @@ metadata:
     - portal
     - react
   annotations:
-    github.com/project-slug: tu-organizacion/ia-ops
+    github.com/project-slug: giovanemere/ia-ops
     backstage.io/techdocs-ref: dir:./applications/backstage
 spec:
   type: website
@@ -49,7 +91,7 @@ metadata:
     - api
     - fastapi
   annotations:
-    github.com/project-slug: tu-organizacion/ia-ops
+    github.com/project-slug: giovanemere/ia-ops
     backstage.io/techdocs-ref: dir:./applications/openai-service
 spec:
   type: service
@@ -71,7 +113,7 @@ metadata:
     - gateway
     - nodejs
   annotations:
-    github.com/project-slug: tu-organizacion/ia-ops
+    github.com/project-slug: giovanemere/ia-ops
     backstage.io/techdocs-ref: dir:./applications/proxy-service
 spec:
   type: service
@@ -136,13 +178,3 @@ spec:
           responses:
             '200':
               description: Chat completion response
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: devops-team
-  title: DevOps Team
-  description: Equipo de DevOps responsable de la plataforma IA-Ops
-spec:
-  type: team
-  children: []

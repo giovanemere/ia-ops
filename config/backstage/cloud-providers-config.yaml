@@ -1,0 +1,291 @@
+# =============================================================================
+# BACKSTAGE CLOUD PROVIDERS CONFIGURATION
+# =============================================================================
+# Configuración para integración con Azure, AWS, GCP y OCI
+
+# =============================================================================
+# 🔵 MICROSOFT AZURE INTEGRATION
+# =============================================================================
+azure:
+  # Azure Resource Manager Integration
+  resourceManager:
+    clientId: ${AZURE_CLIENT_ID}
+    clientSecret: ${AZURE_CLIENT_SECRET}
+    tenantId: ${AZURE_TENANT_ID}
+    subscriptionId: ${AZURE_SUBSCRIPTION_ID}
+    resourceManagerUrl: ${AZURE_RESOURCE_MANAGER_URL}
+  
+  # Azure DevOps Integration
+  devOps:
+    organization: ${AZURE_DEVOPS_ORG}
+    token: ${AZURE_DEVOPS_TOKEN}
+    baseUrl: ${AZURE_DEVOPS_URL}
+  
+  # Azure Container Registry
+  containerRegistry:
+    name: ${AZURE_REGISTRY_NAME}
+    url: ${AZURE_REGISTRY_URL}
+  
+  # Azure Kubernetes Service
+  aks:
+    clusterName: ${AZURE_AKS_CLUSTER_NAME}
+    resourceGroup: ${AZURE_AKS_RESOURCE_GROUP}
+    subscriptionId: ${AZURE_SUBSCRIPTION_ID}
+  
+  # Azure Key Vault
+  keyVault:
+    name: ${AZURE_KEY_VAULT_NAME}
+    url: ${AZURE_KEY_VAULT_URL}
+
+# =============================================================================
+# 🟠 AMAZON WEB SERVICES (AWS) INTEGRATION
+# =============================================================================
+aws:
+  # AWS Credentials
+  credentials:
+    accessKeyId: ${AWS_ACCESS_KEY_ID}
+    secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+    sessionToken: ${AWS_SESSION_TOKEN}
+    region: ${AWS_DEFAULT_REGION}
+  
+  # AWS Account Information
+  account:
+    id: ${AWS_ACCOUNT_ID}
+    alias: ${AWS_ACCOUNT_ALIAS}
+    roleArn: ${AWS_ROLE_ARN}
+    externalId: ${AWS_EXTERNAL_ID}
+  
+  # AWS EKS Integration
+  eks:
+    clusterName: ${AWS_EKS_CLUSTER_NAME}
+    region: ${AWS_EKS_CLUSTER_REGION}
+  
+  # AWS ECR Integration
+  ecr:
+    registryUrl: ${AWS_ECR_REGISTRY_URL}
+    repositoryPrefix: ${AWS_ECR_REPOSITORY_PREFIX}
+    region: ${AWS_DEFAULT_REGION}
+  
+  # AWS RDS Integration
+  rds:
+    endpoint: ${AWS_RDS_ENDPOINT}
+    port: ${AWS_RDS_PORT}
+    database: ${AWS_RDS_DATABASE}
+    username: ${AWS_RDS_USERNAME}
+    password: ${AWS_RDS_PASSWORD}
+  
+  # AWS S3 Integration
+  s3:
+    bucketName: ${AWS_S3_BUCKET_NAME}
+    region: ${AWS_S3_REGION}
+  
+  # AWS CloudFormation
+  cloudFormation:
+    region: ${AWS_CLOUDFORMATION_REGION}
+  
+  # AWS Lambda
+  lambda:
+    region: ${AWS_LAMBDA_REGION}
+
+# =============================================================================
+# 🟢 GOOGLE CLOUD PLATFORM (GCP) INTEGRATION
+# =============================================================================
+gcp:
+  # GCP Service Account
+  serviceAccount:
+    email: ${GCP_SERVICE_ACCOUNT_EMAIL}
+    keyFile: ${GCP_SERVICE_ACCOUNT_KEY_FILE}
+    credentials: ${GOOGLE_APPLICATION_CREDENTIALS}
+  
+  # GCP Project Information
+  project:
+    id: ${GCP_PROJECT_ID}
+    number: ${GCP_PROJECT_NUMBER}
+    region: ${GCP_REGION}
+    zone: ${GCP_ZONE}
+  
+  # Google Kubernetes Engine (GKE)
+  gke:
+    clusterName: ${GCP_GKE_CLUSTER_NAME}
+    location: ${GCP_GKE_CLUSTER_LOCATION}
+    projectId: ${GCP_PROJECT_ID}
+  
+  # Google Container Registry (GCR)
+  gcr:
+    hostname: ${GCP_GCR_HOSTNAME}
+    projectId: ${GCP_GCR_PROJECT_ID}
+  
+  # Google Artifact Registry
+  artifactRegistry:
+    location: ${GCP_ARTIFACT_REGISTRY_LOCATION}
+    repository: ${GCP_ARTIFACT_REGISTRY_REPOSITORY}
+    projectId: ${GCP_PROJECT_ID}
+  
+  # Google Cloud SQL
+  cloudSql:
+    instance: ${GCP_CLOUDSQL_INSTANCE}
+    database: ${GCP_CLOUDSQL_DATABASE}
+    username: ${GCP_CLOUDSQL_USERNAME}
+    password: ${GCP_CLOUDSQL_PASSWORD}
+  
+  # Google Cloud Storage
+  storage:
+    bucket: ${GCP_STORAGE_BUCKET}
+    region: ${GCP_STORAGE_REGION}
+  
+  # Google Cloud Build
+  cloudBuild:
+    projectId: ${GCP_CLOUDBUILD_PROJECT_ID}
+    region: ${GCP_CLOUDBUILD_REGION}
+  
+  # Google Cloud Functions
+  functions:
+    region: ${GCP_FUNCTIONS_REGION}
+    projectId: ${GCP_PROJECT_ID}
+
+# =============================================================================
+# 🔴 ORACLE CLOUD INFRASTRUCTURE (OCI) INTEGRATION
+# =============================================================================
+oci:
+  # OCI Authentication
+  auth:
+    userId: ${OCI_USER_ID}
+    tenancyId: ${OCI_TENANCY_ID}
+    fingerprint: ${OCI_FINGERPRINT}
+    privateKeyPath: ${OCI_PRIVATE_KEY_PATH}
+    privateKeyPassphrase: ${OCI_PRIVATE_KEY_PASSPHRASE}
+    region: ${OCI_REGION}
+  
+  # OCI Compartment
+  compartment:
+    id: ${OCI_COMPARTMENT_ID}
+    rootId: ${OCI_ROOT_COMPARTMENT_ID}
+  
+  # OCI Container Engine for Kubernetes (OKE)
+  oke:
+    clusterId: ${OCI_OKE_CLUSTER_ID}
+    clusterName: ${OCI_OKE_CLUSTER_NAME}
+    compartmentId: ${OCI_COMPARTMENT_ID}
+  
+  # OCI Container Registry (OCIR)
+  ocir:
+    region: ${OCI_REGISTRY_REGION}
+    namespace: ${OCI_REGISTRY_NAMESPACE}
+    url: ${OCI_REGISTRY_URL}
+  
+  # OCI Autonomous Database
+  adb:
+    ocid: ${OCI_ADB_OCID}
+    username: ${OCI_ADB_USERNAME}
+    password: ${OCI_ADB_PASSWORD}
+  
+  # OCI Object Storage
+  objectStorage:
+    namespace: ${OCI_OBJECT_STORAGE_NAMESPACE}
+    bucket: ${OCI_OBJECT_STORAGE_BUCKET}
+  
+  # OCI Functions
+  functions:
+    compartmentId: ${OCI_FUNCTIONS_COMPARTMENT_ID}
+
+# =============================================================================
+# 🌐 MULTI-CLOUD CONFIGURATION
+# =============================================================================
+multiCloud:
+  # Default provider
+  defaultProvider: ${DEFAULT_CLOUD_PROVIDER}
+  
+  # Enabled providers
+  enabledProviders: ${ENABLED_CLOUD_PROVIDERS}
+  
+  # Provider priority for resource discovery
+  providerPriority: ${CLOUD_PROVIDER_PRIORITY}
+  
+  # Common resource tags
+  resourceTags: ${CLOUD_RESOURCE_TAGS}
+  
+  # Feature flags per provider
+  features:
+    azure:
+      resourceDiscovery: ${AZURE_RESOURCE_DISCOVERY_ENABLED}
+      costManagement: ${AZURE_COST_MANAGEMENT_ENABLED}
+      securityCenter: ${AZURE_SECURITY_CENTER_ENABLED}
+    
+    aws:
+      resourceDiscovery: ${AWS_RESOURCE_DISCOVERY_ENABLED}
+      costExplorer: ${AWS_COST_EXPLORER_ENABLED}
+      securityHub: ${AWS_SECURITY_HUB_ENABLED}
+      cloudWatch: ${AWS_CLOUDWATCH_ENABLED}
+    
+    gcp:
+      resourceDiscovery: ${GCP_RESOURCE_DISCOVERY_ENABLED}
+      billing: ${GCP_BILLING_ENABLED}
+      securityCommandCenter: ${GCP_SECURITY_COMMAND_CENTER_ENABLED}
+      monitoring: ${GCP_MONITORING_ENABLED}
+    
+    oci:
+      resourceDiscovery: ${OCI_RESOURCE_DISCOVERY_ENABLED}
+      costAnalysis: ${OCI_COST_ANALYSIS_ENABLED}
+      cloudGuard: ${OCI_CLOUD_GUARD_ENABLED}
+
+# =============================================================================
+# 📊 MONITORING & OBSERVABILITY
+# =============================================================================
+monitoring:
+  azure:
+    applicationInsights:
+      instrumentationKey: ${AZURE_APPLICATION_INSIGHTS_KEY}
+  
+  aws:
+    cloudWatch:
+      region: ${AWS_CLOUDWATCH_REGION}
+  
+  gcp:
+    monitoring:
+      projectId: ${GCP_MONITORING_PROJECT_ID}
+  
+  oci:
+    monitoring:
+      compartmentId: ${OCI_MONITORING_COMPARTMENT_ID}
+
+# =============================================================================
+# 🔐 SECURITY & COMPLIANCE
+# =============================================================================
+security:
+  azure:
+    securityCenter:
+      subscriptionId: ${AZURE_SECURITY_CENTER_SUBSCRIPTION_ID}
+  
+  aws:
+    securityHub:
+      region: ${AWS_SECURITY_HUB_REGION}
+  
+  gcp:
+    securityCommandCenter:
+      organizationId: ${GCP_SECURITY_COMMAND_CENTER_ORG_ID}
+  
+  oci:
+    cloudGuard:
+      tenancyId: ${OCI_CLOUD_GUARD_TENANCY_ID}
+
+# =============================================================================
+# 💰 COST MANAGEMENT
+# =============================================================================
+costManagement:
+  azure:
+    scope: ${AZURE_COST_MANAGEMENT_SCOPE}
+  
+  aws:
+    accountId: ${AWS_COST_EXPLORER_ACCOUNT_ID}
+  
+  gcp:
+    billingAccountId: ${GCP_BILLING_ACCOUNT_ID}
+  
+  oci:
+    tenancyId: ${OCI_COST_ANALYSIS_TENANCY_ID}
+  
+  # Budget alerts
+  alerts:
+    threshold: ${COST_ALERT_THRESHOLD}
+    email: ${COST_ALERT_EMAIL}
+    slackWebhook: ${COST_ALERT_SLACK_WEBHOOK}

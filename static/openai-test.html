@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenAI Test - IA-Ops Platform</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { background: #1976d2; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        .response { background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .loading { color: #666; font-style: italic; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 OpenAI Integration Test</h1>
+        <p>Test the OpenAI integration in Backstage</p>
+        
+        <div>
+            <label for="prompt">Ask the AI:</label>
+            <textarea id="prompt" placeholder="Example: Explain what Backstage is and how it helps developers"></textarea>
+            <button onclick="askAI()">Ask AI</button>
+        </div>
+        
+        <div id="response" class="response" style="display: none;"></div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const prompt = document.getElementById('prompt').value;
+            const responseDiv = document.getElementById('response');
+            
+            if (!prompt.trim()) {
+                alert('Please enter a question');
+                return;
+            }
+            
+            responseDiv.style.display = 'block';
+            responseDiv.innerHTML = '<div class="loading">🤔 AI is thinking...</div>';
+            
+            try {
+                const response = await fetch('/api/proxy/openai/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4o-mini',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a helpful AI assistant integrated with Backstage, a developer portal platform. Help users with development questions and Backstage-related topics.'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        max_tokens: 2000,
+                        temperature: 0.7
+                    }),
+                });
+                
+                const data = await response.json();
+                
+                if (data.choices && data.choices[0]) {
+                    responseDiv.innerHTML = '<h3>🤖 AI Response:</h3><p>' + 
+                        data.choices[0].message.content.replace(/\n/g, '<br>') + '</p>';
+                } else {
+                    responseDiv.innerHTML = '<div class="error">❌ No response from AI</div>';
+                }
+            } catch (error) {
+                responseDiv.innerHTML = '<div class="error">❌ Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Test connection on load
+        window.onload = async function() {
+            try {
+                const response = await fetch('/api/proxy/test-openai');
+                console.log('OpenAI connection test:', response.status);
+            } catch (error) {
+                console.error('OpenAI connection test failed:', error);
+            }
+        };
+    </script>
+</body>
+</html>

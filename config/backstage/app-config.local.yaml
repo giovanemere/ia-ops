@@ -1,0 +1,134 @@
+app:
+  baseUrl: http://localhost:3000
+  title: IA-Ops Platform
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  baseUrl: http://localhost:7007
+  cors:
+    credentials: true
+    methods:
+      - GET
+      - HEAD
+      - PATCH
+      - POST
+      - PUT
+      - DELETE
+    origin: http://localhost:3000
+  csp:
+    connect-src:
+      - "'self'"
+      - 'http:'
+      - 'https:'
+  database:
+    client: pg
+    connection:
+      database: ${POSTGRES_DB}
+      host: ${POSTGRES_HOST}
+      password: ${POSTGRES_PASSWORD}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+  listen:
+    host: 0.0.0.0
+    port: 7007
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  locations:
+    - target: ../../examples/entities.yaml
+      type: file
+    - rules:
+        - allow:
+            - Template
+      target: ../../examples/template/template.yaml
+      type: file
+    - rules:
+        - allow:
+            - User
+            - Group
+      target: ../../examples/org.yaml
+      type: file
+    - target: ./catalog-info.yaml
+      type: file
+    - target: ./users.yaml
+      type: file
+  providers:
+    github:
+      providerId:
+        catalogPath: /catalog-info.yaml
+        filters:
+          branch: main
+          repository: .*
+        organization: ${GITHUB_ORG}
+        schedule:
+          frequency:
+            minutes: 30
+          timeout:
+            minutes: 3
+  rules:
+    - allow:
+        - Component
+        - System
+        - API
+        - Resource
+        - Location
+        - User
+        - Group
+        - Domain
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+organization:
+  name: IA-Ops
+
+proxy: null
+scaffolder: null
+
+search:
+  pg:
+    highlightOptions:
+      fragmentDelimiter: ' ... '
+      highlightAll: false
+      maxFragments: 3
+      maxWord: 35
+      minWord: 15
+      shortWord: 3
+      useHighlight: true
+    schedule:
+      frequency:
+        minutes: 10
+      initialDelay:
+        seconds: 3
+      timeout:
+        minutes: 15
+
+techdocs:
+  builder: local
+  cache:
+    readTimeout: 5000
+    ttl: 3600000
+  generator:
+    dockerImage: spotify/techdocs
+    pullImage: true
+    runIn: local
+  publisher:
+    local:
+      publishDirectory: /tmp/techdocs
+    type: local
+  requestUrl: http://localhost:7007/api/techdocs
+  storageUrl: http://localhost:7007/api/techdocs/static/docs

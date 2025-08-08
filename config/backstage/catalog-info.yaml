@@ -1,0 +1,85 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ia-ops-catalog
+  title: IA-Ops Platform Catalog
+  description: Catálogo principal de la plataforma IA-Ops
+spec:
+  type: file
+  targets:
+    # Sistemas
+    - ./systems/billpay-system.yaml
+    
+    # Componentes adicionales (si existen)
+    - ./components/*.yaml
+    
+    # APIs (si existen)
+    - ./apis/*.yaml
+    
+    # Recursos (si existen)
+    - ./resources/*.yaml
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ia-ops-platform
+  title: IA-Ops Platform
+  description: Plataforma integrada de IA y DevOps con Backstage
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/ia-ops
+    github.com/project-slug: tu-organizacion/ia-ops
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - platform
+    - devops
+    - ai
+    - backstage
+  links:
+    - url: http://localhost:8080
+      title: Platform Portal
+      icon: web
+    - url: http://localhost:8080/openai
+      title: AI Service
+      icon: api
+spec:
+  type: platform
+  lifecycle: production
+  owner: group:platform-team
+  system: ia-ops
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops
+  title: IA-Ops Platform System
+  description: Sistema principal de la plataforma IA-Ops
+  tags:
+    - platform
+    - devops
+    - ai
+spec:
+  owner: group:platform-team
+  domain: platform-services
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform-services
+  title: Platform Services
+  description: Dominio de servicios de plataforma
+spec:
+  owner: group:platform-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: Equipo responsable de la plataforma IA-Ops
+spec:
+  type: team
+  children: []

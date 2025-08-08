@@ -55,12 +55,51 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Template, Domain, Group]
   locations:
+    # Archivos locales del catálogo
     - type: file
       target: ../../catalog-info.yaml
+    - type: file
+      target: ../../catalog-systems.yaml
+    
+    # Templates de Backstage
+    - type: url
+      target: https://github.com/giovanemere/templates_backstage/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Template]
+    
+    # Repositorios de aplicaciones
+    - type: url
+      target: https://github.com/giovanemere/poc-icbs/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API, System]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-b/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-a/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-back/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+    
+    # Variables de entorno adicionales
     - type: url
       target: ${CATALOG_LOCATIONS}
+      rules:
+        - allow: [Component, System, API, Resource, Location, Template]
 
 proxy:
   '/openai':

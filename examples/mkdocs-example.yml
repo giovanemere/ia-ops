@@ -1,0 +1,37 @@
+# Ejemplo de mkdocs.yml para cada repositorio
+# Copia este archivo a la raíz de cada repositorio y personalízalo
+
+site_name: 'POC BillPay Documentation'
+site_description: 'Documentación del proyecto POC BillPay'
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API Reference: api.md
+  - Architecture: architecture.md
+  - Deployment: deployment.md
+
+plugins:
+  - techdocs-core
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: blue
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+
+# Estructura de documentos recomendada:
+# docs/
+# ├── index.md          # Página principal
+# ├── getting-started.md # Guía de inicio
+# ├── api.md            # Documentación de API
+# ├── architecture.md   # Arquitectura del proyecto
+# └── deployment.md     # Guía de despliegue

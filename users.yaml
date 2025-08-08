@@ -1,0 +1,83 @@
+# =============================================================================
+# USUARIOS POR DEFECTO - BACKSTAGE
+# =============================================================================
+# Entidades de usuario para resolver problemas de autenticación
+
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: giovanemere
+  title: Giovanni Emere
+  description: DevOps Engineer and Platform Owner
+  annotations:
+    github.com/user-login: giovanemere
+spec:
+  profile:
+    displayName: Giovanni Emere
+    email: giovanemere@example.com
+    picture: https://github.com/giovanemere.png
+  memberOf:
+    - devops-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Admin User
+  description: Administrator user for the platform
+spec:
+  profile:
+    displayName: Admin User
+    email: admin@ia-ops.local
+  memberOf:
+    - devops-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: guest
+  title: Guest User
+  description: Default guest user for testing
+spec:
+  profile:
+    displayName: Guest User
+    email: guest@ia-ops.local
+  memberOf:
+    - guests
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: devops-team
+  title: DevOps Team
+  description: Equipo de DevOps responsable de la plataforma IA-Ops
+spec:
+  type: team
+  children: []
+  members:
+    - giovanemere
+    - admin
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: guests
+  title: Guest Users
+  description: Usuarios invitados con acceso limitado
+spec:
+  type: team
+  children: []
+  members:
+    - guest
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: everyone
+  title: Everyone
+  description: Todos los usuarios de la plataforma
+spec:
+  type: organization
+  children:
+    - devops-team
+    - guests

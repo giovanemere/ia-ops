@@ -1,0 +1,1395 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Plataforma integrada de IA y DevOps con Backstage">
+      
+      
+        <meta name="author" content="DevOps Team">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.8">
+    
+    
+      
+        <title>Guía Rápida - Integración OpenAI con Backstage - IA-Ops Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#guia-rapida-integracion-openai-con-backstage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="IA-Ops Platform" class="md-header__button md-logo" aria-label="IA-Ops Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IA-Ops Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Guía Rápida - Integración OpenAI con Backstage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../architecture/" class="md-tabs__link">
+        
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../api/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../guides/deployment/" class="md-tabs__link">
+          
+  
+  Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="IA-Ops Platform" class="md-nav__button md-logo" aria-label="IA-Ops Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IA-Ops Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/endpoints/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Endpoints
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Deployment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="En esta página">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inicio-rapido" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Inicio Rápido
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Inicio Rápido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-validar-configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Validar Configuración
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-iniciar-servicios" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Iniciar Servicios
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-verificar-integracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Verificar Integración
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-de-configuracion" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Checklist de Configuración
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Checklist de Configuración">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variables-criticas-en-env" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variables Críticas en .env
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#servicios-requeridos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Servicios Requeridos
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#urls-de-acceso" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 URLs de Acceso
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pruebas-rapidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧪 Pruebas Rápidas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🧪 Pruebas Rápidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-directo-openai-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Directo OpenAI Service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-via-backstage-proxy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test via Backstage Proxy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-rapido" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Troubleshooting Rápido
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔧 Troubleshooting Rápido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problema-servicio-openai-no-responde" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problema: Servicio OpenAI no responde
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-error-de-cors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problema: Error de CORS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-api-key-invalida" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problema: API Key inválida
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problema-backstage-no-puede-conectar-a-openai" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problema: Backstage no puede conectar a OpenAI
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#uso-en-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Uso en Código
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📝 Uso en Código">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frontend-react-backstage-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frontend React (Backstage Plugin)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend-nodejs-backstage-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Backend Node.js (Backstage Plugin)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#casos-de-uso-comunes" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Casos de Uso Comunes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Casos de Uso Comunes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-asistente-de-documentacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Asistente de Documentación
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-analisis-de-codigo" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Análisis de Código
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-generacion-de-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Generación de Tests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoreo" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Monitoreo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Monitoreo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logs-importantes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logs Importantes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metricas-basicas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Métricas Básicas
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comandos-de-mantenimiento" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Comandos de Mantenimiento
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias-rapidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Referencias Rápidas
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#soporte" class="md-nav__link">
+    <span class="md-ellipsis">
+      🆘 Soporte
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="guia-rapida-integracion-openai-con-backstage">Guía Rápida - Integración OpenAI con Backstage<a class="headerlink" href="#guia-rapida-integracion-openai-con-backstage" title="Permanent link">&para;</a></h1>
+<h2 id="inicio-rapido">🚀 Inicio Rápido<a class="headerlink" href="#inicio-rapido" title="Permanent link">&para;</a></h2>
+<h3 id="1-validar-configuracion">1. Validar Configuración<a class="headerlink" href="#1-validar-configuracion" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># Validar todas las variables de entorno</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a>./scripts/validate-openai-backstage-env.sh
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1"># Si hay errores, revisar el archivo .env</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a>nano<span class="w"> </span>.env
+</code></pre></div></td></tr></table></div>
+<h3 id="2-iniciar-servicios">2. Iniciar Servicios<a class="headerlink" href="#2-iniciar-servicios" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># Opción 1: Iniciar todo el stack</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1"># Opción 2: Solo servicios esenciales</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>postgres<span class="w"> </span>openai-service<span class="w"> </span>backstage-backend
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="c1"># Opción 3: Usar script personalizado</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>./start-with-backstage.sh
+</code></pre></div></td></tr></table></div>
+<h3 id="3-verificar-integracion">3. Verificar Integración<a class="headerlink" href="#3-verificar-integracion" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span>
+<span class="normal"><a href="#__codelineno-2-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Ejecutar tests completos</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>./scripts/test-openai-backstage-integration.sh
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1"># Test rápido manual</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>curl<span class="w"> </span>http://localhost:8000/health
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>curl<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
+</code></pre></div></td></tr></table></div>
+<h2 id="checklist-de-configuracion">📋 Checklist de Configuración<a class="headerlink" href="#checklist-de-configuracion" title="Permanent link">&para;</a></h2>
+<h3 id="variables-criticas-en-env">Variables Críticas en <code>.env</code><a class="headerlink" href="#variables-criticas-en-env" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>OPENAI_API_KEY</code> - Tu API key de OpenAI</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>OPENAI_MODEL=gpt-4o-mini</code> - Modelo a usar</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>BACKSTAGE_BASE_URL=http://localhost:8080</code> - URL base de Backstage</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>OPENAI_SERVICE_URL=http://openai-service:8000</code> - URL del servicio OpenAI</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>POSTGRES_PASSWORD</code> - Password de PostgreSQL</li>
+</ul>
+<h3 id="servicios-requeridos">Servicios Requeridos<a class="headerlink" href="#servicios-requeridos" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> PostgreSQL (<code>ia-ops-postgres</code>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> OpenAI Service (<code>ia-ops-openai-service</code>)</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Backstage Backend (<code>ia-ops-backstage-backend</code>)</li>
+</ul>
+<h2 id="urls-de-acceso">🔗 URLs de Acceso<a class="headerlink" href="#urls-de-acceso" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Servicio</th>
+<th>URL</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAI Service</td>
+<td><a href="http://localhost:8000">http://localhost:8000</a></td>
+<td>Servicio directo</td>
+</tr>
+<tr>
+<td>OpenAI Docs</td>
+<td><a href="http://localhost:8000/docs">http://localhost:8000/docs</a></td>
+<td>Documentación API</td>
+</tr>
+<tr>
+<td>Backstage</td>
+<td><a href="http://localhost:8080">http://localhost:8080</a></td>
+<td>Portal principal</td>
+</tr>
+<tr>
+<td>Backstage API</td>
+<td><a href="http://localhost:7007">http://localhost:7007</a></td>
+<td>API backend</td>
+</tr>
+<tr>
+<td>OpenAI via Proxy</td>
+<td><a href="http://localhost:7007/api/proxy/openai">http://localhost:7007/api/proxy/openai</a></td>
+<td>OpenAI via Backstage</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pruebas-rapidas">🧪 Pruebas Rápidas<a class="headerlink" href="#pruebas-rapidas" title="Permanent link">&para;</a></h2>
+<h3 id="test-directo-openai-service">Test Directo OpenAI Service<a class="headerlink" href="#test-directo-openai-service" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># Health check</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a>curl<span class="w"> </span>http://localhost:8000/health
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1"># Listar modelos</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a>curl<span class="w"> </span>http://localhost:8000/models
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="c1"># Chat completion</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="s1">    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}],</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="s1">    &quot;model&quot;: &quot;gpt-4o-mini&quot;,</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="s1">    &quot;max_tokens&quot;: 100</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="s1">  }&#39;</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="test-via-backstage-proxy">Test via Backstage Proxy<a class="headerlink" href="#test-via-backstage-proxy" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># Health check via proxy</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a>curl<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="c1"># Chat completion via proxy</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7007/api/proxy/openai/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="s1">    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello via Backstage!&quot;}],</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="s1">    &quot;model&quot;: &quot;gpt-4o-mini&quot;,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="s1">    &quot;max_tokens&quot;: 100</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="s1">  }&#39;</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="troubleshooting-rapido">🔧 Troubleshooting Rápido<a class="headerlink" href="#troubleshooting-rapido" title="Permanent link">&para;</a></h2>
+<h3 id="problema-servicio-openai-no-responde">Problema: Servicio OpenAI no responde<a class="headerlink" href="#problema-servicio-openai-no-responde" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
+<span class="normal"><a href="#__codelineno-5-2">2</a></span>
+<span class="normal"><a href="#__codelineno-5-3">3</a></span>
+<span class="normal"><a href="#__codelineno-5-4">4</a></span>
+<span class="normal"><a href="#__codelineno-5-5">5</a></span>
+<span class="normal"><a href="#__codelineno-5-6">6</a></span>
+<span class="normal"><a href="#__codelineno-5-7">7</a></span>
+<span class="normal"><a href="#__codelineno-5-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Verificar contenedor</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a>docker<span class="w"> </span>ps<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>openai-service
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1"># Ver logs</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a>docker<span class="w"> </span>logs<span class="w"> </span>ia-ops-openai-service
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="c1"># Reiniciar servicio</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a>docker-compose<span class="w"> </span>restart<span class="w"> </span>openai-service
+</code></pre></div></td></tr></table></div>
+<h3 id="problema-error-de-cors">Problema: Error de CORS<a class="headerlink" href="#problema-error-de-cors" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># Verificar configuración CORS en .env</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$CORS_ORIGIN</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="c1"># Agregar origen faltante</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CORS_ORIGIN</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CORS_ORIGIN</span><span class="s2">,http://nuevo-origen:puerto&quot;</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="problema-api-key-invalida">Problema: API Key inválida<a class="headerlink" href="#problema-api-key-invalida" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
+<span class="normal"><a href="#__codelineno-7-2">2</a></span>
+<span class="normal"><a href="#__codelineno-7-3">3</a></span>
+<span class="normal"><a href="#__codelineno-7-4">4</a></span>
+<span class="normal"><a href="#__codelineno-7-5">5</a></span>
+<span class="normal"><a href="#__codelineno-7-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Activar modo demo temporalmente</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a>docker-compose<span class="w"> </span>restart<span class="w"> </span>openai-service
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="c1"># Verificar API key</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$OPENAI_API_KEY</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-c<span class="w"> </span><span class="m">20</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="problema-backstage-no-puede-conectar-a-openai">Problema: Backstage no puede conectar a OpenAI<a class="headerlink" href="#problema-backstage-no-puede-conectar-a-openai" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
+<span class="normal"><a href="#__codelineno-8-2">2</a></span>
+<span class="normal"><a href="#__codelineno-8-3">3</a></span>
+<span class="normal"><a href="#__codelineno-8-4">4</a></span>
+<span class="normal"><a href="#__codelineno-8-5">5</a></span>
+<span class="normal"><a href="#__codelineno-8-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># Verificar proxy configuration</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a>curl<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="c1"># Verificar variables de red</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$OPENAI_SERVICE_URL</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$BACKSTAGE_BASE_URL</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="uso-en-codigo">📝 Uso en Código<a class="headerlink" href="#uso-en-codigo" title="Permanent link">&para;</a></h2>
+<h3 id="frontend-react-backstage-plugin">Frontend React (Backstage Plugin)<a class="headerlink" href="#frontend-react-backstage-plugin" title="Permanent link">&para;</a></h3>
+<div class="language-typescript highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span>
+<span class="normal"><a href="#__codelineno-9-21">21</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">useApi</span><span class="p">,</span><span class="w"> </span><span class="nx">configApiRef</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@backstage/core-plugin-api&#39;</span><span class="p">;</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="kd">const</span><span class="w"> </span><span class="nx">useOpenAI</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">useApi</span><span class="p">(</span><span class="nx">configApiRef</span><span class="p">);</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">backendUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="s1">&#39;backend.baseUrl&#39;</span><span class="p">);</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">chatCompletion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">backendUrl</span><span class="si">}</span><span class="sb">/proxy/openai/chat/completions`</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">      </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="w">      </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="w">      </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="kt">JSON.stringify</span><span class="p">({</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="w">        </span><span class="nx">messages</span><span class="o">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nx">role</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;user&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">content</span><span class="o">:</span><span class="w"> </span><span class="kt">message</span><span class="w"> </span><span class="p">}],</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">        </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;gpt-4o-mini&#39;</span><span class="p">,</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="w">        </span><span class="nx">max_tokens</span><span class="o">:</span><span class="w"> </span><span class="kt">1000</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">      </span><span class="p">})</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="w">    </span><span class="p">});</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="w">  </span><span class="p">};</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">chatCompletion</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="p">};</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="backend-nodejs-backstage-plugin">Backend Node.js (Backstage Plugin)<a class="headerlink" href="#backend-nodejs-backstage-plugin" title="Permanent link">&para;</a></h3>
+<div class="language-typescript highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span>
+<span class="normal"><a href="#__codelineno-10-17">17</a></span>
+<span class="normal"><a href="#__codelineno-10-18">18</a></span>
+<span class="normal"><a href="#__codelineno-10-19">19</a></span>
+<span class="normal"><a href="#__codelineno-10-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Config</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;@backstage/config&#39;</span><span class="p">;</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">OpenAIService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">(</span><span class="k">private</span><span class="w"> </span><span class="nx">config</span><span class="o">:</span><span class="w"> </span><span class="kt">Config</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">  </span><span class="k">async</span><span class="w"> </span><span class="nx">chat</span><span class="p">(</span><span class="nx">messages</span><span class="o">:</span><span class="w"> </span><span class="kt">any</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">openaiUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="s1">&#39;openai.serviceUrl&#39;</span><span class="p">);</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">openaiUrl</span><span class="si">}</span><span class="sb">/chat/completions`</span><span class="p">,</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">      </span><span class="nx">method</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">      </span><span class="nx">headers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="w">        </span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="w">        </span><span class="s1">&#39;Authorization&#39;</span><span class="o">:</span><span class="w"> </span><span class="sb">`Bearer </span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">getString</span><span class="p">(</span><span class="s1">&#39;openai.apiKey&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">      </span><span class="p">},</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">      </span><span class="nx">body</span><span class="o">:</span><span class="w"> </span><span class="kt">JSON.stringify</span><span class="p">({</span><span class="w"> </span><span class="nx">messages</span><span class="p">,</span><span class="w"> </span><span class="nx">model</span><span class="o">:</span><span class="w"> </span><span class="s1">&#39;gpt-4o-mini&#39;</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">    </span><span class="p">});</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="casos-de-uso-comunes">🎯 Casos de Uso Comunes<a class="headerlink" href="#casos-de-uso-comunes" title="Permanent link">&para;</a></h2>
+<h3 id="1-asistente-de-documentacion">1. Asistente de Documentación<a class="headerlink" href="#1-asistente-de-documentacion" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="c1"># Generar documentación para un componente</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7007/api/proxy/openai/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="s1">    &quot;messages&quot;: [{</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="s1">      &quot;role&quot;: &quot;user&quot;, </span>
+<a id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="s1">      &quot;content&quot;: &quot;Generate documentation for a React component that displays user profiles&quot;</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="s1">    }],</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="s1">    &quot;model&quot;: &quot;gpt-4o-mini&quot;,</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="s1">    &quot;max_tokens&quot;: 500</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="s1">  }&#39;</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="2-analisis-de-codigo">2. Análisis de Código<a class="headerlink" href="#2-analisis-de-codigo" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-12-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-12-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-12-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-12-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-12-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-12-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-12-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-12-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-12-10">10</a></span>
+<span class="normal"><a href="#__codelineno-12-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="c1"># Revisar código para mejores prácticas</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7007/api/proxy/openai/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="s1">    &quot;messages&quot;: [{</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="s1">      &quot;role&quot;: &quot;user&quot;, </span>
+<a id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="s1">      &quot;content&quot;: &quot;Review this code for security issues: function login(user, pass) { return user === admin &amp;&amp; pass === 123; }&quot;</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="s1">    }],</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="s1">    &quot;model&quot;: &quot;gpt-4o-mini&quot;,</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="s1">    &quot;max_tokens&quot;: 300</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="s1">  }&#39;</span>
+</code></pre></div></td></tr></table></div>
+<h3 id="3-generacion-de-tests">3. Generación de Tests<a class="headerlink" href="#3-generacion-de-tests" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-13-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-13-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-13-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-13-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-13-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-13-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-13-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-13-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-13-10">10</a></span>
+<span class="normal"><a href="#__codelineno-13-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="c1"># Generar tests unitarios</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:7007/api/proxy/openai/chat/completions<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="s1">    &quot;messages&quot;: [{</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="s1">      &quot;role&quot;: &quot;user&quot;, </span>
+<a id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="s1">      &quot;content&quot;: &quot;Generate Jest unit tests for a function that calculates the sum of an array&quot;</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="s1">    }],</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="s1">    &quot;model&quot;: &quot;gpt-4o-mini&quot;,</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="s1">    &quot;max_tokens&quot;: 400</span>
+<a id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="s1">  }&#39;</span>
+</code></pre></div></td></tr></table></div>
+<h2 id="monitoreo">📊 Monitoreo<a class="headerlink" href="#monitoreo" title="Permanent link">&para;</a></h2>
+<h3 id="logs-importantes">Logs Importantes<a class="headerlink" href="#logs-importantes" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span>
+<span class="normal"><a href="#__codelineno-14-5">5</a></span>
+<span class="normal"><a href="#__codelineno-14-6">6</a></span>
+<span class="normal"><a href="#__codelineno-14-7">7</a></span>
+<span class="normal"><a href="#__codelineno-14-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="c1"># Logs del servicio OpenAI</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>ia-ops-openai-service
+<a id="__codelineno-14-3" name="__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="c1"># Logs de Backstage</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>ia-ops-backstage-backend
+<a id="__codelineno-14-6" name="__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="c1"># Logs de PostgreSQL</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8"></a>docker<span class="w"> </span>logs<span class="w"> </span>-f<span class="w"> </span>ia-ops-postgres
+</code></pre></div></td></tr></table></div>
+<h3 id="metricas-basicas">Métricas Básicas<a class="headerlink" href="#metricas-basicas" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="c1"># Verificar uso de recursos</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2"></a>docker<span class="w"> </span>stats<span class="w"> </span>ia-ops-openai-service<span class="w"> </span>ia-ops-backstage-backend
+<a id="__codelineno-15-3" name="__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="c1"># Verificar conectividad de red</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5"></a>docker<span class="w"> </span>network<span class="w"> </span>inspect<span class="w"> </span>ia-ops_ia-ops-network
+</code></pre></div></td></tr></table></div>
+<h2 id="comandos-de-mantenimiento">🔄 Comandos de Mantenimiento<a class="headerlink" href="#comandos-de-mantenimiento" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span>
+<span class="normal"><a href="#__codelineno-16-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="c1"># Reiniciar solo la integración OpenAI-Backstage</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2"></a>docker-compose<span class="w"> </span>restart<span class="w"> </span>openai-service<span class="w"> </span>backstage-backend
+<a id="__codelineno-16-3" name="__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="c1"># Limpiar y reiniciar</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5"></a>docker-compose<span class="w"> </span>down
+<a id="__codelineno-16-6" name="__codelineno-16-6"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>postgres<span class="w"> </span>openai-service<span class="w"> </span>backstage-backend
+<a id="__codelineno-16-7" name="__codelineno-16-7"></a>
+<a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="c1"># Backup de configuración</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9"></a>cp<span class="w"> </span>.env<span class="w"> </span>.env.backup.<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d<span class="k">)</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10"></a>
+<a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="c1"># Actualizar servicios</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12"></a>docker-compose<span class="w"> </span>pull
+<a id="__codelineno-16-13" name="__codelineno-16-13"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+</code></pre></div></td></tr></table></div>
+<h2 id="referencias-rapidas">📚 Referencias Rápidas<a class="headerlink" href="#referencias-rapidas" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="./openai-backstage-integration.md">Documentación completa</a></li>
+<li><a href="../openai-backstage-env-vars/">Variables de entorno</a></li>
+<li><a href="https://platform.openai.com/docs">OpenAI API Docs</a></li>
+<li><a href="https://backstage.io/docs">Backstage Docs</a></li>
+</ul>
+<h2 id="soporte">🆘 Soporte<a class="headerlink" href="#soporte" title="Permanent link">&para;</a></h2>
+<p>Si encuentras problemas:</p>
+<ol>
+<li>Ejecuta <code>./scripts/validate-openai-backstage-env.sh</code></li>
+<li>Ejecuta <code>./scripts/test-openai-backstage-integration.sh</code></li>
+<li>Revisa los logs con <code>docker logs &lt;container-name&gt;</code></li>
+<li>Verifica la conectividad de red entre servicios</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/giovanemere/ia-ops" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "navigation.footer", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../search/main.js"></script>
+      
+    
+  </body>
+</html>

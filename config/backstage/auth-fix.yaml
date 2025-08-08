@@ -1,0 +1,88 @@
+# =============================================================================
+# BACKSTAGE AUTH FIX CONFIGURATION
+# =============================================================================
+# Configuración simplificada para resolver problemas de autenticación
+
+app:
+  title: IA-Ops Platform
+  baseUrl: ${BACKSTAGE_BASE_URL}
+
+backend:
+  baseUrl: ${BACKSTAGE_BACKEND_URL}
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+
+# Configuración de autenticación simplificada
+auth:
+  environment: development
+  session:
+    secret: ${BACKEND_SECRET}
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            # Resolver que permite cualquier usuario de GitHub
+            - resolver: githubSignInResolver
+              config:
+                allowGuestAccess: true
+                createUserEntity: true
+
+# Configuración del catálogo con auto-creación de usuarios
+catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Domain]
+  
+  # Locations estáticas para asegurar que las entidades base existan
+  locations:
+    - type: file
+      target: /app/catalog-info.yaml
+    
+    # Usuarios por defecto
+    - type: file
+      target: /app/users.yaml
+
+  # Proveedores
+  providers:
+    github:
+      providerId:
+        organization: ${GITHUB_ORG}
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+
+# Integración con GitHub
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+# Configuración de permisos simplificada
+permission:
+  enabled: false
+
+# Configuración de proxy
+proxy:
+  '/test':
+    target: 'https://example.com'
+    changeOrigin: true
+
+# TechDocs básico
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'

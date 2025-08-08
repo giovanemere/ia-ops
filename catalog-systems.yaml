@@ -1,0 +1,59 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: billpay-system
+  title: BillPay System
+  description: Sistema completo de gestión de pagos con múltiples frontends y backend
+  annotations:
+    github.com/project-slug: giovanemere/ia-ops
+  tags:
+    - billpay
+    - payment-system
+    - microservices
+    - poc
+spec:
+  owner: platform-team
+  domain: payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: payments
+  title: Payments Domain
+  description: Dominio de pagos y transacciones financieras
+  tags:
+    - financial
+    - payments
+    - domain
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: Equipo responsable de la plataforma y la infraestructura
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: frontend-team
+  title: Frontend Team
+  description: Equipo responsable del desarrollo frontend
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: backend-team
+  title: Backend Team
+  description: Equipo responsable del desarrollo backend
+spec:
+  type: team
+  children: []
