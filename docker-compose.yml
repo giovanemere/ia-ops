@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-backstage}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./config/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./config/database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     networks:
@@ -77,12 +77,12 @@ services:
     container_name: ia-ops-backstage-backend
     restart: unless-stopped
     environment:
-      # Database Configuration
+      # Database Configuration - SEPARADA PARA BACKSTAGE
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
-      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+      POSTGRES_USER: backstage_user
+      POSTGRES_PASSWORD: backstage_pass_2025
+      POSTGRES_DB: backstage_db
       
       # Redis Configuration
       REDIS_HOST: redis
@@ -346,12 +346,12 @@ services:
       # Logging
       GF_LOG_LEVEL: ${GRAFANA_LOG_LEVEL:-info}
       
-      # Database
+      # Database - SEPARADA PARA GRAFANA
       GF_DATABASE_TYPE: postgres
       GF_DATABASE_HOST: postgres:5432
-      GF_DATABASE_NAME: ${POSTGRES_DB:-backstage}
-      GF_DATABASE_USER: ${POSTGRES_USER:-postgres}
-      GF_DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      GF_DATABASE_NAME: grafana_db
+      GF_DATABASE_USER: grafana_user
+      GF_DATABASE_PASSWORD: grafana_pass_2025
     volumes:
       - grafana_data:/var/lib/grafana
       - ./config/monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
@@ -466,12 +466,12 @@ services:
       FASTAPI_RELOAD: ${FASTAPI_RELOAD:-false}
       FASTAPI_DEBUG: ${FASTAPI_DEBUG:-false}
       
-      # Database Configuration (for logging/analytics)
+      # Database Configuration (for logging/analytics) - SEPARADA PARA MONITORING
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
-      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+      POSTGRES_USER: monitoring_user
+      POSTGRES_PASSWORD: monitoring_pass_2025
+      POSTGRES_DB: monitoring_db
       
       # Redis Configuration (for caching)
       REDIS_HOST: redis

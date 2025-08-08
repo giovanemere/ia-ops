@@ -1,0 +1,133 @@
+# =============================================================================
+# CONFIGURACIÓN DE DESARROLLO PARA BACKSTAGE IA-OPS
+# =============================================================================
+# Este archivo extiende app-config.yaml con configuraciones específicas para desarrollo
+# que usan variables de entorno del archivo .env
+
+app:
+  title: IA-OPS Developer Portal (Development)
+  baseUrl: ${BACKSTAGE_FRONTEND_URL:-http://localhost:3002}
+
+organization:
+  name: IA-OPS
+
+backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  baseUrl: ${BACKSTAGE_BASE_URL:-http://localhost:7007}
+  listen:
+    port: ${BACKSTAGE_BACKEND_PORT:-7007}
+    host: ${BACKSTAGE_HOST:-127.0.0.1}
+  cors:
+    origin: ${BACKSTAGE_FRONTEND_URL:-http://localhost:3002}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: ${DATABASE_CLIENT:-pg}
+    connection:
+      host: ${POSTGRES_HOST:-localhost}
+      port: ${POSTGRES_PORT:-5432}
+      user: ${POSTGRES_USER:-backstage}
+      password: ${POSTGRES_PASSWORD:-backstage123}
+      database: ${POSTGRES_DB:-backstage_plugin_catalog}
+      ssl: ${POSTGRES_SSL:-false}
+
+# Configuración específica para desarrollo
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+      # Configuración adicional para desarrollo
+      apps:
+        - $include: github-app-backstage-dev-credentials.yaml
+
+# Configuración de autenticación para desarrollo
+auth:
+  environment: development
+  providers:
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+# Configuración de TechDocs para desarrollo
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: ${TECHDOCS_GENERATOR_RUNIN:-docker}
+    dockerImage: ${TECHDOCS_DOCKER_IMAGE:-spotify/techdocs}
+    pullImage: true
+  publisher:
+    type: ${TECHDOCS_PUBLISHER_TYPE:-local}
+    local:
+      publishDirectory: ${TECHDOCS_STORAGE_PATH:-/tmp/techdocs}
+  cache:
+    ttl: 3600000
+
+# Configuración de catálogo para desarrollo
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template]
+  locations:
+    # Entidades locales
+    - type: file
+      target: ../../examples/entities.yaml
+    - type: file
+      target: ../../examples/template/template.yaml
+      rules:
+        - allow: [Template]
+    - type: file
+      target: ../../examples/org.yaml
+      rules:
+        - allow: [User, Group]
+    
+    # Configuración adicional desde variables de entorno
+    ${CATALOG_LOCATIONS}
+
+# Configuración de Kubernetes para desarrollo
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters: []
+  # Deshabilitado por defecto en desarrollo
+  # clusters:
+  #   - url: ${K8S_CLUSTER_URL}
+  #     name: ${K8S_CLUSTER_NAME:-development}
+  #     authProvider: 'serviceAccount'
+  #     serviceAccountToken: ${K8S_SERVICE_ACCOUNT_TOKEN}
+
+# Configuración de proxy para desarrollo
+proxy:
+  endpoints:
+    '/openai':
+      target: ${OPENAI_SERVICE_URL:-http://localhost:8003}
+      changeOrigin: true
+      headers:
+        Authorization: Bearer ${OPENAI_API_KEY}
+
+# Configuración de permisos para desarrollo
+permission:
+  enabled: ${PERMISSIONS_ENABLED:-true}
+  policy: 'allow-all'  # Solo para desarrollo
+
+# Configuración de logging para desarrollo
+logging:
+  level: ${LOG_LEVEL:-info}
+  format: ${LOG_FORMAT:-pretty}
+  
+# Configuración específica para desarrollo local
+development:
+  # Habilitar recarga automática
+  hotReload: true
+  # Mostrar errores detallados
+  showErrorDetails: true
+  # Habilitar debugging
+  debug: ${DEBUG_MODE:-true}

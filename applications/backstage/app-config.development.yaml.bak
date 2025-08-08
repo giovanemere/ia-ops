@@ -1,0 +1,62 @@
+# =============================================================================
+# CONFIGURACIÓN DE DESARROLLO PARA BACKSTAGE IA-OPS
+# =============================================================================
+# Configuración simplificada para desarrollo local
+
+app:
+  title: IA-OPS Developer Portal (Development)
+  baseUrl: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+
+organization:
+  name: IA-OPS
+
+backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET:-your-backstage-secret-key-2025}
+  baseUrl: http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}
+  listen:
+    port: ${BACKSTAGE_BACKEND_PORT:-7007}
+    host: 0.0.0.0
+  cors:
+    origin: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST:-localhost}
+      port: ${POSTGRES_PORT:-5434}
+      user: ${BACKSTAGE_DB_USER:-backstage_user}
+      password: ${BACKSTAGE_DB_PASSWORD:-backstage_pass_2025}
+      database: ${BACKSTAGE_DB_NAME:-backstage_db}
+      ssl: false
+
+# Configuración de autenticación simplificada
+auth:
+  providers:
+    guest:
+      dangerouslyAllowOutsideDevelopment: true
+
+# Configuración de TechDocs
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+
+# Configuración de catálogo básica
+catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Template]
+  locations:
+    # Entidades básicas para desarrollo
+    - type: file
+      target: ../../examples/entities.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Location]
+
+# Configuración de logging
+logging:
+  level: info

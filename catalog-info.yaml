@@ -5,58 +5,15 @@ metadata:
   title: IA-Ops Platform
   description: Plataforma integrada de IA y DevOps con Backstage
   tags:
-    - platform
     - ai
     - devops
+    - platform
     - backstage
   annotations:
-    github.com/project-slug: giovanemere/ia-ops
-    backstage.io/techdocs-ref: dir:.
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops
 spec:
   owner: devops-team
   domain: platform
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: giovanemere
-  title: Giovanni Emere
-  description: DevOps Engineer and Platform Owner
-  annotations:
-    github.com/user-login: giovanemere
-spec:
-  profile:
-    displayName: Giovanni Emere
-    email: giovanemere@example.com
-    picture: https://github.com/giovanemere.png
-  memberOf:
-    - devops-team
----
-apiVersion: backstage.io/v1alpha1
-kind: User
-metadata:
-  name: admin
-  title: Admin User
-  description: Administrator user for the platform
-spec:
-  profile:
-    displayName: Admin User
-    email: admin@ia-ops.local
-  memberOf:
-    - devops-team
----
-apiVersion: backstage.io/v1alpha1
-kind: Group
-metadata:
-  name: devops-team
-  title: DevOps Team
-  description: Equipo de DevOps responsable de la plataforma IA-Ops
-spec:
-  type: team
-  children: []
-  members:
-    - giovanemere
-    - admin
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -67,10 +24,9 @@ metadata:
   tags:
     - frontend
     - portal
-    - react
+    - backstage
   annotations:
-    github.com/project-slug: giovanemere/ia-ops
-    backstage.io/techdocs-ref: dir:./applications/backstage
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/backstage
 spec:
   type: website
   lifecycle: production
@@ -84,19 +40,18 @@ kind: Component
 metadata:
   name: openai-service
   title: OpenAI Service
-  description: Servicio nativo de IA compatible con OpenAI API
+  description: Servicio nativo de IA integrado con OpenAI
   tags:
-    - backend
     - ai
     - api
+    - openai
     - fastapi
   annotations:
-    github.com/project-slug: giovanemere/ia-ops
-    backstage.io/techdocs-ref: dir:./applications/openai-service
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/openai-service
 spec:
   type: service
   lifecycle: production
-  owner: devops-team
+  owner: ai-team
   system: ia-ops-platform
   providesApis:
     - openai-api
@@ -105,16 +60,14 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: proxy-service
-  title: Proxy Service
-  description: Gateway y proxy para comunicación entre servicios
+  title: Proxy Gateway
+  description: Gateway y proxy para todos los servicios de la plataforma
   tags:
-    - backend
-    - proxy
     - gateway
-    - nodejs
+    - proxy
+    - nginx
   annotations:
-    github.com/project-slug: giovanemere/ia-ops
-    backstage.io/techdocs-ref: dir:./applications/proxy-service
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/proxy-service
 spec:
   type: service
   lifecycle: production
@@ -125,6 +78,24 @@ spec:
     - component:openai-service
 ---
 apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: monitoring-stack
+  title: Monitoring Stack
+  description: Stack de monitoreo con Prometheus y Grafana
+  tags:
+    - monitoring
+    - prometheus
+    - grafana
+  annotations:
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/monitoring
+spec:
+  type: service
+  lifecycle: production
+  owner: devops-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: backstage-api
@@ -132,7 +103,7 @@ metadata:
   description: API del portal Backstage
   tags:
     - api
-    - rest
+    - backstage
 spec:
   type: openapi
   lifecycle: production
@@ -155,26 +126,56 @@ apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: openai-api
-  title: OpenAI API
-  description: API compatible con OpenAI para servicios de IA
+  title: OpenAI Service API
+  description: API del servicio de IA
   tags:
     - api
     - ai
-    - rest
+    - openai
 spec:
   type: openapi
   lifecycle: production
-  owner: devops-team
+  owner: ai-team
   system: ia-ops-platform
   definition: |
     openapi: 3.0.0
     info:
-      title: OpenAI Compatible API
-      version: 1.0.8
+      title: OpenAI Service API
+      version: 1.0.0
     paths:
       /chat/completions:
         post:
-          summary: Create chat completion
+          summary: Chat completions
           responses:
             '200':
-              description: Chat completion response
+              description: AI response
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: devops-team
+  title: DevOps Team
+  description: Equipo de DevOps responsable de la plataforma
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ai-team
+  title: AI Team
+  description: Equipo de IA responsable de los servicios de inteligencia artificial
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Platform Administrator
+  description: Administrador de la plataforma IA-Ops
+spec:
+  memberOf:
+    - devops-team

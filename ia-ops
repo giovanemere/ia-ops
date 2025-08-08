@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# =============================================================================
+# IA-OPS PLATFORM - WRAPPER SCRIPT
+# =============================================================================
+# Fecha: 8 de Agosto de 2025
+# Versión: 2.1.0
+# Descripción: Script wrapper para ejecutar docker-manage.sh desde cualquier directorio
+# =============================================================================
+
+# Detectar la ubicación del script docker-manage.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOCKER_MANAGE_SCRIPT="$SCRIPT_DIR/docker-manage.sh"
+
+# Verificar que el script existe
+if [[ ! -f "$DOCKER_MANAGE_SCRIPT" ]]; then
+    echo -e "\033[0;31m[ERROR] No se encontró docker-manage.sh en $SCRIPT_DIR\033[0m"
+    exit 1
+fi
+
+# Ejecutar el script con todos los argumentos pasados
+exec "$DOCKER_MANAGE_SCRIPT" "$@"

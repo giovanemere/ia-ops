@@ -20,6 +20,9 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
+import { TechRadarPage } from '@backstage/plugin-tech-radar';
+import { CostInsightsPage } from '@backstage/plugin-cost-insights';
+import { OpenAIChat } from './components/OpenAI';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
@@ -94,6 +97,9 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
+    <Route path="/cost-insights" element={<CostInsightsPage />} />
+    <Route path="/ai-chat" element={<OpenAIChat />} />
   </FlatRoutes>
 );
 

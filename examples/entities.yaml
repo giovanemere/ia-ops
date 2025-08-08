@@ -1,0 +1,187 @@
+---
+# =============================================================================
+# IA-OPS PLATFORM - CATALOG ENTITIES
+# =============================================================================
+# Entidades básicas para el catálogo de Backstage
+
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-platform
+  title: IA-OPS Platform
+  description: Plataforma de desarrollo e inteligencia artificial para operaciones
+  tags:
+    - platform
+    - ai
+    - ops
+    - development
+  annotations:
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops
+spec:
+  owner: platform-team
+  domain: infrastructure
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-portal
+  title: Backstage Developer Portal
+  description: Portal de desarrolladores basado en Backstage
+  tags:
+    - frontend
+    - portal
+    - backstage
+  annotations:
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/backstage
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  providesApis:
+    - backstage-api
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: openai-service
+  title: OpenAI Service
+  description: Servicio de inteligencia artificial basado en OpenAI
+  tags:
+    - ai
+    - api
+    - openai
+    - fastapi
+  annotations:
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/openai-service
+spec:
+  type: service
+  lifecycle: production
+  owner: ai-team
+  system: ia-ops-platform
+  providesApis:
+    - openai-api
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mkdocs-documentation
+  title: MkDocs Documentation
+  description: Documentación técnica generada con MkDocs
+  tags:
+    - documentation
+    - mkdocs
+    - static-site
+  annotations:
+    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/docs
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: backstage-api
+  title: Backstage API
+  description: API del portal de desarrolladores Backstage
+  tags:
+    - api
+    - backstage
+    - rest
+spec:
+  type: openapi
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Backstage API
+      version: 1.0.0
+      description: API del portal de desarrolladores
+    paths:
+      /api/catalog:
+        get:
+          summary: Obtener catálogo de entidades
+          responses:
+            '200':
+              description: Lista de entidades
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openai-api
+  title: OpenAI Service API
+  description: API del servicio de inteligencia artificial
+  tags:
+    - api
+    - ai
+    - openai
+    - rest
+spec:
+  type: openapi
+  lifecycle: production
+  owner: ai-team
+  system: ia-ops-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: OpenAI Service API
+      version: 1.0.0
+      description: API de servicios de inteligencia artificial
+    paths:
+      /health:
+        get:
+          summary: Health check
+          responses:
+            '200':
+              description: Servicio saludable
+      /chat:
+        post:
+          summary: Chat con IA
+          responses:
+            '200':
+              description: Respuesta de la IA
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: Equipo responsable de la plataforma IA-OPS
+spec:
+  type: team
+  children: []
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ai-team
+  title: AI Team
+  description: Equipo responsable de los servicios de inteligencia artificial
+spec:
+  type: team
+  children: []
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Administrator
+  description: Administrador de la plataforma
+spec:
+  profile:
+    displayName: Platform Administrator
+    email: admin@ia-ops.local
+  memberOf:
+    - platform-team
