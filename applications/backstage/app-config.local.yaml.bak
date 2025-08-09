@@ -1,6 +1,0 @@
-# Backstage override configuration for your local development environment
-backend:
-  database:
-    client: pg
-    connection:
-      ssl: false

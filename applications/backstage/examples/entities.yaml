@@ -19,20 +19,6 @@ spec:
   system: examples
   providesApis: [example-grpc-api]
 ---
-# Sample Service with TechDocs
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: sample-service
-  description: A sample service demonstrating TechDocs with MkDocs plugins
-  annotations:
-    backstage.io/techdocs-ref: dir:./sample-service
-spec:
-  type: service
-  lifecycle: experimental
-  owner: guests
-  system: examples
----
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api
 apiVersion: backstage.io/v1alpha1
 kind: API
