@@ -1,0 +1,4 @@
+site_name: Test Component with GitHub Actions
+docs_dir: docs
+plugins:
+  - techdocs-core

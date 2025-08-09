@@ -19,14 +19,30 @@ fi
 echo "✅ PostgreSQL funcionando correctamente"
 echo ""
 
-# Configurar variables de entorno
-export POSTGRES_HOST=localhost
-export POSTGRES_PORT=5432
-export POSTGRES_USER=backstage_user
-export POSTGRES_PASSWORD=backstage_pass_2025
-export POSTGRES_DB=backstage_db
-export BACKEND_SECRET=your-secret-key-here-change-in-production
-export GITHUB_TOKEN=your-github-token-here
+# Cargar variables de entorno desde el archivo .env
+echo "🔧 Cargando variables de entorno..."
+if [ -f "../../.env" ]; then
+    export $(grep -v '^#' ../../.env | xargs)
+    echo "✅ Variables de entorno cargadas desde .env"
+else
+    echo "⚠️  Archivo .env no encontrado, usando valores por defecto"
+    # Configurar variables de entorno por defecto
+    export POSTGRES_HOST=localhost
+    export POSTGRES_PORT=5432
+    export POSTGRES_USER=backstage_user
+    export POSTGRES_PASSWORD=backstage_pass_2025
+    export POSTGRES_DB=backstage_db
+    export BACKEND_SECRET=your-secret-key-here-change-in-production
+    export GITHUB_TOKEN=your-github-token-here
+fi
+
+echo ""
+echo "🔍 Variables de entorno configuradas:"
+echo "   POSTGRES_HOST: ${POSTGRES_HOST}"
+echo "   POSTGRES_PORT: ${POSTGRES_PORT}"
+echo "   POSTGRES_USER: ${POSTGRES_USER}"
+echo "   POSTGRES_DB: ${POSTGRES_DB}"
+echo ""
 
 echo "🌐 URLs de acceso:"
 echo "   Frontend: http://localhost:3002"
@@ -42,4 +58,4 @@ echo "⚠️  Presiona Ctrl+C para detener"
 echo ""
 
 # Iniciar Backstage
-dotenv -e ../../.env -- yarn start
+yarn start

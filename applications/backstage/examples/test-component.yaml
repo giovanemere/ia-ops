@@ -1,0 +1,33 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: test-github-actions
+  title: Test Component with GitHub Actions
+  description: A test component to verify GitHub Actions integration
+  annotations:
+    github.com/project-slug: backstage/backstage  # Using a public repo for testing
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: test-system
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: test-system
+  title: Test System
+  description: A test system for GitHub Actions
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: The platform engineering team
+spec:
+  type: team
+  children: []

@@ -1,13 +1,40 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstage
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  name: ia-ops-backstage
+  title: IA-OPS Developer Portal
+  description: Backstage Developer Portal for IA-OPS team - Central hub for developer tools, documentation, and services
+  tags:
+    - backstage
+    - developer-portal
+    - ia-ops
+    - platform
+  annotations:
+    # GitHub integration
+    github.com/project-slug: ia-ops/ia-ops
+    
+    # CODEOWNERS configuration
+    backstage.io/codeowners-location: /CODEOWNERS
+    
+    # TechDocs configuration
+    backstage.io/techdocs-ref: dir:applications/backstage
+    
+    # Source location
+    backstage.io/source-location: url:https://github.com/ia-ops/ia-ops/tree/main/applications/backstage
+    
+    # Additional metadata
+    backstage.io/managed-by-location: url:https://github.com/ia-ops/ia-ops/blob/main/applications/backstage/catalog-info.yaml
+    
 spec:
   type: website
-  owner: john@example.com
-  lifecycle: experimental
+  owner: group:ia-ops-team
+  lifecycle: production
+  system: developer-platform
+  providesApis:
+    - backstage-api
+  consumesApis:
+    - github-api
+    - postgresql-api
+  dependsOn:
+    - component:postgresql
+    - component:github-integration

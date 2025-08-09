@@ -107,10 +107,6 @@ catalog:
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
-
-    # Main catalog-info.yaml for this Backstage instance
-    - type: file
-      target: ../../catalog-info.yaml
       rules:
         - allow: [User, Group]
 

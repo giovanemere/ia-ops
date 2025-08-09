@@ -36,10 +36,6 @@ backend:
       database: ${POSTGRES_DB}
       ssl: false
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
-  # ...
-  codeOwners:
-    providers:
-      - github
 
 integrations:
   github:
@@ -77,12 +73,13 @@ auth:
   providers:
     # See https://backstage.io/docs/auth/guest/provider
     guest: {}
-    # GitHub OAuth Authentication
-    github:
-      development:
-        clientId: ${AUTH_GITHUB_CLIENT_ID}
-        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
-        callbackUrl: ${AUTH_GITHUB_CALLBACK_URL}
+    # GitHub OAuth Authentication (disabled until credentials are configured)
+    # Uncomment and configure when you have GitHub OAuth credentials
+    # github:
+    #   development:
+    #     clientId: ${AUTH_GITHUB_CLIENT_ID}
+    #     clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+    #     callbackUrl: ${AUTH_GITHUB_CALLBACK_URL}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -107,10 +104,6 @@ catalog:
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml
-
-    # Main catalog-info.yaml for this Backstage instance
-    - type: file
-      target: ../../catalog-info.yaml
       rules:
         - allow: [User, Group]
 

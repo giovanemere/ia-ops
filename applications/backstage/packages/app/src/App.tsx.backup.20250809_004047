@@ -11,20 +11,28 @@ import {
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
 import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import { AiChatPage } from './components/AiChat';
 import { orgPlugin } from '@backstage/plugin-org';
+import { AiChatPage } from './components/AiChat';
 import { SearchPage } from '@backstage/plugin-search';
+import { AiChatPage } from './components/AiChat';
 import {
   TechDocsIndexPage,
   techdocsPlugin,
   TechDocsReaderPage,
 } from '@backstage/plugin-techdocs';
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
+import { AiChatPage } from './components/AiChat';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { AiChatPage } from './components/AiChat';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
+import { AiChatPage } from './components/AiChat';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
+import { AiChatPage } from './components/AiChat';
 
 
 // import { AzurePullRequestsPage } from '@backstage/plugin-azure-devops';
+import { AiChatPage } from './components/AiChat';
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
@@ -36,10 +44,15 @@ import {
   SignInPage,
 } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
+import { AiChatPage } from './components/AiChat';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
+import { AiChatPage } from './components/AiChat';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
+import { AiChatPage } from './components/AiChat';
 import { RequirePermission } from '@backstage/plugin-permission-react';
+import { AiChatPage } from './components/AiChat';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { AiChatPage } from './components/AiChat';
 
 const app = createApp({
   apis,
@@ -100,7 +113,6 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
-    <Route path="/ai-chat" element={<AiChatPage />} />
 
     {/* <Route path="/azure-devops" element={<AzurePullRequestsPage />} /> */}
   </FlatRoutes>

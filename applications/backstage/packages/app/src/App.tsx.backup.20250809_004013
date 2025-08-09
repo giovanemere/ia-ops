@@ -1,6 +1,5 @@
 import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
-import { AiChatPage } from './components/AiChat';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
@@ -100,7 +99,6 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
-    <Route path="/ai-chat" element={<AiChatPage />} />
 
     {/* <Route path="/azure-devops" element={<AzurePullRequestsPage />} /> */}
   </FlatRoutes>
