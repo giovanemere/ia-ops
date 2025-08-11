@@ -1,0 +1,182 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: templates-multicloud
+  description: Templates de despliegue multi-cloud para Azure, AWS, OCI y GCP
+spec:
+  targets:
+    # Templates de AWS
+    - ./templates/aws-infrastructure/template.yaml
+    
+    # Templates de Azure
+    - ./templates/azure-messaging/template.yaml
+    
+    # Templates de GCP
+    - ./templates/gcp-storage/template.yaml
+    
+    # Templates de OCI
+    - ./templates/oci-networking/template.yaml
+    
+    # Templates de Kubernetes
+    - ./templates/kubernetes-deployment/template.yaml
+    
+    # Catálogo principal de templates
+    - ./templates/catalog-info.yaml
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: multicloud-templates
+  description: Sistema de templates para despliegues multi-cloud
+  tags:
+    - aws
+    - azure
+    - gcp
+    - oci
+    - kubernetes
+    - templates
+    - infrastructure
+spec:
+  owner: platform-team
+  domain: infrastructure
+links:
+  - url: https://github.com/giovanemere/templates_backstage
+    title: Templates Repository
+    icon: github
+  - url: http://localhost:8080/create
+    title: Create from Template
+    icon: web
+  - url: https://backstage.io/docs/features/software-templates/
+    title: Backstage Templates Guide
+    icon: docs
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: aws-infrastructure-template
+  description: Template para infraestructura AWS
+  tags:
+    - aws
+    - terraform
+    - infrastructure
+spec:
+  type: template
+  lifecycle: production
+  owner: platform-team
+  system: multicloud-templates
+links:
+  - url: https://github.com/giovanemere/templates_backstage/tree/trunk/aws-infrastructure
+    title: Template Source
+    icon: github
+  - url: https://aws.amazon.com/getting-started/
+    title: AWS Getting Started
+    icon: cloud
+  - url: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
+    title: Terraform AWS Provider
+    icon: docs
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: azure-messaging-template
+  description: Template para servicios de mensajería Azure
+  tags:
+    - azure
+    - messaging
+    - service-bus
+spec:
+  type: template
+  lifecycle: production
+  owner: platform-team
+  system: multicloud-templates
+links:
+  - url: https://github.com/giovanemere/templates_backstage/tree/trunk/azure-messaging
+    title: Template Source
+    icon: github
+  - url: https://docs.microsoft.com/en-us/azure/service-bus-messaging/
+    title: Azure Service Bus Documentation
+    icon: docs
+  - url: https://azure.microsoft.com/en-us/services/service-bus/
+    title: Azure Service Bus
+    icon: cloud
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gcp-storage-template
+  description: Template para almacenamiento GCP
+  tags:
+    - gcp
+    - storage
+    - cloud-storage
+spec:
+  type: template
+  lifecycle: production
+  owner: platform-team
+  system: multicloud-templates
+links:
+  - url: https://github.com/giovanemere/templates_backstage/tree/trunk/gcp-storage
+    title: Template Source
+    icon: github
+  - url: https://cloud.google.com/storage/docs
+    title: GCP Storage Documentation
+    icon: docs
+  - url: https://cloud.google.com/storage
+    title: Google Cloud Storage
+    icon: cloud
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: oci-networking-template
+  description: Template para networking OCI
+  tags:
+    - oci
+    - networking
+    - vcn
+spec:
+  type: template
+  lifecycle: production
+  owner: platform-team
+  system: multicloud-templates
+links:
+  - url: https://github.com/giovanemere/templates_backstage/tree/trunk/oci-networking
+    title: Template Source
+    icon: github
+  - url: https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm
+    title: OCI Networking Documentation
+    icon: docs
+  - url: https://www.oracle.com/cloud/networking/
+    title: Oracle Cloud Networking
+    icon: cloud
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: kubernetes-deployment-template
+  description: Template para despliegues Kubernetes
+  tags:
+    - kubernetes
+    - deployment
+    - containers
+spec:
+  type: template
+  lifecycle: production
+  owner: platform-team
+  system: multicloud-templates
+links:
+  - url: https://github.com/giovanemere/templates_backstage/tree/trunk/kubernetes-deployment
+    title: Template Source
+    icon: github
+  - url: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+    title: Kubernetes Deployments
+    icon: docs
+  - url: https://kubernetes.io/docs/
+    title: Kubernetes Documentation
+    icon: docs

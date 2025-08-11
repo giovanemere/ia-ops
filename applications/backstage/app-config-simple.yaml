@@ -1,0 +1,99 @@
+app:
+  title: IA-OPS Developer Portal
+  baseUrl: http://localhost:3002
+
+organization:
+  name: IA-OPS
+
+backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET:-your-secret-key-here}
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin: http://localhost:3002
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+      ssl: false
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+  cache:
+    ttl: 3600000
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template, Domain, Group, User]
+  
+  locations:
+    # Repositorios con documentación automática desplegada
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-back/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-a/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-b/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-icbs/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+
+  # Discovery automático
+  providers:
+    github:
+      giovanemere:
+        organization: 'giovanemere'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'trunk'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 10 }
+          timeout: { minutes: 3 }
+
+# GitHub Actions Configuration
+github-actions:
+  proxyPath: /github-actions
+  cache:
+    ttl: 300000
+  scheduler:
+    frequency: { minutes: 5 }
+    timeout: { minutes: 2 }

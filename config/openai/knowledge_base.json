@@ -1,0 +1,657 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-08-11",
+  "description": "Base de conocimiento de aplicaciones DevOps para IA-Ops Platform",
+  "statistics": {
+    "total_applications": 71,
+    "cloud_providers": 0,
+    "technologies": 0,
+    "deployment_patterns": 0
+  },
+  "data": {
+    "applications": [
+      {
+        "name": "Access Manager",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Administración de Efectivo ICOM",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Alertas Móviles",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Almaviva",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Alpopular",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Altiris",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "API Connect",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ATH",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "AvalPayCenter Migracion",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "BillPay Aval",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "C3 (Centro de Computo)",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "C3 Compensacion",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "C3 Cuadre cajeros",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "C3 Requerimientos",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Cartera SISCAR",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Casa de Bolsa",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Centralización de Efectivo",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Cobranzas",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Conplan",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Core de Autenticación",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Core Transaccional",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "CTIF_Cloud",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "DataPower",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Desembolsos",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "EPD",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fevi",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fidubogota",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fiduciaria Corficolombiana",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fiduoccidente",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fidupopular",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fundación Grupo Aval",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Fundación Luis Carlos Sarmiento Angulo",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Grupo Aval",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ICBS App Mobile",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ICBS - Banco AV Villas",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ICBS - Banco de Bogotá",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ICBS - Banco de Occidente",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ICBS - Banco Popular",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "IIB",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Istio",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Latinia",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "LDAP 4",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Linea Etica Construcciones",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Linea Etica El Tiempo",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Margen de Gestión de Riesgos",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Microcredito Aval",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Occidental Bank Barbados",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Occivirtual",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Oficina Virtual Occidente",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Pagos PSE",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Pasarela de Pagos Aval - PCI",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "PB - Banco Popular",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Portal Martillo (Nube)",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Postilion Capa Aplicación",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Postilion Post Office",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Postilion Real Time",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Postilion Remote Monitor",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Publicitaria",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Red Aval",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Secretaría de Hacienda",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Seguros Alfa",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "SISCOI",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "SIXPRO",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "SOFIA",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "SOR Corporativo - BPM (Credito Comercial)",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Transferencias Inmediatas (TIN)",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Transferencias Masivas AVAL",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "ISO 20022",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Gestor de Reclamos",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Listas Decriptivas",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      },
+      {
+        "name": "Conglomerados",
+        "description": "",
+        "cloud_provider": "",
+        "technology_stack": "",
+        "deployment_type": "",
+        "status": "",
+        "team": ""
+      }
+    ],
+    "cloud_providers": [],
+    "technologies": [],
+    "deployment_patterns": []
+  }
+}

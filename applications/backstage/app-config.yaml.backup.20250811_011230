@@ -1,0 +1,153 @@
+app:
+  title: IA-OPS Developer Portal
+  baseUrl: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+
+organization:
+  name: IA-OPS
+
+backend:
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET:-your-secret-key-here}
+  baseUrl: http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}
+  listen:
+    port: ${BACKSTAGE_BACKEND_PORT:-7007}
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+      ssl: false
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+  cache:
+    ttl: 3600000
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template, Domain, Group, User]
+  
+  locations:
+    # Catálogo principal del proyecto
+    - type: file
+      target: ../../catalog-info.yaml
+    
+    # Templates y framework (submódulos locales)
+    - type: file
+      target: ../../catalog-templates.yaml
+    - type: file
+      target: ../../catalog-framework.yaml
+    
+    # Catálogo unificado
+    - type: file
+      target: ./catalog-unified.yaml
+    
+    # Repositorios externos (branch trunk)
+    - type: url
+      target: https://github.com/giovanemere/templates_backstage/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Template, Component, System]
+    
+    - type: url
+      target: https://github.com/giovanemere/ia-ops-framework/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, System, API, Resource]
+    
+    # Repositorios de aplicaciones (branch trunk)
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-back/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-a/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-b/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-icbs/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+
+proxy:
+  '/openai':
+    target: ${OPENAI_SERVICE_URL}
+    changeOrigin: true
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+      
+  '/proxy-health':
+    target: http://proxy-service:8080/health
+    changeOrigin: true
+
+github-actions:
+  proxyPath: /github-actions
+  cache:
+    ttl: 300000
+  scheduler:
+    frequency: { minutes: 5 }
+    timeout: { minutes: 2 }
+
+costInsights:
+  engineerCost: 200000
+  products:
+    aws:
+      name: AWS Services
+      icon: cloud
+    azure:
+      name: Azure Services  
+      icon: cloud
+    gcp:
+      name: GCP Services
+      icon: cloud
+    kubernetes:
+      name: Kubernetes
+      icon: compute
+  metrics:
+    - name: 'Daily Cost'
+      default: true
+    - name: 'Weekly Cost'
+    - name: 'Monthly Cost'
+  currencies:
+    - label: 'USD ($)'
+      unit: 'USD'

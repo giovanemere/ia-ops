@@ -1,0 +1,171 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: jenkins-weblogic-deployment
+  title: Jenkins WebLogic Deployment
+  description: Template para crear pipeline de Jenkins que despliega JARs en WebLogic
+  tags:
+    - jenkins
+    - weblogic
+    - java
+    - deployment
+    - enterprise
+spec:
+  owner: platform-team
+  type: service
+  
+  parameters:
+    - title: Información del Proyecto
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: Nombre del Proyecto
+          type: string
+          description: Nombre único del proyecto
+          pattern: '^[a-zA-Z0-9-]+$'
+        description:
+          title: Descripción
+          type: string
+          description: Descripción del proyecto
+        owner:
+          title: Propietario
+          type: string
+          description: Equipo propietario
+          default: platform-team
+
+    - title: Configuración de WebLogic
+      required:
+        - weblogicServer
+        - weblogicDomain
+        - deploymentTarget
+      properties:
+        weblogicServer:
+          title: Servidor WebLogic
+          type: string
+          description: URL del servidor WebLogic
+          default: "http://weblogic-server:7001"
+        weblogicDomain:
+          title: Dominio WebLogic
+          type: string
+          description: Nombre del dominio WebLogic
+          default: "base_domain"
+        deploymentTarget:
+          title: Target de Despliegue
+          type: string
+          description: Servidor o cluster de destino
+          enum:
+            - AdminServer
+            - ManagedServer1
+            - Cluster1
+          default: AdminServer
+        weblogicUser:
+          title: Usuario WebLogic
+          type: string
+          description: Usuario para despliegue
+          default: "weblogic"
+
+    - title: Configuración de Jenkins
+      required:
+        - jenkinsServer
+        - gitRepository
+      properties:
+        jenkinsServer:
+          title: Servidor Jenkins
+          type: string
+          description: URL del servidor Jenkins
+          default: "http://jenkins:8080"
+        gitRepository:
+          title: Repositorio Git
+          type: string
+          description: URL del repositorio Git
+        buildTool:
+          title: Herramienta de Build
+          type: string
+          description: Herramienta para construir el JAR
+          enum:
+            - maven
+            - gradle
+            - ant
+          default: maven
+        javaVersion:
+          title: Versión de Java
+          type: string
+          enum:
+            - "8"
+            - "11"
+            - "17"
+            - "21"
+          default: "11"
+
+    - title: Configuración de Despliegue
+      properties:
+        deploymentMode:
+          title: Modo de Despliegue
+          type: string
+          enum:
+            - "replace"
+            - "update"
+            - "stage"
+          default: "replace"
+        healthCheckUrl:
+          title: URL de Health Check
+          type: string
+          description: URL para verificar el despliegue
+        rollbackEnabled:
+          title: Habilitar Rollback
+          type: boolean
+          default: true
+        notificationEmail:
+          title: Email de Notificaciones
+          type: string
+          description: Email para notificaciones de despliegue
+
+  steps:
+    - id: fetch
+      name: Fetch Base Template
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          weblogicServer: ${{ parameters.weblogicServer }}
+          weblogicDomain: ${{ parameters.weblogicDomain }}
+          deploymentTarget: ${{ parameters.deploymentTarget }}
+          weblogicUser: ${{ parameters.weblogicUser }}
+          jenkinsServer: ${{ parameters.jenkinsServer }}
+          gitRepository: ${{ parameters.gitRepository }}
+          buildTool: ${{ parameters.buildTool }}
+          javaVersion: ${{ parameters.javaVersion }}
+          deploymentMode: ${{ parameters.deploymentMode }}
+          healthCheckUrl: ${{ parameters.healthCheckUrl }}
+          rollbackEnabled: ${{ parameters.rollbackEnabled }}
+          notificationEmail: ${{ parameters.notificationEmail }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: 'Jenkins WebLogic deployment pipeline for ${{ parameters.name }}'
+        repoUrl: github.com?owner=giovanemere&repo=${{ parameters.name }}
+        defaultBranch: trunk
+
+    - id: register
+      name: Register in Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Jenkins Pipeline
+        url: ${{ parameters.jenkinsServer }}/job/${{ parameters.name }}
+      - title: WebLogic Console
+        url: ${{ parameters.weblogicServer }}/console

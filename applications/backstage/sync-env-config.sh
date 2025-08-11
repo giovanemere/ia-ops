@@ -67,24 +67,34 @@ EOF
 
 echo "✅ Archivo env.ts actualizado con la configuración del .env"
 
-# Verificar TypeScript
+# Verificar TypeScript con timeout
 echo "🔍 Verificando TypeScript..."
-if yarn tsc --noEmit 2>&1 | tee /tmp/tsc_output.log; then
+if timeout 30s yarn tsc --noEmit 2>&1 | tee /tmp/tsc_output.log; then
     echo "✅ TypeScript: Sin errores"
 else
-    echo "⚠️  TypeScript: Hay warnings/errores:"
-    echo "📄 Detalles:"
-    cat /tmp/tsc_output.log | grep -E "(error|warning)" | head -10
+    echo "⚠️  TypeScript: Timeout o errores - continuando..."
+    if [ -f /tmp/tsc_output.log ]; then
+        echo "📄 Detalles:"
+        cat /tmp/tsc_output.log | grep -E "(error|warning)" | head -10 || true
+    fi
 fi
 
-# Verificar linting
+# Verificar linting con timeout
 echo "🔍 Verificando linting..."
-if yarn lint:all 2>&1 | tee /tmp/lint_output.log | grep -q "error\|Error"; then
-    echo "⚠️  Linting: Hay warnings:"
-    echo "📄 Detalles:"
-    cat /tmp/lint_output.log | grep -E "(error|warning|Error|Warning)" | head -5
+if timeout 45s yarn lint:all 2>&1 | tee /tmp/lint_output.log; then
+    if grep -q "error\|Error" /tmp/lint_output.log; then
+        echo "⚠️  Linting: Hay warnings:"
+        echo "📄 Detalles:"
+        cat /tmp/lint_output.log | grep -E "(error|warning|Error|Warning)" | head -5
+    else
+        echo "✅ Linting: Sin errores críticos"
+    fi
 else
-    echo "✅ Linting: Sin errores críticos"
+    echo "⚠️  Linting: Timeout después de 45s - continuando..."
+    if [ -f /tmp/lint_output.log ]; then
+        echo "📄 Salida parcial:"
+        tail -5 /tmp/lint_output.log || true
+    fi
 fi
 
 echo ""

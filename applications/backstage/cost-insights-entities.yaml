@@ -1,0 +1,95 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: aws-cost-tracking
+  description: Seguimiento de costos AWS
+  tags:
+    - cost
+    - aws
+    - monitoring
+spec:
+  type: cost-tracker
+  owner: platform-team
+  system: ia-ops-platform
+links:
+  - url: https://console.aws.amazon.com/billing/
+    title: AWS Billing Console
+    icon: cloud
+  - url: https://console.aws.amazon.com/cost-management/
+    title: AWS Cost Explorer
+    icon: dashboard
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: azure-cost-tracking
+  description: Seguimiento de costos Azure
+  tags:
+    - cost
+    - azure
+    - monitoring
+spec:
+  type: cost-tracker
+  owner: platform-team
+  system: ia-ops-platform
+links:
+  - url: https://portal.azure.com/#blade/Microsoft_Azure_CostManagement/Menu/overview
+    title: Azure Cost Management
+    icon: cloud
+  - url: https://portal.azure.com/#blade/Microsoft_Azure_Billing/BillingMenuBlade/Overview
+    title: Azure Billing
+    icon: dashboard
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: gcp-cost-tracking
+  description: Seguimiento de costos GCP
+  tags:
+    - cost
+    - gcp
+    - monitoring
+spec:
+  type: cost-tracker
+  owner: platform-team
+  system: ia-ops-platform
+links:
+  - url: https://console.cloud.google.com/billing
+    title: GCP Billing Console
+    icon: cloud
+  - url: https://console.cloud.google.com/billing/reports
+    title: GCP Cost Reports
+    icon: dashboard
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cost-insights-dashboard
+  description: Dashboard de insights de costos para IA-Ops Platform
+  tags:
+    - cost
+    - dashboard
+    - monitoring
+    - insights
+spec:
+  type: dashboard
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  dependsOn:
+    - resource:aws-cost-tracking
+    - resource:azure-cost-tracking
+    - resource:gcp-cost-tracking
+links:
+  - url: http://localhost:3002/cost-insights
+    title: Cost Insights Dashboard
+    icon: dashboard
+  - url: http://localhost:3001/d/cost-overview
+    title: Grafana Cost Overview
+    icon: grafana
+  - url: http://localhost:9090/targets?search=cost
+    title: Cost Metrics
+    icon: dashboard

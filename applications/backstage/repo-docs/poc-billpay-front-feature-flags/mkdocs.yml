@@ -1,0 +1,31 @@
+site_name: 'poc-billpay-front-feature-flags Documentation'
+site_description: 'Documentación automática generada por Backstage TechDocs'
+
+nav:
+  - Home: index.md
+  - API: api.md
+  - Architecture: architecture.md
+  - Deployment: deployment.md
+
+plugins:
+  - techdocs-core
+  - search
+  - mermaid2
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: blue
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:mermaid2.fence_mermaid
+
+repo_url: https://github.com/giovanemere/poc-billpay-front-feature-flags
+edit_uri: edit/main/docs/

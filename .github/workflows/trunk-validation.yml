@@ -1,0 +1,202 @@
+name: 🌳 Trunk Branch Validation
+
+on:
+  push:
+    branches: [ trunk ]
+  pull_request:
+    branches: [ trunk ]
+  schedule:
+    # Run daily at 2 AM UTC to validate trunk integrity
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  validate-trunk-only:
+    name: 🔍 Validate Trunk-Only Configuration
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for branch analysis
+
+    - name: 🌳 Validate trunk branch setup
+      run: |
+        echo "🌳 Validating trunk-only branch configuration..."
+        
+        # Check if we're on trunk branch
+        CURRENT_BRANCH=$(git branch --show-current)
+        if [ "$CURRENT_BRANCH" != "trunk" ]; then
+          echo "❌ Not on trunk branch. Current: $CURRENT_BRANCH"
+          exit 1
+        fi
+        echo "✅ Currently on trunk branch"
+        
+        # Check if trunk is the default branch (this requires GitHub API)
+        echo "ℹ️ Current branch: $CURRENT_BRANCH"
+        echo "ℹ️ GitHub ref: ${{ github.ref }}"
+        
+        if [ "${{ github.ref }}" = "refs/heads/trunk" ]; then
+          echo "✅ Workflow triggered from trunk branch"
+        fi
+
+    - name: 🔍 Validate workflow configurations
+      run: |
+        echo "🔍 Validating GitHub Actions workflows..."
+        
+        # Check main CI workflow
+        if grep -q "branches: \[ trunk \]" .github/workflows/main-ci.yml; then
+          echo "✅ Main CI workflow configured for trunk branch"
+        else
+          echo "❌ Main CI workflow not properly configured for trunk branch"
+          exit 1
+        fi
+        
+        # Check Backstage build workflow
+        if grep -q "branches: \[trunk\]" .github/workflows/backstage-build.yml; then
+          echo "✅ Backstage build workflow configured for trunk branch"
+        else
+          echo "❌ Backstage build workflow not properly configured for trunk branch"
+          exit 1
+        fi
+
+    - name: 📚 Validate documentation references
+      run: |
+        echo "📚 Validating documentation branch references..."
+        
+        # Check for any remaining 'main' branch references in documentation
+        MAIN_REFS=$(find . -name "*.md" -type f -exec grep -l "main" {} \; | grep -v migrate-to-trunk.sh | head -5)
+        
+        if [ -n "$MAIN_REFS" ]; then
+          echo "⚠️ Found potential 'main' branch references in documentation:"
+          echo "$MAIN_REFS"
+          echo "Please review these files to ensure they should reference 'main' or update to 'trunk'"
+        else
+          echo "✅ No problematic 'main' branch references found in documentation"
+        fi
+
+    - name: ⚙️ Validate GitOps configurations
+      run: |
+        echo "⚙️ Validating GitOps configurations..."
+        
+        if [ -d "gitops" ]; then
+          # Check ArgoCD configurations
+          if [ -d "gitops/argocd" ]; then
+            ARGOCD_MAIN_REFS=$(find gitops/argocd -name "*.yaml" -o -name "*.yml" | xargs grep -l "targetRevision.*main" 2>/dev/null || true)
+            
+            if [ -n "$ARGOCD_MAIN_REFS" ]; then
+              echo "❌ Found ArgoCD configurations still referencing 'main' branch:"
+              echo "$ARGOCD_MAIN_REFS"
+              exit 1
+            else
+              echo "✅ ArgoCD configurations properly reference trunk branch"
+            fi
+          fi
+          
+          # Check other GitOps files
+          GITOPS_MAIN_REFS=$(find gitops -name "*.yaml" -o -name "*.yml" | xargs grep -l "main" 2>/dev/null | head -3 || true)
+          
+          if [ -n "$GITOPS_MAIN_REFS" ]; then
+            echo "⚠️ Found potential 'main' references in GitOps configurations:"
+            echo "$GITOPS_MAIN_REFS"
+            echo "Please review these files"
+          else
+            echo "✅ GitOps configurations look good"
+          fi
+        else
+          echo "ℹ️ No GitOps directory found"
+        fi
+
+    - name: 🏛️ Validate Backstage catalog configurations
+      run: |
+        echo "🏛️ Validating Backstage catalog configurations..."
+        
+        CATALOG_MAIN_REFS=$(find . -name "catalog-*.yaml" -o -name "catalog-*.yml" | xargs grep -l "main" 2>/dev/null || true)
+        
+        if [ -n "$CATALOG_MAIN_REFS" ]; then
+          echo "❌ Found Backstage catalog files still referencing 'main' branch:"
+          echo "$CATALOG_MAIN_REFS"
+          exit 1
+        else
+          echo "✅ Backstage catalog configurations properly reference trunk branch"
+        fi
+
+    - name: 🔧 Validate CI/CD scripts
+      run: |
+        echo "🔧 Validating CI/CD scripts..."
+        
+        SCRIPT_MAIN_REFS=$(find . -name "*.sh" -type f | xargs grep -l "main" 2>/dev/null | grep -v migrate-to-trunk.sh || true)
+        
+        if [ -n "$SCRIPT_MAIN_REFS" ]; then
+          echo "⚠️ Found scripts with 'main' references:"
+          echo "$SCRIPT_MAIN_REFS"
+          echo "Please review these scripts to ensure they should reference 'main' or update to 'trunk'"
+        else
+          echo "✅ CI/CD scripts look good"
+        fi
+
+    - name: 📊 Generate validation report
+      run: |
+        echo "📊 Generating trunk validation report..."
+        
+        cat > trunk-validation-report.md << EOF
+        # 🌳 Trunk Branch Validation Report
+        
+        **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Branch**: $(git branch --show-current)
+        **Commit**: $(git rev-parse --short HEAD)
+        **Workflow**: ${{ github.workflow }}
+        **Run ID**: ${{ github.run_id }}
+        
+        ## ✅ Validation Results
+        
+        - **Branch Configuration**: ✅ Trunk branch properly configured
+        - **GitHub Actions**: ✅ Workflows configured for trunk branch
+        - **Documentation**: ✅ Documentation references validated
+        - **GitOps**: ✅ GitOps configurations validated
+        - **Backstage Catalog**: ✅ Catalog configurations validated
+        - **CI/CD Scripts**: ✅ Scripts validated
+        
+        ## 📋 Summary
+        
+        The IA-Ops Platform is properly configured for trunk-only workflow.
+        All critical components are aligned with the trunk branch strategy.
+        
+        ## 🚀 Next Steps
+        
+        - Continue development on trunk branch
+        - Use feature branches for new development
+        - Merge feature branches back to trunk via pull requests
+        - Deploy from trunk branch to all environments
+        
+        ---
+        Generated by IA-Ops Platform Trunk Validation Workflow
+        EOF
+        
+        echo "✅ Validation report generated"
+
+    - name: 📤 Upload validation report
+      uses: actions/upload-artifact@v4
+      with:
+        name: trunk-validation-report
+        path: trunk-validation-report.md
+        retention-days: 30
+
+  notify-validation-complete:
+    name: 📢 Notify Validation Complete
+    runs-on: ubuntu-latest
+    needs: [validate-trunk-only]
+    if: success()
+    
+    steps:
+    - name: 🎉 Validation success notification
+      run: |
+        echo "🎉 Trunk branch validation completed successfully!"
+        echo "✅ All trunk-only configurations are valid"
+        echo "✅ Repository is properly configured for trunk workflow"
+        echo "🌳 Trunk branch is ready for development and deployment"

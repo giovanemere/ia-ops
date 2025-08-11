@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: COMPONENT_NAME
+  description: COMPONENT_DESCRIPTION
+  annotations:
+    # Documentación automática
+    backstage.io/techdocs-ref: dir:.
+    
+    # GitHub integration
+    github.com/project-slug: giovanemere/REPO_NAME
+    backstage.io/source-location: url:https://github.com/giovanemere/REPO_NAME
+    
+    # CI/CD integration
+    github.com/workflows: .github/workflows/
+    
+    # View Source
+    backstage.io/view-url: https://github.com/giovanemere/REPO_NAME
+    backstage.io/edit-url: https://github.com/giovanemere/REPO_NAME/edit/main/catalog-info.yaml
+    
+  tags:
+    - component
+    - service
+  links:
+    - url: https://github.com/giovanemere/REPO_NAME
+      title: Repository
+      icon: github
+    - url: https://github.com/giovanemere/REPO_NAME/actions
+      title: GitHub Actions
+      icon: github
+    - url: https://github.com/giovanemere/REPO_NAME/blob/main/README.md
+      title: Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform

@@ -1,0 +1,1 @@
+export { CostInsightsPlaceholder } from './CostInsightsPlaceholder';
