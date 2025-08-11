@@ -1,0 +1,23 @@
+# Entidad generada automáticamente por IA-Ops Platform
+# Timestamp: 2025-08-11T04:13:03Z
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: poc-billpay-back-ai-analyzed
+  title: BillPay Backend (AI Analyzed)
+  description: Microservicio Spring Boot para sistema de pagos con arquitectura en capas y API REST
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-back
+    ia-ops.ai-analyzed: "true"
+    ia-ops.analysis-timestamp: "2025-08-11T04:13:03Z"
+  tags:
+    - java
+    - spring-boot-3.4.4
+    - ai-analyzed
+    - mvp-demo
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: billpay-system
