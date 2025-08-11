@@ -1,0 +1,44 @@
+🌐 BACKSTAGE - DETALLE DE API
+=============================
+
+URL: http://localhost:3000/catalog/default/api/billpay-api-demo
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ← Back to Catalog                                               │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│ 🔌 BillPay API (AI Demo)                       🤖 AI ANALYZED   │
+│                                                                 │
+│ API REST para pagos - Endpoints identificados por IA           │
+│                                                                 │
+│ ┌─── API Definition ──────────────────────────────────────────┐ │
+│ │                                                             │ │
+│ │ 📋 OpenAPI 3.0.0                                           │ │
+│ │                                                             │ │
+│ │ 🛠️  Endpoints (Identificados por IA):                      │ │
+│ │                                                             │ │
+│ │ GET  /health                                                │ │
+│ │      Health check                                           │ │
+│ │                                                             │ │
+│ │ GET  /api/v1/payments                                       │ │
+│ │      List payments                                          │ │
+│ │                                                             │ │
+│ │ POST /api/v1/payments                                       │ │
+│ │      Process payment                                        │ │
+│ │                                                             │ │
+│ │ GET  /api/v1/users                                          │ │
+│ │      List users                                             │ │
+│ │                                                             │ │
+│ │ GET  /api/v1/transactions                                   │ │
+│ │      List transactions                                      │ │
+│ │                                                             │ │
+│ │ POST /api/v1/auth                                           │ │
+│ │      Authenticate user                                      │ │
+│ │                                                             │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ [Try it out] [Download OpenAPI] [View in Swagger]              │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+✅ ESTADO: API documentada automáticamente por análisis IA

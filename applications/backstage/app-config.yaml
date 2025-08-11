@@ -200,19 +200,19 @@ github:
   host: github.com
 
 # GitHub Actions Plugin Configuration
-# githubActions:
-#   # Optional: Configure specific repositories
-#   repositories:
-#     - owner: giovanemere
-#       repo: poc-billpay-back
-#     - owner: giovanemere
-#       repo: poc-billpay-front-a
-#     - owner: giovanemere
-#       repo: poc-billpay-front-b
-#     - owner: giovanemere
-#       repo: poc-billpay-front-feature-flags
-#     - owner: giovanemere
-#       repo: poc-icbs
+githubActions:
+  # Optional: Configure specific repositories
+  repositories:
+    - owner: giovanemere
+      repo: poc-billpay-back
+    - owner: giovanemere
+      repo: poc-billpay-front-a
+    - owner: giovanemere
+      repo: poc-billpay-front-b
+    - owner: giovanemere
+      repo: poc-billpay-front-feature-flags
+    - owner: giovanemere
+      repo: poc-icbs
 
 # Azure DevOps Plugin Configuration (Disabled until properly configured)
 # azureDevOps:

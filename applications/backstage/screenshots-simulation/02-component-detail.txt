@@ -1,0 +1,41 @@
+🌐 BACKSTAGE - DETALLE DE COMPONENTE
+====================================
+
+URL: http://localhost:3000/catalog/default/component/billpay-backend-ai-demo
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ← Back to Catalog                                               │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│ 🏗️  BillPay Backend (AI Demo)                    🤖 AI ANALYZED │
+│                                                                 │
+│ Microservicio Spring Boot para sistema de pagos - Analizado    │
+│ automáticamente por IA                                          │
+│                                                                 │
+│ ┌─── Overview ─────────────────────────────────────────────────┐ │
+│ │                                                             │ │
+│ │ 📊 Metadata                                                 │ │
+│ │ • Type: service                                             │ │
+│ │ • Lifecycle: experimental                                   │ │
+│ │ • Owner: platform-team                                      │ │
+│ │ • System: billpay-system                                    │ │
+│ │                                                             │ │
+│ │ 🤖 AI Analysis                                              │ │
+│ │ • Technologies: Java 17, Spring Boot 3.4.4, Gradle        │ │
+│ │ • Architecture: Spring Boot Microservice                   │ │
+│ │ • Analyzed: 2025-08-11T04:13:03Z                           │ │
+│ │                                                             │ │
+│ │ 🏷️  Tags                                                    │ │
+│ │ [java] [spring-boot] [ai-analyzed] [mvp-demo] [payments]    │ │
+│ │                                                             │ │
+│ │ 🔗 Links                                                    │ │
+│ │ • GitHub Repository                                         │ │
+│ │ • AI Analysis Service                                       │ │
+│ │                                                             │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ [API] [Dependencies] [Docs] [Monitoring]                       │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+✅ ESTADO: Componente catalogado con metadatos de IA completos

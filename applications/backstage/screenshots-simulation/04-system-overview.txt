@@ -1,0 +1,43 @@
+🌐 BACKSTAGE - VISTA DE SISTEMA
+===============================
+
+URL: http://localhost:3000/catalog/default/system/billpay-system
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ← Back to Catalog                                               │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│ 🏛️  BillPay System (AI Demo)                                   │
+│                                                                 │
+│ Sistema completo de pagos BillPay - Arquitectura identificada  │
+│ por IA                                                          │
+│                                                                 │
+│ ┌─── System Diagram ─────────────────────────────────────────┐ │
+│ │                                                             │ │
+│ │     ┌─────────────────────┐                                │ │
+│ │     │  BillPay Backend    │ 🤖                             │ │
+│ │     │  (AI Demo)          │                                │ │
+│ │     │  Spring Boot        │                                │ │
+│ │     └─────────────────────┘                                │ │
+│ │              │                                              │ │
+│ │              │ provides                                     │ │
+│ │              ▼                                              │ │
+│ │     ┌─────────────────────┐                                │ │
+│ │     │  BillPay API        │ 🤖                             │ │
+│ │     │  (AI Demo)          │                                │ │
+│ │     │  REST API           │                                │ │
+│ │     └─────────────────────┘                                │ │
+│ │                                                             │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ 📊 Components in this system:                                  │
+│ • BillPay Backend (AI Demo) - service                          │
+│                                                                 │
+│ 🔌 APIs provided:                                              │
+│ • BillPay API (AI Demo) - openapi                              │
+│                                                                 │
+│ 👥 Owner: platform-team                                        │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+✅ ESTADO: Sistema mapeado automáticamente por análisis IA

@@ -2,6 +2,7 @@ import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import { AiChatPage } from './components/AiChat';
 import { DarkModeDetector } from './components/DarkModeDetector';
+import { GitHubActionsPage } from './components/GitHubActions';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
@@ -104,6 +105,7 @@ const routes = (
     <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
     <Route path="/ai-chat" element={<AiChatPage />} />
     <Route path="/feature-flags" element={<ExampleFeatureFlagsPage />} />
+    <Route path="/github-actions" element={<GitHubActionsPage />} />
 
     {/* <Route path="/azure-devops" element={<AzurePullRequestsPage />} /> */}
   </FlatRoutes>

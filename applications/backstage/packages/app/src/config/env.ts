@@ -1,6 +1,6 @@
 // Configuración de variables de entorno para el AI Chat
 // Estas constantes son sincronizadas automáticamente desde /home/giovanemere/ia-ops/ia-ops/.env
-// Actualizado el: Sun Aug 10 23:06:04 -05 2025
+// Actualizado el: Sun Aug 10 23:47:36 -05 2025
 
 // Variables de OpenAI desde el archivo .env principal
 export const OPENAI_CONFIG = {
