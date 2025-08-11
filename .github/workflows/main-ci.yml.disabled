@@ -1,0 +1,24 @@
+# ❌ WORKFLOW DESHABILITADO - Requiere GitHub Advanced Security
+#
+# Este workflow ha sido deshabilitado porque intenta usar:
+# - SARIF upload (github/codeql-action/upload-sarif)
+# - Code scanning alerts
+# - Security tab integration
+#
+# Estas características requieren GitHub Advanced Security (licencia premium)
+#
+# ALTERNATIVAS DISPONIBLES:
+# - no-premium-ci.yml: CI/CD completo sin características premium
+# - basic-ci.yml: Workflow básico con security scan en logs
+# - pages-simple.yml: Despliegue de documentación a GitHub Pages
+#
+# Para habilitar este workflow:
+# 1. Obtener licencia GitHub Advanced Security
+# 2. Habilitar Code scanning en Settings → Security & analysis
+# 3. Renombrar este archivo de .disabled a .yml
+#
+# Fecha de deshabilitación: $(date)
+# Razón: Resource not accessible by integration (SARIF upload)
+
+# El contenido original del workflow está comentado abajo:
+# [Contenido original removido para evitar ejecución accidental]

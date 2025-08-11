@@ -1,12 +1,13 @@
 name: 📚 Deploy Documentation to GitHub Pages
 
 on:
-  push:
-    branches: [ trunk ]
-    paths: 
-      - 'docs/**'
-      - 'mkdocs*.yml'
-      - '.github/workflows/deploy-docs.yml'
+  # Temporarily disabled due to GitHub Pages plan limitations
+  # push:
+  #   branches: [ trunk ]
+  #   paths: 
+  #     - 'docs/**'
+  #     - 'mkdocs*.yml'
+  #     - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
