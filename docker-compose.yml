@@ -71,9 +71,7 @@ services:
 
   # Backstage Backend - Servidor principal
   backstage-backend:
-    build:
-      context: ./applications/backstage
-      dockerfile: Dockerfile
+    image: edissonz8809/ia-ops-backstage-private:latest
     container_name: ia-ops-backstage-backend
     restart: unless-stopped
     environment:

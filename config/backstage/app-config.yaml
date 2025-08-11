@@ -6,43 +6,12 @@ organization:
   name: IA-Ops Organization
 
 backend:
-  baseUrl: ${BACKSTAGE_BASE_URL}/api
-  listen:
-    port: 7007
-    host: 0.0.0.0
-  csp:
-    connect-src: ["'self'", 'http:', 'https:', 'ws:', 'wss:']
-  cors:
-    origin: 
-      - ${BACKSTAGE_BASE_URL}
-      - ${BACKSTAGE_FRONTEND_URL}
-      - http://localhost:8080
-      - http://localhost:3000
-      - http://localhost:7007
-    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
-    credentials: true
-  database:
-    client: pg
-    connection:
-      host: ${POSTGRES_HOST}
-      port: ${POSTGRES_PORT}
-      user: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
-      database: ${POSTGRES_DB}
-
-integrations:
-  github:
-    - host: github.com
-      token: ${GITHUB_TOKEN}
-
-techdocs:
-  builder: 'local'
-  generator:
-    runIn: 'local'
-  publisher:
-    type: 'local'
-
-auth:
+  auth:
+    externalAccess:
+      - type: static
+        options:
+          token: ${BACKEND_SECRET}
+          subject: backstage-server
   environment: development
   providers:
     github:
