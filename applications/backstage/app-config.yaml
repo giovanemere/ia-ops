@@ -5,6 +5,13 @@ app:
 organization:
   name: IA-OPS
 
+# Feature Flags Configuration
+featureFlags:
+  enable-advanced-features: true
+  enable-experimental-ui: false
+  enable-beta-analytics: true
+  enable-dark-mode-enhancements: true
+
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/auth/service-to-service-auth for
@@ -92,8 +99,12 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Group, User, Domain]
   locations:
+    # IA-Ops Platform entities
+    - type: file
+      target: ./catalog-entities.yaml
+
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ../../examples/entities.yaml
@@ -141,6 +152,19 @@ kubernetes:
 permission:
   # setting this to `false` will disable permissions
   enabled: true
+
+# Search configuration
+search:
+  # Configure the search engine
+  pg:
+    # Use the same database connection as the main database
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+      ssl: false
 
 # Tech Radar Plugin Configuration
 techRadar:

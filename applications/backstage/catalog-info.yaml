@@ -10,20 +10,8 @@ metadata:
     - ia-ops
     - platform
   annotations:
-    # GitHub integration
-    github.com/project-slug: ia-ops/ia-ops
-    
-    # CODEOWNERS configuration
-    backstage.io/codeowners-location: /CODEOWNERS
-    
-    # TechDocs configuration
-    backstage.io/techdocs-ref: dir:applications/backstage
-    
-    # Source location
-    backstage.io/source-location: url:https://github.com/ia-ops/ia-ops/tree/main/applications/backstage
-    
-    # Additional metadata
-    backstage.io/managed-by-location: url:https://github.com/ia-ops/ia-ops/blob/main/applications/backstage/catalog-info.yaml
+    # TechDocs configuration - using local directory
+    backstage.io/techdocs-ref: dir:.
     
 spec:
   type: website

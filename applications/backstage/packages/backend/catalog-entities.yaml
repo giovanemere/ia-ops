@@ -1,0 +1,219 @@
+---
+# Sistema principal
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: developer-platform
+  title: Developer Platform
+  description: Plataforma de desarrolladores con Backstage e IA
+  tags:
+    - platform
+    - backstage
+    - ai
+spec:
+  owner: group:ia-ops-team
+  domain: platform
+
+---
+# Dominio
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform
+  title: Platform Domain
+  description: Dominio de servicios de plataforma
+spec:
+  owner: group:ia-ops-team
+
+---
+# Grupo principal
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ia-ops-team
+  title: IA-Ops Team
+  description: Equipo responsable de la plataforma IA-Ops
+spec:
+  type: team
+  children: []
+
+---
+# Usuario administrador
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: admin
+  title: Platform Administrator
+spec:
+  memberOf:
+    - ia-ops-team
+
+---
+# Componente Backstage
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-portal
+  title: Backstage Portal
+  description: Portal de desarrolladores
+  tags:
+    - frontend
+    - portal
+    - backstage
+spec:
+  type: website
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  providesApis:
+    - backstage-api
+
+---
+# Componente GitHub Integration
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: github-integration
+  title: GitHub Integration
+  description: Integración con GitHub para autenticación y repositorios
+  tags:
+    - integration
+    - github
+    - auth
+spec:
+  type: service
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  providesApis:
+    - github-api
+
+---
+# Componente PostgreSQL
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: postgresql
+  title: PostgreSQL Database
+  description: Base de datos principal de la plataforma
+  tags:
+    - database
+    - postgresql
+    - storage
+spec:
+  type: service
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  providesApis:
+    - postgresql-api
+
+---
+# API de Backstage
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: backstage-api
+  title: Backstage API
+  description: API del portal Backstage
+  tags:
+    - api
+    - backstage
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Backstage API
+      version: 1.0.0
+      description: API del portal Backstage
+    paths:
+      /api/catalog/entities:
+        get:
+          summary: Get catalog entities
+          responses:
+            '200':
+              description: List of entities
+      /api/auth/github:
+        get:
+          summary: GitHub authentication
+          responses:
+            '200':
+              description: Authentication successful
+
+---
+# API de GitHub
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: github-api
+  title: GitHub API
+  description: API de integración con GitHub
+  tags:
+    - api
+    - github
+    - integration
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: GitHub Integration API
+      version: 1.0.0
+      description: API para integración con GitHub
+    paths:
+      /auth/github:
+        get:
+          summary: GitHub OAuth
+          responses:
+            '200':
+              description: OAuth successful
+      /repos:
+        get:
+          summary: Get repositories
+          responses:
+            '200':
+              description: List of repositories
+
+---
+# API de PostgreSQL
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: postgresql-api
+  title: PostgreSQL API
+  description: API de acceso a PostgreSQL
+  tags:
+    - api
+    - database
+    - postgresql
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:ia-ops-team
+  system: developer-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: PostgreSQL API
+      version: 1.0.0
+      description: API de acceso a la base de datos PostgreSQL
+    paths:
+      /health:
+        get:
+          summary: Database health check
+          responses:
+            '200':
+              description: Database is healthy
+      /query:
+        post:
+          summary: Execute query
+          responses:
+            '200':
+              description: Query executed successfully

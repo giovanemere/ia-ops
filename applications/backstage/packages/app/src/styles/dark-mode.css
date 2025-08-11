@@ -1,0 +1,198 @@
+/* =============================================================================
+ * ESTILOS PERSONALIZADOS PARA MODO OSCURO - BACKSTAGE
+ * =============================================================================
+ * Mejoras específicas para elementos que no se ven bien en modo oscuro
+ * ============================================================================= */
+
+/* Estilos para elementos <pre> en modo oscuro */
+[data-theme="dark"] pre,
+[data-theme="dark"] .MuiBox-root pre {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
+  border-radius: 4px;
+  padding: 16px;
+  overflow: auto;
+  font-size: 0.875rem;
+  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* Estilos para código inline en modo oscuro */
+[data-theme="dark"] code {
+  background-color: #3a3a3a !important;
+  color: #f5f5f5 !important;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace;
+}
+
+/* Mejoras para el chat de IA en modo oscuro */
+[data-theme="dark"] .ai-chat-container {
+  background-color: #1e1e1e !important;
+  border-color: #404040 !important;
+}
+
+[data-theme="dark"] .ai-message {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border-color: #404040 !important;
+}
+
+[data-theme="dark"] .user-message {
+  background-color: #1976d2 !important;
+  color: #ffffff !important;
+}
+
+/* Mejoras para scrollbars en modo oscuro */
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #555555;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #666666;
+}
+
+/* Mejoras para inputs en modo oscuro */
+[data-theme="dark"] .MuiOutlinedInput-root {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #404040;
+}
+
+[data-theme="dark"] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2;
+}
+
+[data-theme="dark"] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2;
+}
+
+/* Mejoras para cards en modo oscuro */
+[data-theme="dark"] .MuiCard-root {
+  background-color: #2d2d2d;
+  border: 1px solid #404040;
+}
+
+/* Mejoras para papers en modo oscuro */
+[data-theme="dark"] .MuiPaper-root {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+}
+
+/* Mejoras para texto en modo oscuro */
+[data-theme="dark"] .MuiTypography-root {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .MuiTypography-colorTextSecondary {
+  color: #b0b0b0 !important;
+}
+
+/* Mejoras específicas para feature flags display */
+[data-theme="dark"] .feature-flags-display pre {
+  background-color: #1a1a1a !important;
+  color: #00ff00 !important;
+  border: 1px solid #333333 !important;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Mejoras para syntax highlighting en modo oscuro */
+[data-theme="dark"] .hljs {
+  background: #2d2d2d !important;
+  color: #e0e0e0 !important;
+}
+
+[data-theme="dark"] .hljs-keyword {
+  color: #569cd6 !important;
+}
+
+[data-theme="dark"] .hljs-string {
+  color: #ce9178 !important;
+}
+
+[data-theme="dark"] .hljs-number {
+  color: #b5cea8 !important;
+}
+
+[data-theme="dark"] .hljs-comment {
+  color: #6a9955 !important;
+}
+
+/* Mejoras para botones en modo oscuro */
+[data-theme="dark"] .MuiButton-containedPrimary {
+  background-color: #1976d2;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .MuiButton-containedPrimary:hover {
+  background-color: #1565c0;
+}
+
+/* Mejoras para chips en modo oscuro */
+[data-theme="dark"] .MuiChip-root {
+  background-color: #404040;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .MuiChip-clickable:hover {
+  background-color: #1976d2;
+  color: #ffffff;
+}
+
+/* Mejoras para dividers en modo oscuro */
+[data-theme="dark"] .MuiDivider-root {
+  background-color: #404040;
+}
+
+/* Mejoras para tablas en modo oscuro */
+[data-theme="dark"] .MuiTableCell-root {
+  border-bottom-color: #404040;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .MuiTableHead-root .MuiTableCell-root {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Mejoras para alerts en modo oscuro */
+[data-theme="dark"] .MuiAlert-root {
+  background-color: #2d2d2d;
+  color: #e0e0e0;
+  border: 1px solid #404040;
+}
+
+[data-theme="dark"] .MuiAlert-standardInfo {
+  background-color: #1e3a8a;
+  color: #bfdbfe;
+}
+
+[data-theme="dark"] .MuiAlert-standardSuccess {
+  background-color: #166534;
+  color: #bbf7d0;
+}
+
+[data-theme="dark"] .MuiAlert-standardWarning {
+  background-color: #92400e;
+  color: #fde68a;
+}
+
+[data-theme="dark"] .MuiAlert-standardError {
+  background-color: #991b1b;
+  color: #fecaca;
+}

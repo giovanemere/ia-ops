@@ -3435,6 +3435,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/dev-utils@npm:^1.1.10":
+  version: 1.1.12
+  resolution: "@backstage/dev-utils@npm:1.1.12"
+  dependencies:
+    "@backstage/app-defaults": "npm:^1.6.4"
+    "@backstage/catalog-model": "npm:^1.7.5"
+    "@backstage/core-app-api": "npm:^1.18.0"
+    "@backstage/core-components": "npm:^0.17.4"
+    "@backstage/core-plugin-api": "npm:^1.10.9"
+    "@backstage/integration-react": "npm:^1.2.9"
+    "@backstage/plugin-catalog-react": "npm:^1.19.1"
+    "@backstage/theme": "npm:^0.6.7"
+    "@material-ui/core": "npm:^4.12.2"
+    "@material-ui/icons": "npm:^4.9.1"
+    react-use: "npm:^17.2.4"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+    react-router-dom: ^6.3.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/fcd75919ff29e552cca7b472dcb61d78eee4459947fdc7c97a7c43e9caa6ce8273aed25010d23dd6bbe78a84380720acf2065856919f2c06ef2e8ef2d7936567
+  languageName: node
+  linkType: hard
+
 "@backstage/e2e-test-utils@npm:^0.1.1":
   version: 0.1.1
   resolution: "@backstage/e2e-test-utils@npm:0.1.1"
@@ -6838,6 +6865,27 @@ __metadata:
   checksum: 10c0/14a375fb6b5b6b3bdb85cf6542855e964dcb0289da1f168cb621b273ee4f2a9b33e297113bf2f3ef4affbeceb085a7a257aa38e0cea59be342774449ed6ea53c
   languageName: node
   linkType: hard
+
+"@internal/plugin-example-feature-flags@npm:^0.1.0, @internal/plugin-example-feature-flags@workspace:plugins/example-feature-flags":
+  version: 0.0.0-use.local
+  resolution: "@internal/plugin-example-feature-flags@workspace:plugins/example-feature-flags"
+  dependencies:
+    "@backstage/cli": "npm:^0.33.1"
+    "@backstage/core-components": "npm:^0.17.4"
+    "@backstage/core-plugin-api": "npm:^1.10.9"
+    "@backstage/dev-utils": "npm:^1.1.10"
+    "@backstage/test-utils": "npm:^1.7.10"
+    "@backstage/theme": "npm:^0.6.7"
+    "@material-ui/core": "npm:^4.12.2"
+    "@material-ui/icons": "npm:^4.9.1"
+    "@testing-library/jest-dom": "npm:^6.0.0"
+    "@testing-library/react": "npm:^14.0.0"
+    "@testing-library/user-event": "npm:^14.0.0"
+    "@types/react": "npm:*"
+    react: "npm:^18.0.2"
+    react-router-dom: "npm:^6.3.0"
+  languageName: unknown
+  linkType: soft
 
 "@internationalized/date@npm:^3.8.2":
   version: 3.8.2
@@ -15670,6 +15718,7 @@ __metadata:
     "@backstage/test-utils": "npm:^1.7.10"
     "@backstage/theme": "npm:^0.6.7"
     "@backstage/ui": "npm:^0.6.0"
+    "@internal/plugin-example-feature-flags": "npm:^0.1.0"
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@playwright/test": "npm:^1.32.3"
@@ -30738,8 +30787,10 @@ __metadata:
     "@backstage/cli": "npm:^0.33.1"
     "@backstage/e2e-test-utils": "npm:^0.1.1"
     "@playwright/test": "npm:^1.32.3"
+    buffer: "npm:^6.0.3"
     node-gyp: "npm:^10.0.0"
     prettier: "npm:^2.3.2"
+    process: "npm:^0.11.10"
     typescript: "npm:~5.8.0"
   languageName: unknown
   linkType: soft

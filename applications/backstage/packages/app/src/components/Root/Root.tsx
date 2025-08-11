@@ -9,6 +9,7 @@ import CloudIcon from '@material-ui/icons/Cloud';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import AndroidIcon from '@material-ui/icons/Android';
+import FlagIcon from '@material-ui/icons/Flag';
 import LogoFull from './LogoFull';
 import LogoIcon from './LogoIcon';
 import {
@@ -88,6 +89,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
           <SidebarItem icon={TimelineIcon} to="tech-radar" text="Tech Radar" />
           <SidebarItem icon={MonetizationOnIcon} to="cost-insights" text="Cost Insights" />
           <SidebarItem icon={AndroidIcon} to="ai-chat" text="AI Assistant" />
+          <SidebarItem icon={FlagIcon} to="feature-flags" text="Feature Flags" />
         </SidebarGroup>
         <SidebarDivider />
         <SidebarScrollWrapper>

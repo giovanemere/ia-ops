@@ -22,6 +22,7 @@ import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
+import { ExampleFeatureFlagsPage } from '@internal/plugin-example-feature-flags';
 
 
 // import { AzurePullRequestsPage } from '@backstage/plugin-azure-devops';
@@ -101,6 +102,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
     <Route path="/ai-chat" element={<AiChatPage />} />
+    <Route path="/feature-flags" element={<ExampleFeatureFlagsPage />} />
 
     {/* <Route path="/azure-devops" element={<AzurePullRequestsPage />} /> */}
   </FlatRoutes>
