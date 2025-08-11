@@ -47,10 +47,10 @@ dist-types/
 *.sh
 !start-*.sh
 
-# Documentación de desarrollo
+# Documentación de desarrollo (mantener docs/ para runtime)
 *.md
 !README.md
-docs/
+!docs/**/*.md
 screenshots-simulation/
 
 # Archivos de backup

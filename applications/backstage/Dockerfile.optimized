@@ -29,7 +29,7 @@ COPY .yarn .yarn
 COPY packages packages
 
 # Install dependencies with optimizations for CI
-RUN yarn install --immutable --network-timeout 600000 --cache-folder /tmp/yarn-cache
+RUN yarn install --network-timeout 600000
 
 FROM base AS build
 
@@ -69,7 +69,10 @@ RUN tar xzf bundle.tar.gz && rm bundle.tar.gz
 
 # Copy configuration files
 COPY --chown=backstage:backstage app-config*.yaml ./
-COPY --chown=backstage:backstage docs ./docs/
+
+# Create docs directory and copy if exists
+RUN mkdir -p docs
+COPY --chown=backstage:backstage docs/ ./docs/
 
 # Create logs directory
 RUN mkdir -p /app/logs && chown -R backstage:backstage /app/logs
