@@ -1,6 +1,7 @@
 import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import { AiChatPage } from './components/AiChat';
+import { DarkModeDetector } from './components/DarkModeDetector';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
@@ -110,6 +111,7 @@ const routes = (
 
 export default app.createRoot(
   <>
+    <DarkModeDetector />
     <AlertDisplay />
     <OAuthRequestDialog />
     <AppRouter>

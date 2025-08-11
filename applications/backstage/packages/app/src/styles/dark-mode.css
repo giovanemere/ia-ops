@@ -4,195 +4,305 @@
  * Mejoras específicas para elementos que no se ven bien en modo oscuro
  * ============================================================================= */
 
-/* Estilos para elementos <pre> en modo oscuro */
+/* Estilos para elementos <pre> en modo oscuro - MUY ESPECÍFICOS */
 [data-theme="dark"] pre,
-[data-theme="dark"] .MuiBox-root pre {
+[data-theme="dark"] .MuiBox-root pre,
+[data-theme="dark"] pre.MuiBox-root,
+[data-theme="dark"] .MuiBox-root-1818,
+[data-theme="dark"] .MuiBox-root-2054,
+body[data-theme="dark"] pre,
+body[data-theme="dark"] .MuiBox-root pre,
+html[data-theme="dark"] pre,
+html[data-theme="dark"] .MuiBox-root pre {
   background-color: #2d2d2d !important;
   color: #e0e0e0 !important;
   border: 1px solid #404040 !important;
-  border-radius: 4px;
-  padding: 16px;
-  overflow: auto;
-  font-size: 0.875rem;
-  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace;
+  border-radius: 4px !important;
+  padding: 16px !important;
+  overflow: auto !important;
+  font-size: 0.875rem !important;
+  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace !important;
+}
+
+/* Estilos específicos para feature flags */
+[data-theme="dark"] pre:contains("featureFlags"),
+[data-theme="dark"] .MuiBox-root pre:contains("featureFlags") {
+  background-color: #1a1a1a !important;
+  color: #00ff00 !important;
+  border: 1px solid #333333 !important;
+}
+
+/* Fallback para cuando el atributo data-theme no esté presente pero el tema sea oscuro */
+.bp3-dark pre,
+.bp3-dark .MuiBox-root pre,
+body.bp3-dark pre,
+html.bp3-dark pre {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
+}
+
+/* Estilos para Material-UI dark theme */
+.MuiCssBaseline-root[data-mui-color-scheme="dark"] pre,
+.MuiCssBaseline-root[data-mui-color-scheme="dark"] .MuiBox-root pre {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
+}
+
+/* Estilos universales para modo oscuro - detecta automáticamente */
+@media (prefers-color-scheme: dark) {
+  pre,
+  .MuiBox-root pre {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #404040 !important;
+  }
+}
+
+/* ESTILOS ADICIONALES PARA SOBRESCRIBIR ESTILOS INLINE */
+
+/* Selector muy específico para elementos pre con clases MuiBox */
+.MuiBox-root-1818[style*="background-color: rgb(245, 245, 245)"],
+.MuiBox-root-2054[style*="background-color: rgb(245, 245, 245)"],
+pre[style*="background-color: rgb(245, 245, 245)"] {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
+}
+
+/* Para cuando el usuario está en modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .MuiBox-root-1818,
+  .MuiBox-root-2054,
+  pre.MuiBox-root {
+    background-color: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #404040 !important;
+  }
+}
+
+/* Estilos que se aplican independientemente del tema si detectamos modo oscuro */
+body.dark-theme pre,
+body.dark-theme .MuiBox-root,
+html.dark-theme pre,
+html.dark-theme .MuiBox-root {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
 }
 
 /* Estilos para código inline en modo oscuro */
-[data-theme="dark"] code {
+[data-theme="dark"] code,
+body[data-theme="dark"] code,
+html[data-theme="dark"] code {
   background-color: #3a3a3a !important;
   color: #f5f5f5 !important;
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+  font-family: 'Roboto Mono', 'Monaco', 'Consolas', monospace !important;
 }
 
 /* Mejoras para el chat de IA en modo oscuro */
-[data-theme="dark"] .ai-chat-container {
+[data-theme="dark"] .ai-chat-container,
+body[data-theme="dark"] .ai-chat-container {
   background-color: #1e1e1e !important;
   border-color: #404040 !important;
 }
 
-[data-theme="dark"] .ai-message {
+[data-theme="dark"] .ai-message,
+body[data-theme="dark"] .ai-message {
   background-color: #2d2d2d !important;
   color: #e0e0e0 !important;
   border-color: #404040 !important;
 }
 
-[data-theme="dark"] .user-message {
+[data-theme="dark"] .user-message,
+body[data-theme="dark"] .user-message {
   background-color: #1976d2 !important;
   color: #ffffff !important;
 }
 
 /* Mejoras para scrollbars en modo oscuro */
-[data-theme="dark"] ::-webkit-scrollbar {
+[data-theme="dark"] ::-webkit-scrollbar,
+body[data-theme="dark"] ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-track {
+[data-theme="dark"] ::-webkit-scrollbar-track,
+body[data-theme="dark"] ::-webkit-scrollbar-track {
   background: #2d2d2d;
   border-radius: 4px;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
+[data-theme="dark"] ::-webkit-scrollbar-thumb,
+body[data-theme="dark"] ::-webkit-scrollbar-thumb {
   background: #555555;
   border-radius: 4px;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+body[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   background: #666666;
 }
 
 /* Mejoras para inputs en modo oscuro */
-[data-theme="dark"] .MuiOutlinedInput-root {
-  background-color: #2d2d2d;
-  color: #e0e0e0;
+[data-theme="dark"] .MuiOutlinedInput-root,
+body[data-theme="dark"] .MuiOutlinedInput-root {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
 }
 
-[data-theme="dark"] .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-  border-color: #404040;
+[data-theme="dark"] .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline,
+body[data-theme="dark"] .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #404040 !important;
 }
 
-[data-theme="dark"] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #1976d2;
+[data-theme="dark"] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
+body[data-theme="dark"] .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2 !important;
 }
 
-[data-theme="dark"] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #1976d2;
+[data-theme="dark"] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+body[data-theme="dark"] .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #1976d2 !important;
 }
 
 /* Mejoras para cards en modo oscuro */
-[data-theme="dark"] .MuiCard-root {
-  background-color: #2d2d2d;
-  border: 1px solid #404040;
+[data-theme="dark"] .MuiCard-root,
+body[data-theme="dark"] .MuiCard-root {
+  background-color: #2d2d2d !important;
+  border: 1px solid #404040 !important;
 }
 
 /* Mejoras para papers en modo oscuro */
-[data-theme="dark"] .MuiPaper-root {
-  background-color: #2d2d2d;
-  color: #e0e0e0;
+[data-theme="dark"] .MuiPaper-root,
+body[data-theme="dark"] .MuiPaper-root {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
 }
 
 /* Mejoras para texto en modo oscuro */
-[data-theme="dark"] .MuiTypography-root {
-  color: #e0e0e0;
+[data-theme="dark"] .MuiTypography-root,
+body[data-theme="dark"] .MuiTypography-root {
+  color: #e0e0e0 !important;
 }
 
-[data-theme="dark"] .MuiTypography-colorTextSecondary {
+[data-theme="dark"] .MuiTypography-colorTextSecondary,
+body[data-theme="dark"] .MuiTypography-colorTextSecondary {
   color: #b0b0b0 !important;
 }
 
 /* Mejoras específicas para feature flags display */
-[data-theme="dark"] .feature-flags-display pre {
+[data-theme="dark"] .feature-flags-display pre,
+body[data-theme="dark"] .feature-flags-display pre {
   background-color: #1a1a1a !important;
   color: #00ff00 !important;
   border: 1px solid #333333 !important;
-  font-family: 'Roboto Mono', monospace;
+  font-family: 'Roboto Mono', monospace !important;
 }
 
 /* Mejoras para syntax highlighting en modo oscuro */
-[data-theme="dark"] .hljs {
+[data-theme="dark"] .hljs,
+body[data-theme="dark"] .hljs {
   background: #2d2d2d !important;
   color: #e0e0e0 !important;
 }
 
-[data-theme="dark"] .hljs-keyword {
+[data-theme="dark"] .hljs-keyword,
+body[data-theme="dark"] .hljs-keyword {
   color: #569cd6 !important;
 }
 
-[data-theme="dark"] .hljs-string {
+[data-theme="dark"] .hljs-string,
+body[data-theme="dark"] .hljs-string {
   color: #ce9178 !important;
 }
 
-[data-theme="dark"] .hljs-number {
+[data-theme="dark"] .hljs-number,
+body[data-theme="dark"] .hljs-number {
   color: #b5cea8 !important;
 }
 
-[data-theme="dark"] .hljs-comment {
+[data-theme="dark"] .hljs-comment,
+body[data-theme="dark"] .hljs-comment {
   color: #6a9955 !important;
 }
 
 /* Mejoras para botones en modo oscuro */
-[data-theme="dark"] .MuiButton-containedPrimary {
-  background-color: #1976d2;
-  color: #ffffff;
+[data-theme="dark"] .MuiButton-containedPrimary,
+body[data-theme="dark"] .MuiButton-containedPrimary {
+  background-color: #1976d2 !important;
+  color: #ffffff !important;
 }
 
-[data-theme="dark"] .MuiButton-containedPrimary:hover {
-  background-color: #1565c0;
+[data-theme="dark"] .MuiButton-containedPrimary:hover,
+body[data-theme="dark"] .MuiButton-containedPrimary:hover {
+  background-color: #1565c0 !important;
 }
 
 /* Mejoras para chips en modo oscuro */
-[data-theme="dark"] .MuiChip-root {
-  background-color: #404040;
-  color: #e0e0e0;
+[data-theme="dark"] .MuiChip-root,
+body[data-theme="dark"] .MuiChip-root {
+  background-color: #404040 !important;
+  color: #e0e0e0 !important;
 }
 
-[data-theme="dark"] .MuiChip-clickable:hover {
-  background-color: #1976d2;
-  color: #ffffff;
+[data-theme="dark"] .MuiChip-clickable:hover,
+body[data-theme="dark"] .MuiChip-clickable:hover {
+  background-color: #1976d2 !important;
+  color: #ffffff !important;
 }
 
 /* Mejoras para dividers en modo oscuro */
-[data-theme="dark"] .MuiDivider-root {
-  background-color: #404040;
+[data-theme="dark"] .MuiDivider-root,
+body[data-theme="dark"] .MuiDivider-root {
+  background-color: #404040 !important;
 }
 
 /* Mejoras para tablas en modo oscuro */
-[data-theme="dark"] .MuiTableCell-root {
-  border-bottom-color: #404040;
-  color: #e0e0e0;
+[data-theme="dark"] .MuiTableCell-root,
+body[data-theme="dark"] .MuiTableCell-root {
+  border-bottom-color: #404040 !important;
+  color: #e0e0e0 !important;
 }
 
-[data-theme="dark"] .MuiTableHead-root .MuiTableCell-root {
-  background-color: #2d2d2d;
-  color: #ffffff;
-  font-weight: 600;
+[data-theme="dark"] .MuiTableHead-root .MuiTableCell-root,
+body[data-theme="dark"] .MuiTableHead-root .MuiTableCell-root {
+  background-color: #2d2d2d !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
 }
 
 /* Mejoras para alerts en modo oscuro */
-[data-theme="dark"] .MuiAlert-root {
-  background-color: #2d2d2d;
-  color: #e0e0e0;
-  border: 1px solid #404040;
+[data-theme="dark"] .MuiAlert-root,
+body[data-theme="dark"] .MuiAlert-root {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #404040 !important;
 }
 
-[data-theme="dark"] .MuiAlert-standardInfo {
-  background-color: #1e3a8a;
-  color: #bfdbfe;
+[data-theme="dark"] .MuiAlert-standardInfo,
+body[data-theme="dark"] .MuiAlert-standardInfo {
+  background-color: #1e3a8a !important;
+  color: #bfdbfe !important;
 }
 
-[data-theme="dark"] .MuiAlert-standardSuccess {
-  background-color: #166534;
-  color: #bbf7d0;
+[data-theme="dark"] .MuiAlert-standardSuccess,
+body[data-theme="dark"] .MuiAlert-standardSuccess {
+  background-color: #166534 !important;
+  color: #bbf7d0 !important;
 }
 
-[data-theme="dark"] .MuiAlert-standardWarning {
-  background-color: #92400e;
-  color: #fde68a;
+[data-theme="dark"] .MuiAlert-standardWarning,
+body[data-theme="dark"] .MuiAlert-standardWarning {
+  background-color: #92400e !important;
+  color: #fde68a !important;
 }
 
-[data-theme="dark"] .MuiAlert-standardError {
-  background-color: #991b1b;
-  color: #fecaca;
+[data-theme="dark"] .MuiAlert-standardError,
+body[data-theme="dark"] .MuiAlert-standardError {
+  background-color: #991b1b !important;
+  color: #fecaca !important;
 }

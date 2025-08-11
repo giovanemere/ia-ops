@@ -105,6 +105,10 @@ catalog:
     - type: file
       target: ./catalog-entities.yaml
 
+    # MVP Demo - AI Analyzed Application
+    - type: file
+      target: ./catalog-mvp-demo.yaml
+
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ../../examples/entities.yaml
