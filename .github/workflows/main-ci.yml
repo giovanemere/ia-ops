@@ -2,9 +2,9 @@ name: IA-Ops Platform CI/CD
 
 on:
   push:
-    branches: [ main, develop, trunk ]
+    branches: [ trunk ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ trunk ]
   workflow_dispatch:
 
 env:
@@ -197,7 +197,7 @@ jobs:
     name: 📚 Deploy Documentation
     runs-on: ubuntu-latest
     needs: [test-documentation]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/trunk'
     
     steps:
     - name: 📥 Checkout code
@@ -213,7 +213,7 @@ jobs:
         pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
 
     - name: 🚀 Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/trunk'
       run: |
         if [ -f "mkdocs.yml" ]; then
           echo "🚀 Deploying documentation to GitHub Pages..."

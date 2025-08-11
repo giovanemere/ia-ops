@@ -2,9 +2,10 @@ name: Build Backstage
 
 on:
   push:
-    branches: [main, develop]
+    branches: [trunk]
     paths: ['applications/backstage/**']
   pull_request:
+    branches: [trunk]
     paths: ['applications/backstage/**']
 
 env:
