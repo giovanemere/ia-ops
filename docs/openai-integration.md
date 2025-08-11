@@ -328,7 +328,7 @@ curl http://localhost:8080/api/openai/health
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 - [Backstage Plugin Development](https://backstage.io/docs/plugins/)
 - [Docker Compose Configuration](../docker-compose.yml)
-- [Kubernetes Manifests](../k8s/)
+- [Kubernetes Manifests](../iac/kubernetes/)
 
 ## 🤝 Contribución
 

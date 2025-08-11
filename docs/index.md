@@ -144,7 +144,7 @@ Soporte para múltiples proveedores:
 
 - [**Getting Started**](getting-started.md) - Guía de inicio rápido
 - [**Architecture**](architecture.md) - Arquitectura detallada del sistema
-- [**API Reference**](api/) - Documentación de APIs
+- [**API Reference**](api/index.md) - Documentación de APIs
 - [**Deployment Guide**](guides/deployment.md) - Guía de despliegue
 - [**Troubleshooting**](guides/troubleshooting.md) - Solución de problemas
 

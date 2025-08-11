@@ -1,27 +1,32 @@
-# 🚀 Guía de Integración: IA-Ops + ICBS Platform
+# 🚀 Guía de Integración: IA-Ops + ICBS Platform (Con Auto-Corrección)
 
 ## 📋 Resumen de la Integración
 
-Esta guía describe cómo usar la **solución integrada** que combina:
+Esta guía describe cómo usar la **solución integrada con auto-corrección** que combina:
 - **IA-Ops Platform** (Backstage + OpenAI Service)
-- **ICBS** (Oracle WebLogic + Jenkins)
+- **ICBS** (Oracle WebLogic + Jenkins + HAProxy)
+- **🔧 Auto-corrección** de imágenes Docker y configuraciones
 
-En lugar de manejar dos sistemas separados, ahora tienes **una plataforma unificada** con startup coordinado y monitoreo integrado.
+En lugar de manejar dos sistemas separados, ahora tienes **una plataforma unificada** con startup coordinado, monitoreo integrado y **corrección automática de problemas**.
 
-## 🎯 ¿Por qué una Solución Integrada?
+## 🎯 ¿Por qué una Solución Integrada con Auto-Corrección?
 
 ### ❌ Problema Anterior
 - Dos sistemas separados que requerían inicio manual
+- HAProxy y otras imágenes ICBS con problemas de configuración
 - Comandos diferentes para cada plataforma
 - Sin integración en el catálogo de Backstage
 - Monitoreo fragmentado
+- Errores de compilación de imágenes Docker
 
 ### ✅ Solución Actual
 - **Un solo comando** para iniciar toda la plataforma
+- **🔧 Auto-corrección automática** de HAProxy e imágenes ICBS
 - **Startup coordinado** con verificación de dependencias
 - **ICBS registrado** en el catálogo de Backstage
 - **Monitoreo unificado** en Grafana
 - **Verificación automática** de servicios
+- **Corrección de configuraciones** en tiempo real
 
 ## 🚀 Inicio Rápido
 
@@ -44,7 +49,7 @@ cd /home/giovanemere/ia-ops/ia-ops
 ./scripts/integrated-startup.sh stop
 ```
 
-## 📊 Secuencia de Inicio
+## 📊 Secuencia de Inicio (Con Auto-Corrección)
 
 El script integrado ejecuta la siguiente secuencia:
 
@@ -53,16 +58,24 @@ El script integrado ejecuta la siguiente secuencia:
 - ✅ Limpiar puertos ocupados
 - ✅ Validar configuraciones
 
-### 2. 🏗️ Inicio de ICBS (Infraestructura Base)
+### 2. 🔧 Auto-Corrección de ICBS
+- ✅ **Diagnosticar** estado de imágenes Docker
+- ✅ **Corregir HAProxy** con configuración simplificada
+- ✅ **Compilar imágenes faltantes** (WebLogic, Jenkins, MkDocs)
+- ✅ **Crear configuraciones funcionales**
+- ✅ **Verificar** que todas las imágenes estén disponibles
+
+### 3. 🏗️ Inicio de ICBS (Infraestructura Base Corregida)
 ```bash
 cd /home/giovanemere/periferia/icbs/docker-for-oracle-weblogic
 ./manage-services.sh start
 ```
-- WebLogic Admin Server
-- Jenkins CI/CD
-- HAProxy Load Balancer
+- Oracle Database XE
+- WebLogic Admin Server A/B (corregido)
+- Jenkins CI/CD (corregido)
+- HAProxy Load Balancer (auto-corregido)
 
-### 3. 🚀 Inicio de IA-Ops (Plataforma Principal)
+### 4. 🚀 Inicio de IA-Ops (Plataforma Principal)
 ```bash
 cd /home/giovanemere/ia-ops/ia-ops/applications/backstage
 ./kill-ports.sh
@@ -75,10 +88,11 @@ cd /home/giovanemere/ia-ops/ia-ops/applications/backstage
 - Proxy Gateway
 - Monitoring Stack
 
-### 4. 🔗 Integración y Verificación
+### 5. 🔗 Integración y Verificación
 - Registro de ICBS en catálogo de Backstage
 - Health checks de todos los servicios
 - Configuración de monitoreo unificado
+- **Verificación de auto-corrección**
 
 ## 🌐 URLs de Acceso
 
@@ -91,20 +105,27 @@ cd /home/giovanemere/ia-ops/ia-ops/applications/backstage
 - **Grafana**: http://localhost:3001 (admin/admin123)
 - **Prometheus**: http://localhost:9090
 
-### 🏗️ Servicios ICBS
-- **WebLogic Console**: http://localhost:7001/console
-- **Jenkins**: http://localhost:8081
-- **HAProxy Stats**: http://localhost:8404/stats
+### 🏗️ Servicios ICBS (Auto-Corregidos)
+- **HAProxy Stats**: http://localhost:8404/stats (admin/admin123) ✨ **CORREGIDO**
+- **HAProxy Frontend**: http://localhost:8083 ✨ **FUNCIONAL**
+- **WebLogic A Console**: http://localhost:7001/console
+- **WebLogic B Console**: http://localhost:7002/console
+- **Jenkins**: http://localhost:8081 ✨ **CORREGIDO**
+
+> **🔧 Nota**: Todos los servicios ICBS han sido auto-corregidos y verificados
 
 ## 🔧 Comandos de Gestión
 
 ### Inicio y Parada
 ```bash
-# Iniciar plataforma completa
+# Iniciar plataforma completa (con auto-corrección)
 ./start-integrated-platform.sh
 
 # Detener todos los servicios
 ./scripts/integrated-startup.sh stop
+
+# Solo corregir ICBS sin iniciar
+./scripts/integrated-startup.sh fix-icbs
 
 # Reiniciar (detener + iniciar)
 ./scripts/integrated-startup.sh stop && ./scripts/integrated-startup.sh start
@@ -112,7 +133,7 @@ cd /home/giovanemere/ia-ops/ia-ops/applications/backstage
 
 ### Verificación y Diagnóstico
 ```bash
-# Verificación completa
+# Verificación completa (incluye verificación de auto-corrección)
 ./scripts/verify-integration.sh
 
 # Verificación rápida
@@ -123,6 +144,18 @@ cd /home/giovanemere/ia-ops/ia-ops/applications/backstage
 
 # Estado de servicios
 ./scripts/integrated-startup.sh status
+```
+
+### Comandos de Auto-Corrección
+```bash
+# Solo corregir problemas de ICBS
+./scripts/integrated-startup.sh fix-icbs
+
+# Verificar si HAProxy está funcionando
+curl http://localhost:8404/stats
+
+# Ver logs de HAProxy corregido
+docker logs haproxy
 ```
 
 ### Comandos Individuales (Si es necesario)

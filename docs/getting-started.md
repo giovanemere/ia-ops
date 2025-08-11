@@ -318,7 +318,7 @@ Una vez que tengas la plataforma ejecutándose:
 ### Recursos Adicionales
 
 - [Architecture Guide](architecture.md) - Arquitectura detallada
-- [API Documentation](api/) - Documentación de APIs
+- [API Documentation](api/index.md) - Documentación de APIs
 - [Deployment Guide](guides/deployment.md) - Despliegue en producción
 - [Troubleshooting](guides/troubleshooting.md) - Solución de problemas
 

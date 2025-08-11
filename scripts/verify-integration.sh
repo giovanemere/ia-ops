@@ -268,9 +268,14 @@ show_access_urls() {
     echo -e "• ${CYAN}Grafana:${NC} http://localhost:3001 (admin/admin123)"
     echo -e "• ${CYAN}Prometheus:${NC} http://localhost:9090"
     echo ""
-    echo -e "• ${CYAN}WebLogic Console:${NC} http://localhost:7001/console"
+    echo -e "${BLUE}🏗️ ICBS Platform (Auto-corregido):${NC}"
+    echo -e "• ${CYAN}HAProxy Stats:${NC} http://localhost:8404/stats (admin/admin123)"
+    echo -e "• ${CYAN}HAProxy Frontend:${NC} http://localhost:8083"
+    echo -e "• ${CYAN}WebLogic A Console:${NC} http://localhost:7001/console"
+    echo -e "• ${CYAN}WebLogic B Console:${NC} http://localhost:7002/console"
     echo -e "• ${CYAN}Jenkins:${NC} http://localhost:8081"
-    echo -e "• ${CYAN}HAProxy Stats:${NC} http://localhost:8404/stats"
+    echo ""
+    echo -e "${GREEN}🔧 Nota: HAProxy y todas las imágenes ICBS han sido auto-corregidas${NC}"
 }
 
 # Función para mostrar ayuda

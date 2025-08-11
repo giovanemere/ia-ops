@@ -333,9 +333,9 @@ graph TD
 
 ## Enlaces Útiles
 
-- [Documentación de API](api/)
-- [Guía de Despliegue](guides/deployment/)
-- [Solución de Problemas](guides/troubleshooting/)
+- [Documentación de API](api/index.md)
+- [Guía de Despliegue](guides/deployment.md)
+- [Solución de Problemas](guides/troubleshooting.md)
 ```
 
 ### 2. Documentación de API (api/index.md)

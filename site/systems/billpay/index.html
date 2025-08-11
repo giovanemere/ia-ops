@@ -7,9 +7,10 @@
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="Plataforma integrada de IA y DevOps con Backstage" name="description"/>
 <meta content="DevOps Team" name="author"/>
+<link href="../../guides/troubleshooting/" rel="prev"/>
 <link href="../../assets/images/favicon.png" rel="icon"/>
 <meta content="mkdocs-1.6.1, mkdocs-material-9.6.8" name="generator"/>
-<title>💳 Sistema BillPay - IA-Ops Platform</title>
+<title>BillPay - IA-Ops Platform</title>
 <link href="../../assets/stylesheets/main.8608ea7d.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -48,7 +49,7 @@
 <div class="md-header__topic" data-md-component="header-topic">
 <span class="md-ellipsis">
             
-              💳 Sistema BillPay
+              BillPay
             
           </span>
 </div>
@@ -147,6 +148,14 @@
           
   
   Guides
+
+        </a>
+</li>
+<li class="md-tabs__item md-tabs__item--active">
+<a class="md-tabs__link" href="./">
+          
+  
+  Systems
 
         </a>
 </li>
@@ -254,6 +263,333 @@
     
   </span>
 </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_6" type="checkbox"/>
+<label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+<span class="md-ellipsis">
+    Systems
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_6_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_6">
+<span class="md-nav__icon md-icon"></span>
+            Systems
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    BillPay
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    BillPay
+    
+  </span>
+</a>
+<nav aria-label="En esta página" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      En esta página
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#descripcion-general">
+<span class="md-ellipsis">
+      Descripción General
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#arquitectura-del-sistema">
+<span class="md-ellipsis">
+      Arquitectura del Sistema
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#componentes-del-sistema">
+<span class="md-ellipsis">
+      Componentes del Sistema
+    </span>
+</a>
+<nav aria-label="Componentes del Sistema" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#frontend-components">
+<span class="md-ellipsis">
+      🌐 Frontend Components
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#api-components">
+<span class="md-ellipsis">
+      🔌 API Components
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backend-services">
+<span class="md-ellipsis">
+      ⚙️ Backend Services
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#data-components">
+<span class="md-ellipsis">
+      💾 Data Components
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#external-resources">
+<span class="md-ellipsis">
+      🔗 External Resources
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#apis-principales">
+<span class="md-ellipsis">
+      APIs Principales
+    </span>
+</a>
+<nav aria-label="APIs Principales" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#billpay-api-v1">
+<span class="md-ellipsis">
+      BillPay API v1
+    </span>
+</a>
+<nav aria-label="BillPay API v1" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#endpoints-principales">
+<span class="md-ellipsis">
+      Endpoints Principales:
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#flujos-de-trabajo">
+<span class="md-ellipsis">
+      Flujos de Trabajo
+    </span>
+</a>
+<nav aria-label="Flujos de Trabajo" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#1-flujo-de-pago-de-factura">
+<span class="md-ellipsis">
+      1. Flujo de Pago de Factura
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#2-flujo-de-notificaciones">
+<span class="md-ellipsis">
+      2. Flujo de Notificaciones
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuracion-y-despliegue">
+<span class="md-ellipsis">
+      Configuración y Despliegue
+    </span>
+</a>
+<nav aria-label="Configuración y Despliegue" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#variables-de-entorno">
+<span class="md-ellipsis">
+      Variables de Entorno
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#docker-compose">
+<span class="md-ellipsis">
+      Docker Compose
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#monitoreo-y-observabilidad">
+<span class="md-ellipsis">
+      Monitoreo y Observabilidad
+    </span>
+</a>
+<nav aria-label="Monitoreo y Observabilidad" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#metricas-clave">
+<span class="md-ellipsis">
+      Métricas Clave
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alertas-configuradas">
+<span class="md-ellipsis">
+      Alertas Configuradas
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dashboards-grafana">
+<span class="md-ellipsis">
+      Dashboards Grafana
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#seguridad">
+<span class="md-ellipsis">
+      Seguridad
+    </span>
+</a>
+<nav aria-label="Seguridad" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#medidas-de-seguridad-implementadas">
+<span class="md-ellipsis">
+      Medidas de Seguridad Implementadas
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compliance">
+<span class="md-ellipsis">
+      Compliance
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#desarrollo-y-testing">
+<span class="md-ellipsis">
+      Desarrollo y Testing
+    </span>
+</a>
+<nav aria-label="Desarrollo y Testing" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#entorno-de-desarrollo">
+<span class="md-ellipsis">
+      Entorno de Desarrollo
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-strategy">
+<span class="md-ellipsis">
+      Testing Strategy
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#roadmap">
+<span class="md-ellipsis">
+      Roadmap
+    </span>
+</a>
+<nav aria-label="Roadmap" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q1-2025">
+<span class="md-ellipsis">
+      Q1 2025
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q2-2025">
+<span class="md-ellipsis">
+      Q2 2025
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#q3-2025">
+<span class="md-ellipsis">
+      Q3 2025
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#contacto-y-soporte">
+<span class="md-ellipsis">
+      Contacto y Soporte
+    </span>
+</a>
+<nav aria-label="Contacto y Soporte" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#equipo-responsable">
+<span class="md-ellipsis">
+      Equipo Responsable
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#canales-de-soporte">
+<span class="md-ellipsis">
+      Canales de Soporte
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sla">
+<span class="md-ellipsis">
+      SLA
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
 </li>
 </ul>
 </nav>

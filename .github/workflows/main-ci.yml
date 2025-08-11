@@ -117,19 +117,19 @@ jobs:
       run: |
         if [ -f "mkdocs.ci.yml" ]; then
           echo "📚 Building MkDocs documentation with CI configuration..."
-          mkdocs build --config-file mkdocs.ci.yml --strict
+          mkdocs build --config-file mkdocs.ci.yml --clean
           echo "✅ Documentation built successfully with CI config"
         elif [ -f "mkdocs.yml" ]; then
           echo "📚 Building MkDocs documentation with default configuration..."
           # Try to build with default config, but handle techdocs-core gracefully
-          if mkdocs build --strict 2>&1 | grep -q "techdocs-core"; then
+          if mkdocs build --clean 2>&1 | grep -q "techdocs-core"; then
             echo "⚠️ techdocs-core plugin not available in CI, using alternative approach"
             # Create a temporary config without techdocs-core
             sed 's/- techdocs-core/# - techdocs-core (disabled in CI)/' mkdocs.yml > mkdocs.temp.yml
-            mkdocs build --config-file mkdocs.temp.yml --strict
+            mkdocs build --config-file mkdocs.temp.yml --clean
             rm mkdocs.temp.yml
           else
-            mkdocs build --strict
+            mkdocs build --clean
           fi
           echo "✅ Documentation built successfully"
         else

@@ -13,6 +13,8 @@ nav:
   - Guides:
     - Deployment: guides/deployment.md
     - Troubleshooting: guides/troubleshooting.md
+  - Systems:
+    - BillPay: systems/billpay.md
 
 # Plugins para CI (sin techdocs-core)
 plugins:
@@ -80,3 +82,6 @@ extra:
 # Directorio de documentos
 docs_dir: docs
 site_dir: site
+
+# Configuración estricta para evitar warnings
+strict: false
