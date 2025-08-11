@@ -8,3 +8,4 @@ To start the app, run:
 yarn install
 yarn start
 ```
+# Backstage CI/CD Pipeline Active
