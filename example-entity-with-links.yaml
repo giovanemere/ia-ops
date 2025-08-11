@@ -1,0 +1,144 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-service
+  description: Ejemplo de servicio con links bien definidos
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - example
+    - service
+    - web
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  # 👇 AQUÍ VAN LOS LINKS - Esta es la sección que faltaba
+  links:
+    # Links de desarrollo y código
+    - url: https://github.com/tu-organizacion/example-service
+      title: Source Code
+      icon: github
+    - url: https://github.com/tu-organizacion/example-service/pulls
+      title: Pull Requests
+      icon: github
+    - url: https://github.com/tu-organizacion/example-service/issues
+      title: Issues & Bugs
+      icon: bug
+    
+    # Links de documentación
+    - url: https://docs.example-service.com
+      title: API Documentation
+      icon: docs
+    - url: https://wiki.company.com/example-service
+      title: Internal Wiki
+      icon: docs
+    - url: https://confluence.company.com/example-service
+      title: Architecture Docs
+      icon: docs
+    
+    # Links de monitoreo y observabilidad
+    - url: https://grafana.company.com/d/example-service
+      title: Service Dashboard
+      icon: grafana
+    - url: https://prometheus.company.com/targets?search=example-service
+      title: Metrics & Alerts
+      icon: dashboard
+    - url: https://logs.company.com/example-service
+      title: Application Logs
+      icon: dashboard
+    
+    # Links de despliegue y operaciones
+    - url: https://jenkins.company.com/job/example-service
+      title: CI/CD Pipeline
+      icon: web
+    - url: https://k8s-dashboard.company.com/example-service
+      title: Kubernetes Dashboard
+      icon: web
+    - url: https://example-service.company.com
+      title: Production Environment
+      icon: web
+    - url: https://staging.example-service.company.com
+      title: Staging Environment
+      icon: web
+    
+    # Links de comunicación y soporte
+    - url: https://slack.com/channels/example-service
+      title: Team Slack Channel
+      icon: chat
+    - url: https://pagerduty.com/services/example-service
+      title: On-Call Schedule
+      icon: alert
+    - url: mailto:example-service-team@company.com
+      title: Team Email
+      icon: email
+    
+    # Links específicos del negocio
+    - url: https://company.com/example-service/status
+      title: Service Status Page
+      icon: web
+    - url: https://company.com/example-service/api
+      title: Public API
+      icon: web
+
+---
+# Ejemplo para IA-Ops Platform específicamente
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: openai-service
+  description: Servicio de IA con contexto DevOps
+  tags:
+    - ai
+    - openai
+    - devops
+    - fastapi
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  links:
+    # Código y desarrollo
+    - url: https://github.com/giovanemere/ia-ops/tree/main/applications/openai-service
+      title: Service Source Code
+      icon: github
+    - url: https://github.com/giovanemere/ia-ops/blob/main/applications/openai-service/README.md
+      title: Service Documentation
+      icon: docs
+    
+    # APIs y endpoints
+    - url: http://localhost:8080/openai
+      title: OpenAI Service API
+      icon: web
+    - url: http://localhost:8080/openai/docs
+      title: FastAPI Documentation
+      icon: docs
+    - url: http://localhost:8080/openai/health
+      title: Health Check
+      icon: web
+    
+    # Configuración y datos
+    - url: https://github.com/giovanemere/ia-ops-framework/blob/trunk/apps/Listado%20Aplicaciones%20DevOps.xlsx
+      title: DevOps Applications Inventory
+      icon: catalog
+    - url: https://github.com/giovanemere/ia-ops/tree/main/config/openai
+      title: Service Configuration
+      icon: web
+    
+    # Monitoreo
+    - url: http://localhost:9090/targets?search=openai
+      title: Prometheus Metrics
+      icon: dashboard
+    - url: http://localhost:3001/d/openai-service
+      title: Grafana Dashboard
+      icon: grafana
+    
+    # Recursos externos
+    - url: https://platform.openai.com/docs
+      title: OpenAI API Documentation
+      icon: docs
+    - url: https://fastapi.tiangolo.com/
+      title: FastAPI Framework
+      icon: docs

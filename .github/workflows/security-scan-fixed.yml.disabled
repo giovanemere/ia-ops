@@ -1,0 +1,52 @@
+name: 🔒 Security Scan (Fixed)
+
+on:
+  push:
+    branches: [ trunk, main ]
+  pull_request:
+    branches: [ trunk, main ]
+  workflow_dispatch:
+
+# Permisos necesarios para security scanning
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  security-scan:
+    name: 🔍 Trivy Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔍 Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH,MEDIUM'
+        exit-code: '0'
+
+    - name: 📊 Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+        category: 'trivy-security-scan'
+      continue-on-error: true
+
+    - name: 📋 Display scan results
+      if: always()
+      run: |
+        echo "🔒 Security scan completed"
+        if [ -f "trivy-results.sarif" ]; then
+          echo "✅ SARIF results generated successfully"
+          echo "📊 Results file size: $(du -h trivy-results.sarif | cut -f1)"
+        else
+          echo "❌ No SARIF results file generated"
+        fi

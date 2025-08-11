@@ -1,0 +1,96 @@
+proxy:
+  host: ${PROXY_SERVICE_HOST}
+  port: ${PROXY_SERVICE_PORT}
+  timeout: ${PROXY_TIMEOUT}
+  
+routes:
+  frontend:
+    path: "/"
+    target: ${PROXY_BACKSTAGE_FRONTEND_URL}
+    changeOrigin: true
+    ws: true
+    
+  backend:
+    path: "/api"
+    target: ${PROXY_BACKSTAGE_BACKEND_URL}
+    changeOrigin: true
+    pathRewrite:
+      "^/api": ""
+      
+  openai:
+    path: "/openai"
+    target: ${PROXY_OPENAI_SERVICE_URL}
+    changeOrigin: true
+    pathRewrite:
+      "^/openai": ""
+
+  templates:
+    path: "/templates"
+    target: "http://ia-ops-templates:80"
+    changeOrigin: true
+    pathRewrite:
+      "^/templates": ""
+
+  framework:
+    path: "/framework"
+    target: "http://ia-ops-mkdocs:8000"
+    changeOrigin: true
+    pathRewrite:
+      "^/framework": ""
+
+security:
+  cors:
+    enabled: ${PROXY_CORS_ENABLED}
+    origins:
+      - ${BACKSTAGE_BASE_URL}
+      - ${BACKSTAGE_FRONTEND_URL}
+      - "http://localhost:3000"
+      - "http://localhost:7007"
+      - "http://localhost:8080"
+      - "http://localhost:8006"
+      - "http://localhost:8007"
+    credentials: true
+    methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+    headers:
+      - Content-Type
+      - Authorization
+      - X-Requested-With
+      
+  rate_limit:
+    window_ms: 900000  # 15 minutes
+    max_requests: ${PROXY_RATE_LIMIT}
+    message: "Too many requests from this IP"
+    
+  helmet:
+    content_security_policy:
+      default_src: ["'self'"]
+      style_src: ["'self'", "'unsafe-inline'"]
+      script_src: ["'self'"]
+      img_src: ["'self'", "data:", "https:"]
+      connect_src: ["'self'", "ws:", "wss:"]
+
+logging:
+  enabled: ${PROXY_LOGGING_ENABLED}
+  level: ${LOG_LEVEL}
+  format: "combined"
+  files:
+    error: "logs/proxy-error.log"
+    combined: "logs/proxy-combined.log"
+    
+health_check:
+  enabled: true
+  endpoint: "/health"
+  include_services: true
+  
+compression:
+  enabled: true
+  threshold: 1024  # bytes
+  
+monitoring:
+  metrics_enabled: true
+  metrics_endpoint: "/metrics"

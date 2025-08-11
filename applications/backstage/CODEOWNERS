@@ -1,0 +1,32 @@
+# CODEOWNERS file for IA-OPS Backstage
+# This file defines who owns different parts of the codebase
+
+# Global owners (default for everything)
+* @ia-ops-team
+
+# Backstage configuration
+/app-config*.yaml @ia-ops-team @backstage-admins
+/catalog-info.yaml @ia-ops-team
+
+# Backend code
+/packages/backend/ @ia-ops-team @backend-team
+
+# Frontend code  
+/packages/app/ @ia-ops-team @frontend-team
+
+# Documentation
+/docs/ @ia-ops-team @documentation-team
+*.md @ia-ops-team @documentation-team
+
+# Templates and examples
+/examples/ @ia-ops-team
+/templates/ @ia-ops-team
+
+# Infrastructure and deployment
+/kubernetes/ @ia-ops-team @devops-team
+/docker/ @ia-ops-team @devops-team
+Dockerfile* @ia-ops-team @devops-team
+
+# CI/CD
+/.github/ @ia-ops-team @devops-team
+/scripts/ @ia-ops-team @devops-team

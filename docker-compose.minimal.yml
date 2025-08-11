@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # Core Services Only - No Security Components
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  backstage:
+    build:
+      context: ./applications/backstage
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID}
+      AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./config/backstage:/app/config:ro
+      - ./data:/app/data:ro
+
+  openai-service:
+    build:
+      context: ./applications/openai-service
+      dockerfile: Dockerfile
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data:ro
+
+  proxy-service:
+    build:
+      context: ./applications/proxy-service
+      dockerfile: Dockerfile
+    environment:
+      BACKSTAGE_URL: http://backstage:3000
+      OPENAI_SERVICE_URL: http://openai-service:8000
+      DOCS_URL: http://docs:8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backstage
+      - openai-service
+      - docs
+
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile.docs
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./docs:/docs:ro
+      - ./framework:/framework:ro
+      - ./templates:/templates:ro
+
+volumes:
+  postgres_data:
+  redis_data:

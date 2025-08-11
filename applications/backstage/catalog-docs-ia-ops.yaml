@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ia-ops-documentation
+  description: Documentación principal de la plataforma IA-OPS
+  annotations:
+    # TechDocs habilitado para documentación local
+    backstage.io/techdocs-ref: dir:./docs-local
+    
+    # GitHub integration
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops
+    
+  tags:
+    - documentation
+    - platform
+  links:
+    - url: http://localhost:8005
+      title: MkDocs Documentation
+      icon: docs
+    - url: http://localhost:1100
+      title: Framework Documentation
+      icon: docs
+spec:
+  type: documentation
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform

@@ -1,0 +1,97 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+*.pfx
+
+# GitHub tokens and secrets
+**/github_pat_*
+**/ghp_*
+**/*token*
+**/*secret*
+**/*credential*
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+venv-*/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Build outputs
+dist/
+build/
+site/
+*.egg-info/
+
+# Documentation builds
+docs/_build/
+docs/site/
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
+# Sensitive documentation files
+**/GITHUB_AUTH_*.md
+**/SOLUCION_GITHUB_AUTH_*.md
+**/DOCUMENTATION-APPLIED-*.md
+**/AUTO-DOCUMENTATION-*.md
+**/CONFIGURACION_PERSISTENTE_*.md
+**/AUTOMATIZACION-*.md
+**/IMPLEMENTATION_SUMMARY.md
+**/ARQUITECTURA-IMPLEMENTACION-*.md

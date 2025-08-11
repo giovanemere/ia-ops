@@ -1,0 +1,20 @@
+site_name: IA-OPS Platform
+site_description: Plataforma integrada de IA y DevOps
+
+nav:
+  - Home: ia-ops-platform/index.md
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: light-blue
+
+plugins:
+  - search
+  - techdocs-core
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences

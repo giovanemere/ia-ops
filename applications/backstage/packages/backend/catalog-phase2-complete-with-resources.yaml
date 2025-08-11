@@ -1,0 +1,592 @@
+# =============================================================================
+# CATÁLOGO COMPLETO FASE 2 CON RECURSOS EXTERNOS - IA-OPS PLATFORM
+# =============================================================================
+# Todas las entidades catalogadas: MVP + Fase 2 + Recursos Externos
+# Generado automáticamente por IA-Ops Platform
+
+# =============================================================================
+# SISTEMA BILLPAY - BACKEND (MVP)
+# =============================================================================
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-backend-ai-demo
+  title: BillPay Backend (AI Demo - MVP)
+  description: Microservicio Spring Boot para sistema de pagos - Analizado automáticamente por IA
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-back
+    ia-ops.ai-analyzed: "true"
+    ia-ops.analysis-timestamp: "2025-08-11T04:13:03Z"
+    ia-ops.technologies: "Java 17, Spring Boot 3.4.4, Gradle"
+    ia-ops.architecture: "Spring Boot Microservice"
+    ia-ops.phase: "MVP"
+    ia-ops.recommended-templates: "azure-aks, aws-eks"
+    ia-ops.recommended-architectures: "deployment-strategies, gitops-architecture"
+  tags:
+    - java
+    - spring-boot
+    - ai-analyzed
+    - mvp-demo
+    - payments
+    - backend
+    - microservice
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-back
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/analyze-repository
+      title: AI Analysis Service
+      icon: api
+    - url: http://localhost:8003/analyze-with-recommendations
+      title: Enhanced AI Analysis
+      icon: api
+spec:
+  type: service
+  lifecycle: experimental
+  owner: backend-team
+  system: billpay-system
+  providesApis:
+    - billpay-api-demo
+  dependsOn:
+    - resource:ia-ops-framework
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-api-demo
+  title: BillPay API (AI Demo - MVP)
+  description: API REST para pagos - Endpoints identificados por IA
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-back
+    ia-ops.ai-analyzed: "true"
+    ia-ops.phase: "MVP"
+    ia-ops.deployment-strategy: "blue-green"
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: backend-team
+  system: billpay-system
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay API
+      version: 1.0.0
+      description: API REST para sistema de pagos BillPay
+    paths:
+      /api/payments:
+        get:
+          summary: Listar pagos
+          responses:
+            '200':
+              description: Lista de pagos exitosa
+        post:
+          summary: Crear pago
+          responses:
+            '201':
+              description: Pago creado exitosamente
+      /api/payments/{id}:
+        get:
+          summary: Obtener pago por ID
+          responses:
+            '200':
+              description: Pago encontrado
+        put:
+          summary: Actualizar pago
+          responses:
+            '200':
+              description: Pago actualizado
+      /api/users:
+        get:
+          summary: Listar usuarios
+          responses:
+            '200':
+              description: Lista de usuarios
+      /actuator/health:
+        get:
+          summary: Health check
+          responses:
+            '200':
+              description: Servicio saludable
+
+# =============================================================================
+# SISTEMA BILLPAY - FRONTEND A (FASE 2)
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-frontend-a-phase2
+  title: BillPay Frontend A (Phase 2 - Material-UI)
+  description: Frontend React con Material-UI - Análisis completo Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-a
+    ia-ops.ai-analyzed: "true"
+    ia-ops.analysis-timestamp: "2025-08-11T04:54:12Z"
+    ia-ops.phase: "Phase 2"
+    ia-ops.technologies: "React 18.2.0, TypeScript, Material-UI, Axios"
+    ia-ops.architecture: "Single Page Application (SPA)"
+    ia-ops.analysis-type: "React Frontend"
+    ia-ops.recommended-templates: "azure-static-web-app, aws-s3-cloudfront"
+    ia-ops.recommended-architectures: "serverless-architecture"
+    ia-ops.deployment-strategy: "rolling"
+  tags:
+    - react
+    - typescript
+    - material-ui
+    - frontend
+    - ai-analyzed
+    - phase-2
+    - billpay
+    - spa
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-front-a
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/analyze-with-recommendations
+      title: Enhanced AI Analysis
+      icon: api
+    - url: http://localhost:8003/templates/providers
+      title: Available Templates
+      icon: catalog
+spec:
+  type: website
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  consumesApis:
+    - billpay-api-demo
+  dependsOn:
+    - component:billpay-backend-ai-demo
+    - resource:templates-backstage
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-frontend-a-client-api
+  title: BillPay Frontend A - Client API (Phase 2)
+  description: API cliente React para comunicación con backend - Análisis IA Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-a
+    ia-ops.ai-analyzed: "true"
+    ia-ops.phase: "Phase 2"
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay Frontend A - Client API
+      version: 1.0.0
+      description: API cliente React para comunicación con backend BillPay
+    paths:
+      /api/payments:
+        get:
+          summary: Obtener lista de pagos
+          responses:
+            '200':
+              description: Lista de pagos exitosa
+      /api/users/profile:
+        get:
+          summary: Obtener perfil de usuario
+          responses:
+            '200':
+              description: Perfil de usuario
+      /api/payments:
+        post:
+          summary: Crear nuevo pago
+          responses:
+            '201':
+              description: Pago creado exitosamente
+      /api/payments/{id}:
+        put:
+          summary: Actualizar pago existente
+          responses:
+            '200':
+              description: Pago actualizado exitosamente
+
+# =============================================================================
+# SISTEMA BILLPAY - FRONTEND B (FASE 2)
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-frontend-b-phase2
+  title: BillPay Frontend B (Alternative Design - Chakra UI)
+  description: Frontend React con Chakra UI - Diseño alternativo Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-b
+    ia-ops.ai-analyzed: "true"
+    ia-ops.analysis-timestamp: "2025-08-11T05:55:05Z"
+    ia-ops.phase: "Phase 2"
+    ia-ops.technologies: "React 18.2.0, TypeScript, Chakra UI, Framer Motion"
+    ia-ops.architecture: "Single Page Application (SPA)"
+    ia-ops.analysis-type: "React Frontend"
+    ia-ops.design-variant: "Alternative Design"
+    ia-ops.recommended-templates: "azure-static-web-app, aws-s3-cloudfront"
+    ia-ops.recommended-architectures: "serverless-architecture"
+    ia-ops.deployment-strategy: "rolling"
+  tags:
+    - react
+    - typescript
+    - chakra-ui
+    - framer-motion
+    - frontend
+    - ai-analyzed
+    - phase-2
+    - billpay
+    - spa
+    - alternative-design
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-front-b
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/analyze-with-recommendations
+      title: Enhanced AI Analysis
+      icon: api
+spec:
+  type: website
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  consumesApis:
+    - billpay-api-demo
+  dependsOn:
+    - component:billpay-backend-ai-demo
+    - resource:templates-backstage
+  providesApis: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-frontend-b-client-api
+  title: BillPay Frontend B - Client API (Chakra UI)
+  description: API cliente React (Chakra UI) - Análisis IA Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-b
+    ia-ops.ai-analyzed: "true"
+    ia-ops.phase: "Phase 2"
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay Frontend B - Client API
+      version: 1.0.0
+      description: API cliente React con Chakra UI para BillPay
+    paths:
+      /api/payments:
+        get:
+          summary: Obtener lista de pagos (con animaciones)
+          responses:
+            '200':
+              description: Lista de pagos con UI mejorada
+      /api/users/profile:
+        get:
+          summary: Obtener perfil de usuario (diseño alternativo)
+          responses:
+            '200':
+              description: Perfil con diseño Chakra UI
+
+# =============================================================================
+# RECURSOS EXTERNOS - TEMPLATES Y ARQUITECTURAS
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: templates-backstage
+  title: Backstage Templates Repository
+  description: Templates multi-cloud para despliegues en Azure, AWS, GCP, OCI
+  annotations:
+    github.com/project-slug: giovanemere/templates_backstage
+    ia-ops.resource-type: "templates"
+    ia-ops.providers: "azure,aws,gcp,oci"
+    ia-ops.templates-count: "55+"
+    ia-ops.integration-status: "active"
+  tags:
+    - templates
+    - multi-cloud
+    - azure
+    - aws
+    - gcp
+    - oci
+    - scaffolding
+    - deployment
+  links:
+    - url: https://github.com/giovanemere/templates_backstage
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/templates/providers
+      title: Available Providers
+      icon: catalog
+spec:
+  type: template-repository
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ia-ops-framework
+  title: IA-Ops Framework
+  description: Arquitecturas de referencia y patrones DevOps
+  annotations:
+    github.com/project-slug: giovanemere/ia-ops-framework
+    ia-ops.resource-type: "architectures"
+    ia-ops.architectures-count: "10"
+    ia-ops.total-size-kb: "600"
+    ia-ops.integration-status: "active"
+  tags:
+    - architectures
+    - reference
+    - devops
+    - patterns
+    - best-practices
+    - documentation
+  links:
+    - url: https://github.com/giovanemere/ia-ops-framework
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/architectures/reference
+      title: Reference Architectures
+      icon: docs
+spec:
+  type: documentation
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: applications-inventory
+  title: Applications Inventory (Excel)
+  description: Inventario completo de aplicaciones DevOps para automatización
+  annotations:
+    ia-ops.resource-type: "inventory"
+    ia-ops.file-path: "ia-ops-framework/apps/Listado Aplicaciones DevOps.xlsx"
+    ia-ops.applications-count: "50+"
+    ia-ops.categories-count: "5"
+    ia-ops.automation-ready: "true"
+    ia-ops.integration-status: "active"
+  tags:
+    - inventory
+    - applications
+    - excel
+    - automation
+    - bulk-analysis
+    - devops
+  links:
+    - url: http://localhost:8003/inventory/applications
+      title: Applications Inventory
+      icon: catalog
+spec:
+  type: data
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+
+# =============================================================================
+# SERVICIOS DE PLATAFORMA
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: openai-service-phase2
+  title: OpenAI Service (Phase 2 with Resources)
+  description: Servicio de IA expandido con templates, arquitecturas e inventario
+  annotations:
+    ia-ops.service-type: "ai-analysis"
+    ia-ops.version: "2.1.0-resources"
+    ia-ops.capabilities: "analysis,recommendations,templates,architectures"
+    ia-ops.endpoints-count: "8"
+  tags:
+    - ai
+    - openai
+    - analysis
+    - recommendations
+    - templates
+    - architectures
+    - phase-2
+  links:
+    - url: http://localhost:8003/docs
+      title: API Documentation
+      icon: docs
+    - url: http://localhost:8003/health
+      title: Health Check
+      icon: dashboard
+    - url: http://localhost:8003/resources/summary
+      title: Resources Summary
+      icon: catalog
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  providesApis:
+    - openai-analysis-api
+  dependsOn:
+    - resource:templates-backstage
+    - resource:ia-ops-framework
+    - resource:applications-inventory
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: openai-analysis-api
+  title: OpenAI Analysis API (Enhanced)
+  description: API de análisis de IA con recomendaciones y recursos externos
+  annotations:
+    ia-ops.api-type: "ai-analysis"
+    ia-ops.version: "2.1.0-resources"
+spec:
+  type: openapi
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: OpenAI Analysis API (Enhanced)
+      version: 2.1.0-resources
+      description: API de análisis de IA con recomendaciones inteligentes
+    paths:
+      /analyze-repository:
+        post:
+          summary: Análisis básico de repositorio
+          responses:
+            '200':
+              description: Análisis completado
+      /analyze-with-recommendations:
+        post:
+          summary: Análisis con recomendaciones inteligentes
+          responses:
+            '200':
+              description: Análisis con templates y arquitecturas recomendadas
+      /templates/providers:
+        get:
+          summary: Lista de proveedores de templates
+          responses:
+            '200':
+              description: Proveedores multi-cloud disponibles
+      /architectures/reference:
+        get:
+          summary: Arquitecturas de referencia
+          responses:
+            '200':
+              description: Patrones arquitectónicos disponibles
+      /inventory/applications:
+        get:
+          summary: Inventario de aplicaciones
+          responses:
+            '200':
+              description: Aplicaciones DevOps catalogadas
+
+# =============================================================================
+# SISTEMAS Y GRUPOS
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: billpay-system
+  title: BillPay Payment System
+  description: Sistema completo de pagos con backend y múltiples frontends
+  annotations:
+    ia-ops.ai-analyzed: "true"
+    ia-ops.phase: "MVP + Phase 2"
+    ia-ops.components-count: "3"
+    ia-ops.apis-count: "3"
+    ia-ops.recommended-deployment: "blue-green"
+spec:
+  owner: platform-team
+  domain: payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-platform
+  title: IA-Ops Platform Complete
+  description: Plataforma completa con templates, arquitecturas e inventario
+  annotations:
+    ia-ops.components-count: "4"
+    ia-ops.resources-count: "3"
+    ia-ops.capabilities: "analysis,templates,architectures,inventory"
+    ia-ops.version: "2.1.0-resources"
+spec:
+  owner: platform-team
+  domain: devops-automation
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: backend-team
+  title: Backend Development Team
+  description: Equipo de desarrollo backend - Java/Spring Boot
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: frontend-team
+  title: Frontend Development Team
+  description: Equipo de desarrollo frontend - React/TypeScript
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: Equipo de plataforma y DevOps - IA-Ops Platform
+spec:
+  type: team
+  children: []
+
+# =============================================================================
+# DOMINIOS
+# =============================================================================
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: payments
+  title: Payments Domain
+  description: Dominio de pagos y transacciones financieras
+  annotations:
+    ia-ops.ai-analyzed: "true"
+    ia-ops.systems-count: "1"
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: devops-automation
+  title: DevOps Automation Domain
+  description: Dominio de automatización DevOps y plataformas IA
+  annotations:
+    ia-ops.systems-count: "1"
+    ia-ops.resources-count: "3"
+    ia-ops.capabilities: "templates,architectures,inventory,analysis"
+spec:
+  owner: platform-team

@@ -1,0 +1,89 @@
+name: 🐳 Push to Docker Hub (Private)
+
+on:
+  push:
+    branches: [trunk]
+    paths: ['applications/backstage/**']
+  pull_request:
+    branches: [trunk]
+    paths: ['applications/backstage/**']
+  workflow_dispatch:
+    inputs:
+      force_push:
+        description: 'Force push to Docker Hub'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  DOCKER_HUB_REGISTRY: docker.io
+  DOCKER_HUB_REPOSITORY: giovanemere/ia-ops-backstage-private
+
+jobs:
+  build-and-push:
+    name: 🏗️ Build and Push to Docker Hub (Private)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔐 Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.DOCKER_HUB_REGISTRY }}
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: 🏷️ Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.DOCKER_HUB_REPOSITORY }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+          type=raw,value=stable,enable={{is_default_branch}}
+          type=raw,value={{date 'YYYY.MM.DD'}}-{{sha}}
+        labels: |
+          org.opencontainers.image.title=IA-Ops Backstage (Private)
+          org.opencontainers.image.description=Private Backstage Developer Portal for IA-Ops Platform
+          org.opencontainers.image.vendor=IA-Ops Team
+          org.opencontainers.image.source=https://github.com/giovanemere/ia-ops
+          org.opencontainers.image.documentation=https://github.com/giovanemere/ia-ops/blob/trunk/applications/backstage/README.md
+          org.opencontainers.image.visibility=private
+
+    - name: 🏗️ Build and push to Docker Hub (Private)
+      uses: docker/build-push-action@v5
+      with:
+        context: ./applications/backstage
+        file: ./applications/backstage/Dockerfile.optimized
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        platforms: linux/amd64,linux/arm64
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
+          VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
+          REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+
+    - name: 📊 Image digest
+      run: echo ${{ steps.build.outputs.digest }}
+
+    - name: 🎉 Success notification
+      run: |
+        echo "✅ Successfully pushed to Docker Hub (Private)!"
+        echo "🐳 Repository: ${{ env.DOCKER_HUB_REPOSITORY }}"
+        echo "🏷️ Tags: ${{ steps.meta.outputs.tags }}"
+        echo "🔒 Visibility: Private"
+        echo "🔗 Docker Hub: https://hub.docker.com/r/${{ env.DOCKER_HUB_REPOSITORY }}"
+        echo ""
+        echo "📝 Note: This is a private repository. Only authorized users can pull the image."
+        echo "🔑 To pull: docker login && docker pull ${{ env.DOCKER_HUB_REPOSITORY }}:latest"

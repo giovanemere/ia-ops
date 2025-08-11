@@ -1,0 +1,707 @@
+# =============================================================================
+# IA-OPS PLATFORM - DOCKER COMPOSE CONSOLIDADO
+# =============================================================================
+# Fecha: 8 de Agosto de 2025
+# Versión: 2.0.0
+# Estado: PRODUCCIÓN - Configuración consolidada completa
+# Descripción: Todos los servicios de la plataforma IA-Ops en un solo archivo
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # =============================================================================
+  # 💾 SERVICIOS DE BASE DE DATOS
+  # =============================================================================
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: ia-ops-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+      POSTGRES_DB: ${POSTGRES_DB:-backstage}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./config/database/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - ia-ops-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-backstage}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    labels:
+      - "traefik.enable=false"
+      - "ia-ops.service=database"
+      - "ia-ops.component=postgres"
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7.2-alpine
+    container_name: ia-ops-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    volumes:
+      - redis_data:/data
+      - ./config/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - ia-ops-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "auth", "${REDIS_PASSWORD:-redis123}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    labels:
+      - "traefik.enable=false"
+      - "ia-ops.service=cache"
+      - "ia-ops.component=redis"
+
+
+  # =============================================================================
+  # 🏛️ SERVICIOS DE BACKSTAGE
+  # =============================================================================
+
+  # Backstage Backend - Servidor principal
+  backstage-backend:
+    build:
+      context: ./applications/backstage
+      dockerfile: Dockerfile
+    container_name: ia-ops-backstage-backend
+    restart: unless-stopped
+    environment:
+      # Database Configuration - SEPARADA PARA BACKSTAGE
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: backstage_user
+      POSTGRES_PASSWORD: backstage_pass_2025
+      POSTGRES_DB: backstage_db
+      
+      # Redis Configuration
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis123}
+      REDIS_DB: ${REDIS_DB:-0}
+      
+      # GitHub Integration
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
+      AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
+      AUTH_GITHUB_CALLBACK_URL: ${AUTH_GITHUB_CALLBACK_URL:-}
+      GITHUB_ORG: ${GITHUB_ORG:-tu-organizacion}
+      
+      # OpenAI Integration
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_SERVICE_URL: http://openai-service:${FASTAPI_PORT:-8000}
+      
+      # Base URLs
+      BACKSTAGE_BASE_URL: ${BACKSTAGE_BASE_URL:-http://localhost:8080}
+      BACKSTAGE_FRONTEND_URL: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+      
+      # Security
+      BACKEND_SECRET: ${BACKEND_SECRET:-your-secret-key-here}
+      
+      # TechDocs Configuration
+      TECHDOCS_BUILDER: ${TECHDOCS_BUILDER:-local}
+      TECHDOCS_GENERATOR_RUNIN: ${TECHDOCS_GENERATOR_RUNIN:-local}
+      TECHDOCS_PUBLISHER_TYPE: ${TECHDOCS_PUBLISHER_TYPE:-local}
+      
+      # Catalog locations
+      CATALOG_LOCATIONS: ${CATALOG_LOCATIONS:-}
+      
+      # Monitoring
+      ENABLE_METRICS: ${ENABLE_METRICS:-true}
+    ports:
+      - "${BACKSTAGE_BACKEND_PORT:-7007}:7007"
+    volumes:
+      - ./config/backstage:/app/config:ro
+      - ./docs:/app/docs:ro
+      - ./mkdocs.yml:/app/mkdocs.yml:ro
+      - ./logs/backstage:/app/logs
+    networks:
+      - ia-ops-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7007/api/catalog/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 120s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backstage-backend.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.services.backstage-backend.loadbalancer.server.port=7007"
+      - "ia-ops.service=backstage"
+      - "ia-ops.component=backend"
+
+  # Backstage Frontend
+  backstage-frontend:
+    build:
+      context: ./applications/backstage
+      dockerfile: Dockerfile.frontend
+    container_name: ia-ops-backstage-frontend
+    restart: unless-stopped
+    environment:
+      # Base URLs
+      APP_BASE_URL: http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+      BACKEND_BASE_URL: http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}
+      # OpenAI Integration
+      OPENAI_SERVICE_URL: http://openai-service:${FASTAPI_PORT:-8000}
+      # Environment
+      NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "${BACKSTAGE_FRONTEND_PORT:-3002}:3000"
+    volumes:
+      - ./logs/backstage-frontend:/app/logs
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backstage-frontend.rule=Host(`localhost`)"
+      - "traefik.http.services.backstage-frontend.loadbalancer.server.port=3000"
+      - "ia-ops.service=backstage"
+      - "ia-ops.component=frontend"
+
+  # =============================================================================
+  # 📚 SERVICIOS DE DOCUMENTACIÓN
+  # =============================================================================
+
+  # TechDocs Builder Service (independiente de Backstage)
+  techdocs-builder:
+    image: spotify/techdocs:latest
+    container_name: ia-ops-techdocs-builder
+    restart: unless-stopped
+    environment:
+      # TechDocs Configuration
+      TECHDOCS_PUBLISHER_TYPE: ${TECHDOCS_PUBLISHER_TYPE:-local}
+      TECHDOCS_STORAGE_PATH: ${TECHDOCS_STORAGE_PATH:-/tmp/techdocs}
+      MKDOCS_DEFAULT_PLUGINS: "techdocs-core"
+      # Configuración adicional para estabilidad
+      PYTHONUNBUFFERED: "1"
+      MKDOCS_CONFIG_FILE: "/content/mkdocs.yml"
+    volumes:
+      - ./docs:/content/docs:ro
+      - ./mkdocs.yml:/content/mkdocs.yml:ro
+      - techdocs_storage:/tmp/techdocs
+      - ./logs/techdocs:/var/log/techdocs
+    ports:
+      - "${TECHDOCS_PORT:-8006}:8000"
+    networks:
+      - ia-ops-network
+    working_dir: /content
+    entrypoint: ["/bin/sh"]
+    command: 
+      - -c
+      - |
+        echo '📚 TechDocs Builder starting...'
+        echo '🔧 Creating necessary directories...'
+        mkdir -p /tmp/techdocs /var/log/techdocs
+        echo '📁 Content directory:'
+        ls -la /content/
+        echo '📄 Available documentation files:'
+        find /content -type f -name "*.md" | head -10
+        echo '✅ TechDocs Builder ready and independent'
+        echo '⏳ Running in standby mode - ready to build documentation'
+        # Mantener el contenedor vivo
+        tail -f /dev/null
+    healthcheck:
+      test: ["CMD", "test", "-f", "/content/mkdocs.yml"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.techdocs.rule=Host(`localhost`) && PathPrefix(`/techdocs`)"
+      - "traefik.http.services.techdocs.loadbalancer.server.port=8000"
+      - "ia-ops.service=documentation"
+      - "ia-ops.component=techdocs"
+
+  # MkDocs Documentation with TechDocs support
+  mkdocs:
+    image: squidfunk/mkdocs-material:latest
+    container_name: ia-ops-mkdocs
+    restart: unless-stopped
+    environment:
+      # MkDocs Configuration
+      MKDOCS_DEV_ADDR: ${MKDOCS_DEV_ADDR:-0.0.0.0:8000}
+      MKDOCS_STRICT: ${MKDOCS_STRICT:-false}
+      MKDOCS_VERBOSE: ${MKDOCS_VERBOSE:-true}
+    volumes:
+      - .:/docs:ro
+      - ./requirements-docs.txt:/tmp/requirements-docs.txt:ro
+      - ./logs/mkdocs:/var/log/mkdocs
+    ports:
+      - "${MKDOCS_PORT:-8005}:8000"
+    networks:
+      - ia-ops-network
+    working_dir: /docs
+    entrypoint: sh
+    command: 
+      - -c
+      - |
+        pip install -r /tmp/requirements-docs.txt &&
+        if [ ! -f mkdocs.yml ]; then 
+          echo 'Error: mkdocs.yml not found' && exit 1; 
+        fi &&
+        mkdocs serve --dev-addr=0.0.0.0:8000 --verbose
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mkdocs.rule=Host(`localhost`) && PathPrefix(`/docs`)"
+      - "traefik.http.services.mkdocs.loadbalancer.server.port=8000"
+      - "ia-ops.service=documentation"
+      - "ia-ops.component=mkdocs"
+
+  # =============================================================================
+  # 📊 SERVICIOS DE MONITOREO
+  # =============================================================================
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:v2.47.2
+    container_name: ia-ops-prometheus
+    restart: unless-stopped
+    user: "65534:65534"
+    environment:
+      # Prometheus Configuration
+      PROMETHEUS_RETENTION_TIME: ${PROMETHEUS_RETENTION_TIME:-15d}
+    volumes:
+      - ./config/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./config/monitoring/rules:/etc/prometheus/rules:ro
+      - prometheus_data:/prometheus
+      - ./logs/prometheus:/var/log/prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    networks:
+      - ia-ops-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=${PROMETHEUS_RETENTION_TIME:-15d}'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+      - '--log.level=${LOG_LEVEL:-info}'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`localhost`) && PathPrefix(`/prometheus`)"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "ia-ops.service=monitoring"
+      - "ia-ops.component=prometheus"
+
+  # Grafana Dashboards
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: ia-ops-grafana
+    restart: unless-stopped
+    environment:
+      # Admin Configuration
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+      
+      # General Configuration
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_USERS_ALLOW_ORG_CREATE: "false"
+      GF_USERS_AUTO_ASSIGN_ORG: "true"
+      GF_USERS_AUTO_ASSIGN_ORG_ROLE: "Viewer"
+      
+      # Server Configuration
+      GF_SERVER_ROOT_URL: http://localhost:${GRAFANA_PORT:-3001}
+      GF_SERVER_SERVE_FROM_SUB_PATH: "false"
+      
+      # Analytics
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      
+      # Logging
+      GF_LOG_LEVEL: ${GRAFANA_LOG_LEVEL:-info}
+      
+      # Database - SEPARADA PARA GRAFANA
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgres:5432
+      GF_DATABASE_NAME: grafana_db
+      GF_DATABASE_USER: grafana_user
+      GF_DATABASE_PASSWORD: grafana_pass_2025
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./config/monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./logs/grafana:/var/log/grafana
+    ports:
+      - "${GRAFANA_PORT:-3001}:3000"
+    networks:
+      - ia-ops-network
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`localhost`) && PathPrefix(`/grafana`)"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "ia-ops.service=monitoring"
+      - "ia-ops.component=grafana"
+
+  # Node Exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: ia-ops-node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "${NODE_EXPORTER_PORT:-9100}:9100"
+    networks:
+      - ia-ops-network
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.netdev.device-exclude=^(veth.*|docker.*|br-.*|lo)$$'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=false"
+      - "ia-ops.service=monitoring"
+      - "ia-ops.component=node-exporter"
+
+  # cAdvisor for container metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    container_name: ia-ops-cadvisor
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /cgroup:/cgroup:ro
+    ports:
+      - "${CADVISOR_PORT:-8082}:8080"
+    networks:
+      - ia-ops-network
+    command:
+      - '--housekeeping_interval=10s'
+      - '--docker_only=true'
+      - '--store_container_labels=false'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cadvisor.rule=Host(`localhost`) && PathPrefix(`/cadvisor`)"
+      - "traefik.http.services.cadvisor.loadbalancer.server.port=8080"
+      - "ia-ops.service=monitoring"
+      - "ia-ops.component=cadvisor"
+
+  # =============================================================================
+  # 🤖 SERVICIO DE INTELIGENCIA ARTIFICIAL
+  # =============================================================================
+
+  # OpenAI Service (FastAPI)
+  openai-service:
+    build:
+      context: ./applications/openai-service
+      dockerfile: Dockerfile
+    container_name: ia-ops-openai-service
+    restart: unless-stopped
+    environment:
+      # OpenAI Configuration
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      OPENAI_MAX_TOKENS: ${OPENAI_MAX_TOKENS:-2000}
+      OPENAI_TEMPERATURE: ${OPENAI_TEMPERATURE:-0.7}
+      
+      # FastAPI Configuration
+      FASTAPI_HOST: ${FASTAPI_HOST:-0.0.0.0}
+      FASTAPI_PORT: ${FASTAPI_PORT:-8000}
+      FASTAPI_RELOAD: ${FASTAPI_RELOAD:-false}
+      FASTAPI_DEBUG: ${FASTAPI_DEBUG:-false}
+      
+      # Database Configuration (for logging/analytics) - SEPARADA PARA MONITORING
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: monitoring_user
+      POSTGRES_PASSWORD: monitoring_pass_2025
+      POSTGRES_DB: monitoring_db
+      
+      # Redis Configuration (for caching)
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis123}
+      REDIS_DB: ${REDIS_DB:-1}
+      
+      # Security
+      API_SECRET_KEY: ${API_SECRET_KEY:-your-secret-key-here}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      
+      # Monitoring
+      ENABLE_METRICS: ${ENABLE_METRICS:-true}
+      METRICS_PORT: 8001
+      
+      # Environment
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "${OPENAI_SERVICE_PORT:-8003}:8000"  # Main API
+      - "${OPENAI_METRICS_PORT:-8004}:8001"  # Metrics endpoint
+    volumes:
+      - ./config/openai:/app/config:ro
+      - ./logs/openai:/app/logs
+      - ./applications/openai-service/knowledge_base.yaml:/app/knowledge_base.yaml:ro
+    networks:
+      - ia-ops-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.openai-service.rule=Host(`localhost`) && PathPrefix(`/openai`)"
+      - "traefik.http.services.openai-service.loadbalancer.server.port=8000"
+      - "ia-ops.service=ai"
+      - "ia-ops.component=openai-service"
+
+  # =============================================================================
+  # 🌐 SERVICIO DE PROXY Y GATEWAY
+  # =============================================================================
+
+  # Proxy Service (Gateway)
+  proxy-service:
+    build:
+      context: ./applications/proxy-service
+      dockerfile: Dockerfile
+    container_name: ia-ops-proxy-service
+    restart: unless-stopped
+    environment:
+      # Proxy Configuration
+      PROXY_PORT: ${PROXY_PORT:-8080}
+      PROXY_HOST: ${PROXY_HOST:-0.0.0.0}
+      
+      # Service URLs
+      BACKSTAGE_FRONTEND_URL: http://backstage-frontend:3000
+      BACKSTAGE_BACKEND_URL: http://backstage-backend:7007
+      OPENAI_SERVICE_URL: http://openai-service:${FASTAPI_PORT:-8000}
+      MKDOCS_URL: http://mkdocs:8000
+      GRAFANA_URL: http://grafana:3000
+      PROMETHEUS_URL: http://prometheus:9090
+      TECHDOCS_URL: http://techdocs-builder:8000
+      
+      # Security
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      RATE_LIMIT_REQUESTS: ${RATE_LIMIT_REQUESTS:-100}
+      RATE_LIMIT_WINDOW: ${RATE_LIMIT_WINDOW:-60}
+      
+      # Logging
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      ACCESS_LOG: ${ACCESS_LOG:-true}
+      
+      # Environment
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "${PROXY_PORT:-8080}:8080"
+    volumes:
+      - ./config/proxy:/app/config:ro
+      - ./logs/proxy:/app/logs
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-frontend
+      - backstage-backend
+      - openai-service
+      - mkdocs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.proxy-service.rule=Host(`localhost`)"
+      - "traefik.http.services.proxy-service.loadbalancer.server.port=8080"
+      - "ia-ops.service=gateway"
+      - "ia-ops.component=proxy"
+
+  # =============================================================================
+  # 🔧 SERVICIOS ADICIONALES (OPCIONAL)
+  # =============================================================================
+
+  # Nginx Proxy - OPCIONAL (redundante con proxy-service)
+  # Deshabilitado por defecto para evitar conflictos de puertos
+  nginx-proxy:
+    image: nginx:alpine
+    container_name: ia-ops-nginx-proxy
+    restart: unless-stopped
+    profiles:
+      - nginx  # Solo se ejecuta con: docker-compose --profile nginx up
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./logs/nginx:/var/log/nginx
+    ports:
+      - "${NGINX_PROXY_PORT:-8081}:80"
+    networks:
+      - ia-ops-network
+    depends_on:
+      - backstage-frontend
+      - backstage-backend
+      - grafana
+      - prometheus
+      - mkdocs
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=false"
+      - "ia-ops.service=gateway"
+      - "ia-ops.component=nginx"
+
+# =============================================================================
+# 💾 VOLÚMENES PERSISTENTES
+# =============================================================================
+volumes:
+  # Base de datos
+  postgres_data:
+    driver: local
+    labels:
+      - "ia-ops.volume=database"
+      - "ia-ops.component=postgres"
+  
+  redis_data:
+    driver: local
+    labels:
+      - "ia-ops.volume=cache"
+      - "ia-ops.component=redis"
+  
+  # Monitoreo
+  prometheus_data:
+    driver: local
+    labels:
+      - "ia-ops.volume=monitoring"
+      - "ia-ops.component=prometheus"
+  
+  grafana_data:
+    driver: local
+    labels:
+      - "ia-ops.volume=monitoring"
+      - "ia-ops.component=grafana"
+  
+  # Documentación
+  techdocs_storage:
+    driver: local
+    labels:
+      - "ia-ops.volume=documentation"
+      - "ia-ops.component=techdocs"
+
+# =============================================================================
+# 🌐 REDES
+# =============================================================================
+networks:
+  ia-ops-network:
+    driver: bridge
+    name: ia-ops-network
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+    labels:
+      - "ia-ops.network=main"
+      - "ia-ops.environment=${ENVIRONMENT:-development}"
+
+# =============================================================================
+# 📋 CONFIGURACIÓN Y COMANDOS ÚTILES
+# =============================================================================
+#
+# 🚀 COMANDOS DE INICIO:
+#   docker-compose up -d                    # Iniciar todos los servicios
+#   docker-compose --profile nginx up -d    # Incluir Nginx proxy
+#   docker-compose up -d postgres redis     # Solo bases de datos
+#
+# 🔍 COMANDOS DE MONITOREO:
+#   docker-compose ps                       # Estado de servicios
+#   docker-compose logs -f [servicio]       # Ver logs en tiempo real
+#   docker-compose top                      # Procesos en ejecución
+#
+# 🛠️ COMANDOS DE MANTENIMIENTO:
+#   docker-compose restart [servicio]       # Reiniciar servicio específico
+#   docker-compose down -v                  # Parar y eliminar volúmenes
+#   docker-compose build --no-cache         # Reconstruir imágenes
+#
+# 🌐 URLS DE ACCESO:
+#   Proxy Gateway:        http://localhost:${PROXY_PORT:-8080}
+#   Backstage Portal:     http://localhost:${PROXY_PORT:-8080}
+#   Backstage Backend:    http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}
+#   Backstage Frontend:   http://localhost:${BACKSTAGE_FRONTEND_PORT:-3002}
+#   OpenAI Service:       http://localhost:${OPENAI_SERVICE_PORT:-8003}
+#   MkDocs:              http://localhost:${MKDOCS_PORT:-8005}
+#   TechDocs:            http://localhost:${TECHDOCS_PORT:-8006}
+#   Prometheus:          http://localhost:${PROMETHEUS_PORT:-9090}
+#   Grafana:             http://localhost:${GRAFANA_PORT:-3001}
+#   Node Exporter:       http://localhost:${NODE_EXPORTER_PORT:-9100}
+#   cAdvisor:            http://localhost:${CADVISOR_PORT:-8082}
+#
+# 🔧 HEALTH CHECKS:
+#   curl http://localhost:${PROXY_PORT:-8080}/health
+#   curl http://localhost:${OPENAI_SERVICE_PORT:-8003}/health
+#   curl http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}/api/catalog/health
+#
+# =============================================================================

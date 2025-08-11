@@ -1,0 +1,318 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: billpay
+  title: BillPay System
+  description: Sistema integral de gestión y pago de facturas
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/ia-ops/blob/main/config/backstage/catalog/systems/billpay-system.yaml
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - payments
+    - billing
+    - fintech
+    - microservices
+  links:
+    - url: https://billpay.tu-organizacion.com
+      title: BillPay Portal
+      icon: web
+    - url: https://docs.billpay.tu-organizacion.com
+      title: Documentation
+      icon: docs
+    - url: https://monitoring.billpay.tu-organizacion.com
+      title: Monitoring Dashboard
+      icon: dashboard
+spec:
+  owner: team:payments
+  domain: financial-services
+  
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: financial-services
+  title: Financial Services
+  description: Dominio que agrupa todos los servicios financieros y de pagos
+spec:
+  owner: group:fintech-team
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: fintech-team
+  title: FinTech Team
+  description: Equipo responsable de los servicios financieros
+spec:
+  type: team
+  children: []
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: payments-lead
+  title: Payments Team Lead
+spec:
+  profile:
+    displayName: Payments Team Lead
+    email: payments-lead@tu-organizacion.com
+  memberOf: [fintech-team]
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-api
+  title: BillPay API Gateway
+  description: API Gateway principal para el sistema BillPay
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/billpay-api
+    github.com/project-slug: tu-organizacion/billpay-api
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - api
+    - gateway
+    - payments
+  links:
+    - url: https://api.billpay.tu-organizacion.com
+      title: API Gateway
+      icon: api
+    - url: https://swagger.billpay.tu-organizacion.com
+      title: API Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+  providesApis:
+    - billpay-api-v1
+  consumesApis:
+    - payment-processor-api
+    - notification-service-api
+  dependsOn:
+    - component:billpay-database
+    - component:redis-cache
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-frontend
+  title: BillPay Web Application
+  description: Aplicación web frontend para gestión de pagos
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/billpay-frontend
+    github.com/project-slug: tu-organizacion/billpay-frontend
+  tags:
+    - frontend
+    - react
+    - payments
+spec:
+  type: website
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+  consumesApis:
+    - billpay-api-v1
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-processor
+  title: Payment Processor Service
+  description: Servicio de procesamiento de pagos y transacciones
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/payment-processor
+    github.com/project-slug: tu-organizacion/payment-processor
+  tags:
+    - microservice
+    - payments
+    - transactions
+spec:
+  type: service
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+  providesApis:
+    - payment-processor-api
+  dependsOn:
+    - component:billpay-database
+    - resource:payment-gateway
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: notification-service
+  title: Notification Service
+  description: Servicio de notificaciones para el sistema BillPay
+  annotations:
+    backstage.io/managed-by-location: url:https://github.com/tu-organizacion/notification-service
+    github.com/project-slug: tu-organizacion/notification-service
+  tags:
+    - microservice
+    - notifications
+    - messaging
+spec:
+  type: service
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+  providesApis:
+    - notification-service-api
+  dependsOn:
+    - resource:email-service
+    - resource:sms-service
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-database
+  title: BillPay Database
+  description: Base de datos principal del sistema BillPay
+  tags:
+    - database
+    - postgresql
+spec:
+  type: database
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: redis-cache
+  title: Redis Cache
+  description: Sistema de caché Redis para BillPay
+  tags:
+    - cache
+    - redis
+spec:
+  type: database
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-api-v1
+  title: BillPay API v1
+  description: API principal del sistema BillPay
+  tags:
+    - rest
+    - openapi
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay API
+      version: 1.0.0
+      description: API para gestión y pago de facturas
+    paths:
+      /bills:
+        get:
+          summary: Obtener lista de facturas
+          responses:
+            '200':
+              description: Lista de facturas
+      /bills/{id}/pay:
+        post:
+          summary: Procesar pago de factura
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: string
+          responses:
+            '200':
+              description: Pago procesado exitosamente
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: payment-processor-api
+  title: Payment Processor API
+  description: API del servicio de procesamiento de pagos
+  tags:
+    - rest
+    - payments
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: notification-service-api
+  title: Notification Service API
+  description: API del servicio de notificaciones
+  tags:
+    - rest
+    - notifications
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: payment-gateway
+  title: Payment Gateway
+  description: Gateway externo para procesamiento de pagos
+  tags:
+    - external
+    - payment-gateway
+spec:
+  type: payment-gateway
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: email-service
+  title: Email Service
+  description: Servicio externo de envío de emails
+  tags:
+    - external
+    - email
+spec:
+  type: email-service
+  owner: team:payments
+  system: billpay
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: sms-service
+  title: SMS Service
+  description: Servicio externo de envío de SMS
+  tags:
+    - external
+    - sms
+spec:
+  type: sms-service
+  owner: team:payments
+  system: billpay

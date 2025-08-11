@@ -1,0 +1,59 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-platform
+  title: IA-OPS Platform
+  description: Plataforma de desarrollo con inteligencia artificial
+  tags:
+    - platform
+    - ai
+    - development
+spec:
+  owner: ia-ops-team
+  domain: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-portal
+  title: Backstage Developer Portal
+  description: Portal de desarrolladores basado en Backstage
+  tags:
+    - portal
+    - backstage
+    - frontend
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  lifecycle: production
+  owner: ia-ops-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: platform
+  title: Platform Domain
+  description: Dominio de la plataforma IA-OPS
+spec:
+  owner: ia-ops-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: ia-ops-team
+  title: IA-OPS Team
+  description: Equipo de desarrollo de la plataforma IA-OPS
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: guest
+  title: Guest User
+  description: Usuario invitado para desarrollo
+spec:
+  memberOf: [ia-ops-team]

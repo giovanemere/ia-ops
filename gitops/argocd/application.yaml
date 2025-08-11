@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ia-ops-platform
+  namespace: argocd
+  labels:
+    app: ia-ops
+    environment: development
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tu-organizacion/ia-ops
+    targetRevision: main
+    path: iac/helm/ia-ops
+    helm:
+      valueFiles:
+        - values-dev.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ia-ops
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+  revisionHistoryLimit: 10
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: ia-ops
+  namespace: argocd
+spec:
+  description: IA-Ops Platform Project
+  sourceRepos:
+    - 'https://github.com/tu-organizacion/ia-ops'
+  destinations:
+    - namespace: ia-ops
+      server: https://kubernetes.default.svc
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: ConfigMap
+    - group: ''
+      kind: Secret
+    - group: ''
+      kind: Service
+    - group: apps
+      kind: Deployment
+    - group: networking.k8s.io
+      kind: Ingress

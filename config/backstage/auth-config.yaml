@@ -1,0 +1,120 @@
+# =============================================================================
+# BACKSTAGE AUTHENTICATION CONFIGURATION
+# =============================================================================
+# Configuración específica para autenticación GitHub OAuth
+
+auth:
+  environment: development
+  session:
+    secret: ${BACKEND_SECRET}
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            # Resolver principal: busca por username de GitHub
+            - resolver: usernameMatchingUserEntityName
+            # Resolver alternativo: busca por email
+            - resolver: emailMatchingUserEntityProfileEmail
+            # Resolver de fallback: usa parte local del email
+            - resolver: emailLocalPartMatchingUserEntityName
+            # Resolver personalizado para crear usuarios automáticamente
+            - resolver: githubSignInResolver
+
+# Configuración de sign-in personalizada
+signInPage:
+  providers:
+    github:
+      title: 'Sign in with GitHub'
+      message: 'Sign in using your GitHub account'
+
+# Configuración de permisos
+permission:
+  enabled: true
+  policy:
+    # Permitir lectura a todos los usuarios autenticados
+    - resource: 'catalog-entity'
+      actions: ['read']
+      effect: allow
+    
+    # Permitir escritura solo a miembros del equipo devops
+    - resource: 'catalog-entity'
+      actions: ['create', 'update', 'delete']
+      effect: allow
+      conditions:
+        rule: IS_ENTITY_OWNER
+        resourceType: 'catalog-entity'
+        params:
+          claims: ['group:devops-team']
+    
+    # Permitir acceso a scaffolder
+    - resource: 'scaffolder-template'
+      actions: ['read', 'use']
+      effect: allow
+    
+    # Permitir acceso a TechDocs
+    - resource: 'techdocs-document'
+      actions: ['read']
+      effect: allow
+
+# Configuración del catálogo para usuarios
+catalog:
+  rules:
+    - allow: [Component, System, API, Resource, Location, User, Group, Domain]
+  
+  # Configuración de procesadores
+  processors:
+    github:
+      providers:
+        - host: github.com
+          apiBaseUrl: https://api.github.com
+          rawBaseUrl: https://raw.githubusercontent.com
+          token: ${GITHUB_TOKEN}
+    
+    # Procesador para usuarios de GitHub
+    githubOrg:
+      providers:
+        - id: production
+          githubUrl: https://github.com
+          orgs: 
+            - ${GITHUB_ORG}
+          token: ${GITHUB_TOKEN}
+
+  # Proveedores de entidades
+  providers:
+    github:
+      # Proveedor principal para repositorios
+      providerId:
+        organization: ${GITHUB_ORG}
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+    
+    # Proveedor para usuarios y grupos de GitHub
+    githubOrg:
+      id: production
+      githubUrl: https://github.com
+      orgs: 
+        - ${GITHUB_ORG}
+      schedule:
+        frequency: { minutes: 60 }
+        timeout: { minutes: 15 }
+
+# Configuración de integración con GitHub
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+      apps:
+        - appId: ${GITHUB_APP_ID}
+          clientId: ${AUTH_GITHUB_CLIENT_ID}
+          clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+          webhookSecret: ${GITHUB_WEBHOOK_SECRET}
+          privateKey: |
+            ${GITHUB_APP_PRIVATE_KEY}

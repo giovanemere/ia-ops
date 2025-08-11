@@ -1,0 +1,219 @@
+[
+  {
+    "name": "React",
+    "ring": "ADOPT",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Frontend framework principal para aplicaciones SPA"
+  },
+  {
+    "name": "Node.js",
+    "ring": "ADOPT", 
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Runtime principal para servicios backend"
+  },
+  {
+    "name": "PostgreSQL",
+    "ring": "ADOPT",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Base de datos relacional principal"
+  },
+  {
+    "name": "Docker",
+    "ring": "ADOPT",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Containerización estándar"
+  },
+  {
+    "name": "Kubernetes",
+    "ring": "ADOPT",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Orquestación de contenedores"
+  },
+  {
+    "name": "FastAPI",
+    "ring": "ADOPT",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Framework Python para APIs de IA"
+  },
+  {
+    "name": "OpenAI GPT-4",
+    "ring": "TRIAL",
+    "quadrant": "techniques",
+    "isNew": true,
+    "description": "Modelo LLM para análisis de código y documentación"
+  },
+  {
+    "name": "LangChain",
+    "ring": "TRIAL",
+    "quadrant": "techniques",
+    "isNew": true,
+    "description": "Orquestación de LLMs y chains"
+  },
+  {
+    "name": "Angular",
+    "ring": "ASSESS",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Framework alternativo para aplicaciones enterprise"
+  },
+  {
+    "name": "Vue.js",
+    "ring": "ASSESS",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Framework ligero para aplicaciones específicas"
+  },
+  {
+    "name": "Java Spring",
+    "ring": "ADOPT",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Framework enterprise para sistemas bancarios"
+  },
+  {
+    "name": "MongoDB",
+    "ring": "TRIAL",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Base de datos NoSQL para casos específicos"
+  },
+  {
+    "name": "Redis",
+    "ring": "ADOPT",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Cache en memoria y gestión de sesiones"
+  },
+  {
+    "name": "AWS",
+    "ring": "ADOPT",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Plataforma cloud principal"
+  },
+  {
+    "name": "Azure",
+    "ring": "TRIAL",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Plataforma cloud alternativa"
+  },
+  {
+    "name": "GCP",
+    "ring": "ASSESS",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Plataforma cloud para casos específicos"
+  },
+  {
+    "name": "Terraform",
+    "ring": "ADOPT",
+    "quadrant": "tools",
+    "isNew": false,
+    "description": "Infrastructure as Code"
+  },
+  {
+    "name": "Jenkins",
+    "ring": "ADOPT",
+    "quadrant": "tools",
+    "isNew": false,
+    "description": "CI/CD Pipeline principal"
+  },
+  {
+    "name": "ArgoCD",
+    "ring": "TRIAL",
+    "quadrant": "tools",
+    "isNew": true,
+    "description": "GitOps para despliegues automáticos"
+  },
+  {
+    "name": "Backstage",
+    "ring": "ADOPT",
+    "quadrant": "tools",
+    "isNew": true,
+    "description": "Portal de desarrolladores y catálogo de servicios"
+  },
+  {
+    "name": "Grafana",
+    "ring": "ADOPT",
+    "quadrant": "tools",
+    "isNew": false,
+    "description": "Visualización de métricas y dashboards"
+  },
+  {
+    "name": "Prometheus",
+    "ring": "ADOPT",
+    "quadrant": "tools",
+    "isNew": false,
+    "description": "Recolección de métricas"
+  },
+  {
+    "name": "Microservicios",
+    "ring": "ADOPT",
+    "quadrant": "techniques",
+    "isNew": false,
+    "description": "Arquitectura principal para nuevas aplicaciones"
+  },
+  {
+    "name": "GitOps",
+    "ring": "TRIAL",
+    "quadrant": "techniques",
+    "isNew": true,
+    "description": "Metodología de despliegue basada en Git"
+  },
+  {
+    "name": "DevSecOps",
+    "ring": "TRIAL",
+    "quadrant": "techniques",
+    "isNew": true,
+    "description": "Integración de seguridad en pipelines"
+  },
+  {
+    "name": "Serverless",
+    "ring": "ASSESS",
+    "quadrant": "techniques",
+    "isNew": false,
+    "description": "Arquitectura sin servidor para casos específicos"
+  },
+  {
+    "name": "Event Sourcing",
+    "ring": "ASSESS",
+    "quadrant": "techniques",
+    "isNew": false,
+    "description": "Patrón para sistemas de alta concurrencia"
+  },
+  {
+    "name": "CQRS",
+    "ring": "ASSESS",
+    "quadrant": "techniques",
+    "isNew": false,
+    "description": "Separación de comandos y consultas"
+  },
+  {
+    "name": "Monolito Modular",
+    "ring": "HOLD",
+    "quadrant": "techniques",
+    "isNew": false,
+    "description": "Arquitectura legacy en proceso de migración"
+  },
+  {
+    "name": "jQuery",
+    "ring": "HOLD",
+    "quadrant": "languages-and-frameworks",
+    "isNew": false,
+    "description": "Framework frontend legacy"
+  },
+  {
+    "name": "Oracle DB",
+    "ring": "HOLD",
+    "quadrant": "platforms",
+    "isNew": false,
+    "description": "Base de datos legacy en migración"
+  }
+]

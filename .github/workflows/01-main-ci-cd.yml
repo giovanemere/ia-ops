@@ -1,0 +1,446 @@
+name: 🚀 Main CI/CD Pipeline
+
+on:
+  push:
+    branches: [ trunk ]
+  pull_request:
+    branches: [ trunk ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: false
+        default: 'development'
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+
+# Permisos básicos - sin características premium
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  pull-requests: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================================================
+  # STAGE 1: VALIDATION & TESTING
+  # ============================================================================
+  
+  validate:
+    name: 🔍 Code Validation
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.changes.outputs.should-deploy }}
+      
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🔍 Detect changes
+      id: changes
+      run: |
+        if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/trunk" ]]; then
+          echo "should-deploy=true" >> $GITHUB_OUTPUT
+        else
+          echo "should-deploy=false" >> $GITHUB_OUTPUT
+        fi
+        echo "✅ Change detection completed"
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 📋 Validate YAML files
+      run: |
+        echo "🔍 Validating YAML configuration files..."
+        yaml_files=$(find . -name "*.yml" -o -name "*.yaml" | grep -v ".git" | head -20)
+        
+        if [ -z "$yaml_files" ]; then
+          echo "⚠️ No YAML files found to validate"
+          exit 0
+        fi
+        
+        for file in $yaml_files; do
+          echo "Checking $file..."
+          python -c "import yaml; yaml.safe_load(open('$file'))" || {
+            echo "❌ Invalid YAML: $file"
+            exit 1
+          }
+        done
+        echo "✅ All YAML files are valid"
+
+    - name: 📋 Validate JSON files
+      run: |
+        echo "🔍 Validating JSON configuration files..."
+        json_files=$(find . -name "*.json" | grep -v ".git" | grep -v "node_modules" | head -10)
+        
+        if [ -z "$json_files" ]; then
+          echo "⚠️ No JSON files found to validate"
+          exit 0
+        fi
+        
+        for file in $json_files; do
+          echo "Checking $file..."
+          python -c "import json; json.load(open('$file'))" || {
+            echo "❌ Invalid JSON: $file"
+            exit 1
+          }
+        done
+        echo "✅ All JSON files are valid"
+
+  # ============================================================================
+  # STAGE 2: SECURITY SCANNING
+  # ============================================================================
+  
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    needs: validate
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔍 Run Trivy filesystem scan
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'table'
+        severity: 'CRITICAL,HIGH,MEDIUM'
+        exit-code: '0'
+
+    - name: 📊 Security scan summary
+      run: |
+        echo "🔒 Security scan completed successfully"
+        echo "📋 Results are displayed above in table format"
+        echo "🎯 Focus on CRITICAL and HIGH severity issues"
+        echo "✅ Security scan stage completed"
+
+  # ============================================================================
+  # STAGE 3: BUILD & TEST
+  # ============================================================================
+  
+  build-test:
+    name: 🏗️ Build & Test
+    runs-on: ubuntu-latest
+    needs: [validate, security-scan]
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [backstage, openai-service, proxy-service]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔍 Check Dockerfile exists
+      run: |
+        if [ -f "applications/${{ matrix.service }}/Dockerfile" ]; then
+          echo "✅ Dockerfile found for ${{ matrix.service }}"
+        else
+          echo "❌ Dockerfile not found for ${{ matrix.service }}"
+          echo "📁 Available files in applications/${{ matrix.service }}:"
+          ls -la applications/${{ matrix.service }}/ || echo "Directory not found"
+          exit 1
+        fi
+
+    - name: 🏗️ Build ${{ matrix.service }}
+      run: |
+        echo "🏗️ Building ${{ matrix.service }}..."
+        cd applications/${{ matrix.service }}
+        docker build -t ia-ops-${{ matrix.service }}:test .
+        echo "✅ ${{ matrix.service }} built successfully"
+
+    - name: 🧪 Test ${{ matrix.service }} image
+      run: |
+        echo "🧪 Testing ${{ matrix.service }} image..."
+        
+        # Basic image inspection
+        docker images ia-ops-${{ matrix.service }}:test
+        docker inspect ia-ops-${{ matrix.service }}:test > /dev/null
+        
+        echo "✅ ${{ matrix.service }} image tests passed"
+
+  # ============================================================================
+  # STAGE 4: DOCUMENTATION
+  # ============================================================================
+  
+  build-docs:
+    name: 📚 Build Documentation
+    runs-on: ubuntu-latest
+    needs: validate
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 📦 Install MkDocs dependencies
+      run: |
+        pip install --upgrade pip
+        pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
+
+    - name: 🔍 Check documentation structure
+      run: |
+        echo "🔍 Checking documentation structure..."
+        
+        if [ ! -d "docs" ]; then
+          echo "❌ docs/ directory not found"
+          exit 1
+        fi
+        
+        if [ ! -f "mkdocs.ci.yml" ] && [ ! -f "mkdocs.yml" ]; then
+          echo "❌ No MkDocs configuration found"
+          exit 1
+        fi
+        
+        md_count=$(find docs -name "*.md" | wc -l)
+        echo "📄 Found $md_count markdown files"
+        
+        if [ $md_count -eq 0 ]; then
+          echo "⚠️ No markdown files found, creating basic index"
+          echo "# IA-Ops Platform Documentation" > docs/index.md
+        fi
+        
+        echo "✅ Documentation structure validated"
+
+    - name: 🏗️ Build documentation
+      run: |
+        echo "📚 Building documentation..."
+        
+        if [ -f "mkdocs.ci.yml" ]; then
+          echo "📋 Using mkdocs.ci.yml configuration"
+          mkdocs build --config-file mkdocs.ci.yml --clean --verbose
+        else
+          echo "📋 Using mkdocs.yml configuration"
+          mkdocs build --clean --verbose
+        fi
+        
+        echo "✅ Documentation built successfully"
+
+    - name: 📤 Upload docs artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: documentation
+        path: site/
+        retention-days: 30
+
+  # ============================================================================
+  # STAGE 5: INTEGRATION TESTS
+  # ============================================================================
+  
+  integration-test:
+    name: 🔗 Integration Tests
+    runs-on: ubuntu-latest
+    needs: [build-test, build-docs]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐳 Create test environment
+      run: |
+        echo "🐳 Creating integration test environment..."
+        
+        # Create minimal docker-compose for testing
+        cat > docker-compose.test.yml << 'EOF'
+        version: '3.8'
+        services:
+          test-postgres:
+            image: postgres:15-alpine
+            environment:
+              POSTGRES_DB: test
+              POSTGRES_USER: test
+              POSTGRES_PASSWORD: test
+            ports:
+              - "5432:5432"
+            healthcheck:
+              test: ["CMD-SHELL", "pg_isready -U test"]
+              interval: 10s
+              timeout: 5s
+              retries: 5
+          
+          test-redis:
+            image: redis:7-alpine
+            ports:
+              - "6379:6379"
+            healthcheck:
+              test: ["CMD", "redis-cli", "ping"]
+              interval: 10s
+              timeout: 5s
+              retries: 3
+        EOF
+        
+        echo "✅ Test environment configuration created"
+
+    - name: 🚀 Start test services
+      run: |
+        echo "🚀 Starting test services..."
+        docker-compose -f docker-compose.test.yml up -d
+        
+        echo "⏳ Waiting for services to be ready..."
+        sleep 30
+        
+        echo "✅ Test services started"
+
+    - name: 🧪 Run integration tests
+      run: |
+        echo "🧪 Running integration tests..."
+        
+        # Test database connection
+        echo "Testing PostgreSQL connection..."
+        docker-compose -f docker-compose.test.yml exec -T test-postgres psql -U test -d test -c "SELECT 1 as test;" || {
+          echo "❌ Database connection failed"
+          docker-compose -f docker-compose.test.yml logs test-postgres
+          exit 1
+        }
+        
+        # Test Redis connection
+        echo "Testing Redis connection..."
+        docker-compose -f docker-compose.test.yml exec -T test-redis redis-cli ping || {
+          echo "❌ Redis connection failed"
+          docker-compose -f docker-compose.test.yml logs test-redis
+          exit 1
+        }
+        
+        echo "✅ All integration tests passed"
+
+    - name: 🧹 Cleanup test environment
+      if: always()
+      run: |
+        echo "🧹 Cleaning up test environment..."
+        docker-compose -f docker-compose.test.yml down -v
+        docker system prune -f
+        echo "✅ Test environment cleaned up"
+
+  # ============================================================================
+  # STAGE 6: DEPLOYMENT PREPARATION
+  # ============================================================================
+  
+  prepare-deployment:
+    name: 📦 Prepare Deployment
+    runs-on: ubuntu-latest
+    needs: [integration-test]
+    if: needs.validate.outputs.should-deploy == 'true'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Create deployment package
+      run: |
+        echo "📦 Creating deployment package..."
+        
+        # Create deployment directory
+        mkdir -p deployment-package
+        
+        # Copy essential files
+        if [ -f "docker-compose.yml" ]; then
+          cp docker-compose.yml deployment-package/
+        fi
+        
+        if [ -d "config" ]; then
+          cp -r config deployment-package/
+        fi
+        
+        if [ -d "iac" ]; then
+          cp -r iac deployment-package/
+        fi
+        
+        # Create deployment info
+        cat > deployment-package/deployment-info.json << EOF
+        {
+          "version": "${{ github.sha }}",
+          "branch": "${{ github.ref_name }}",
+          "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+          "environment": "${{ github.event.inputs.environment || 'development' }}",
+          "commit_message": $(echo '${{ github.event.head_commit.message }}' | jq -R . || echo '"No message"')
+        }
+        EOF
+        
+        echo "✅ Deployment package created"
+
+    - name: 📤 Upload deployment artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-package
+        path: deployment-package/
+        retention-days: 30
+
+  # ============================================================================
+  # FINAL STAGE: SUCCESS SUMMARY
+  # ============================================================================
+  
+  success-summary:
+    name: 🎉 Pipeline Success
+    runs-on: ubuntu-latest
+    needs: [validate, security-scan, build-test, build-docs, integration-test]
+    if: always()
+    
+    steps:
+    - name: 📊 Pipeline Summary
+      run: |
+        echo "🎉 IA-Ops Platform CI/CD Pipeline Results"
+        echo "=========================================="
+        echo ""
+        echo "📊 Stage Results:"
+        echo "✅ Validation: ${{ needs.validate.result }}"
+        echo "🔒 Security Scan: ${{ needs.security-scan.result }}"
+        echo "🏗️ Build & Test: ${{ needs.build-test.result }}"
+        echo "📚 Documentation: ${{ needs.build-docs.result }}"
+        echo "🔗 Integration Tests: ${{ needs.integration-test.result }}"
+        echo ""
+        echo "🚀 Environment: ${{ github.event.inputs.environment || 'development' }}"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "🌿 Branch: ${{ github.ref_name }}"
+        echo "⏰ Completed: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo ""
+        
+        # Check if all stages passed
+        if [[ "${{ needs.validate.result }}" == "success" && 
+              "${{ needs.security-scan.result }}" == "success" && 
+              "${{ needs.build-test.result }}" == "success" && 
+              "${{ needs.build-docs.result }}" == "success" && 
+              "${{ needs.integration-test.result }}" == "success" ]]; then
+          echo "🎉 ALL STAGES PASSED SUCCESSFULLY!"
+          echo "✨ Pipeline completed without errors"
+          echo "🚀 Ready for deployment"
+        else
+          echo "⚠️ Some stages had issues - check logs above"
+        fi
+
+    - name: ❌ Pipeline Failure Analysis
+      if: contains(needs.*.result, 'failure')
+      run: |
+        echo "❌ Pipeline Analysis - Some Stages Failed"
+        echo "========================================"
+        echo ""
+        echo "Failed stages:"
+        if [[ "${{ needs.validate.result }}" == "failure" ]]; then echo "- ❌ Code Validation"; fi
+        if [[ "${{ needs.security-scan.result }}" == "failure" ]]; then echo "- ❌ Security Scan"; fi
+        if [[ "${{ needs.build-test.result }}" == "failure" ]]; then echo "- ❌ Build & Test"; fi
+        if [[ "${{ needs.build-docs.result }}" == "failure" ]]; then echo "- ❌ Documentation Build"; fi
+        if [[ "${{ needs.integration-test.result }}" == "failure" ]]; then echo "- ❌ Integration Tests"; fi
+        echo ""
+        echo "🔍 Check the individual stage logs above for detailed error information"
+        echo "🔄 Fix the issues and push again to retry the pipeline"
+        exit 1

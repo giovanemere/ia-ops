@@ -1,0 +1,78 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: billpay-frontend-b-phase2
+  title: BillPay Frontend B (Alternative Design)
+  description: Frontend React con Chakra UI - Diseño alternativo Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-b
+    ia-ops.ai-analyzed: "true"
+    ia-ops.analysis-timestamp: "2025-08-11T04:55:05Z"
+    ia-ops.phase: "Phase 2"
+    ia-ops.technologies: "React 18.2.0, TypeScript, Chakra UI, Framer Motion"
+    ia-ops.architecture: "Single Page Application (SPA)"
+    ia-ops.analysis-type: "React Frontend"
+    ia-ops.design-variant: "Alternative Design"
+  tags:
+    - react
+    - typescript
+    - chakra-ui
+    - framer-motion
+    - frontend
+    - ai-analyzed
+    - phase-2
+    - billpay
+    - spa
+    - alternative-design
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-front-b
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/analyze-repository
+      title: AI Analysis Service (Phase 2)
+      icon: api
+spec:
+  type: website
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  consumesApis:
+    - billpay-api-demo
+  dependsOn:
+    - component:billpay-backend-ai-demo
+  providesApis: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-frontend-b-client-api
+  title: BillPay Frontend B - Client API
+  description: API cliente React (Chakra UI) - Análisis IA Fase 2
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-front-b
+    ia-ops.ai-analyzed: "true"
+    ia-ops.phase: "Phase 2"
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: frontend-team
+  system: billpay-system
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay Frontend B - Client API
+      version: 1.0.0
+      description: API cliente React con Chakra UI para BillPay
+    paths:
+      /api/payments:
+        get:
+          summary: Obtener lista de pagos (con animaciones)
+          responses:
+            '200':
+              description: Lista de pagos con UI mejorada
+      /api/users/profile:
+        get:
+          summary: Obtener perfil de usuario (diseño alternativo)
+          responses:
+            '200':
+              description: Perfil con diseño Chakra UI

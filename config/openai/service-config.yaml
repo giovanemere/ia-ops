@@ -1,0 +1,38 @@
+openai:
+  api_key: ${OPENAI_API_KEY}
+  model: ${OPENAI_MODEL}
+  max_tokens: ${OPENAI_MAX_TOKENS}
+  temperature: ${OPENAI_TEMPERATURE}
+  demo_mode: ${OPENAI_DEMO_MODE}
+  
+service:
+  host: ${OPENAI_SERVICE_HOST}
+  port: ${OPENAI_SERVICE_PORT}
+  rate_limit: ${OPENAI_RATE_LIMIT}
+  timeout: ${OPENAI_TIMEOUT}
+
+cors:
+  origins:
+    - ${BACKSTAGE_BASE_URL}
+    - ${BACKSTAGE_FRONTEND_URL}
+  methods:
+    - GET
+    - POST
+    - OPTIONS
+  headers:
+    - Content-Type
+    - Authorization
+
+logging:
+  level: ${LOG_LEVEL}
+  format: json
+
+health_check:
+  enabled: true
+  endpoint: /health
+  interval: 30
+
+knowledge_base:
+  enabled: true
+  file_path: ./knowledge/applications.yaml
+  update_interval: 300

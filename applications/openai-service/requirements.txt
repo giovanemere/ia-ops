@@ -1,0 +1,28 @@
+# =============================================================================
+# OPENAI SERVICE - REQUIREMENTS (Versión Simplificada)
+# =============================================================================
+
+# FastAPI y servidor
+fastapi
+uvicorn[standard]
+pydantic
+
+# OpenAI
+openai
+
+# LangChain básico (sin versiones específicas para evitar conflictos)
+langchain
+langchain-openai
+
+# Utilidades básicas
+python-dotenv
+httpx
+pyyaml
+jinja2
+
+# Logging
+structlog
+
+# Testing
+pytest
+pytest-asyncio

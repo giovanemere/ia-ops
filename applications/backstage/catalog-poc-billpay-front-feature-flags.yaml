@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: poc-billpay-front-feature-flags
+  description: Feature flags frontend for billpay
+  annotations:
+    # Documentación automática
+    backstage.io/techdocs-ref: dir:.
+    
+    # GitHub integration
+    github.com/project-slug: giovanemere/poc-billpay-front-feature-flags
+    backstage.io/source-location: url:https://github.com/giovanemere/poc-billpay-front-feature-flags
+    
+    # CI/CD integration
+    github.com/workflows: .github/workflows/
+    
+    # View Source
+    backstage.io/view-url: https://github.com/giovanemere/poc-billpay-front-feature-flags
+    backstage.io/edit-url: https://github.com/giovanemere/poc-billpay-front-feature-flags/edit/main/catalog-info.yaml
+    
+  tags:
+    - component
+    - service
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-front-feature-flags
+      title: Repository
+      icon: github
+    - url: https://github.com/giovanemere/poc-billpay-front-feature-flags/actions
+      title: GitHub Actions
+      icon: github
+    - url: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/main/README.md
+      title: Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform

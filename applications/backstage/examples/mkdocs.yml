@@ -1,0 +1,15 @@
+site_name: Test Component with GitHub Actions
+site_description: Documentation for the Test Component in IA-Ops Platform
+docs_dir: docs
+
+nav:
+  - Home: index.md
+
+plugins:
+  - techdocs-core
+
+theme:
+  name: material
+  palette:
+    primary: blue
+    accent: blue

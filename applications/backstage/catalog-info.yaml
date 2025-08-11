@@ -1,0 +1,39 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ia-ops-backstage
+  title: IA-OPS Developer Portal
+  description: Backstage Developer Portal for IA-OPS team - Central hub for developer tools, documentation, and services
+  tags:
+    - backstage
+    - developer-portal
+    - ia-ops
+    - platform
+  annotations:
+    # TechDocs configuration - using local directory
+    backstage.io/techdocs-ref: dir:.
+    
+spec:
+  type: website
+  owner: group:ia-ops-team
+  lifecycle: production
+  system: developer-platform
+  providesApis:
+    - backstage-api
+  consumesApis:
+    - github-api
+    - postgresql-api
+  dependsOn:
+    - component:postgresql
+    - component:github-integration
+
+---
+# Documentación de la plataforma
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ia-ops-docs
+  description: Documentación de IA-OPS Platform
+spec:
+  targets:
+    - ./catalog-docs-ia-ops.yaml

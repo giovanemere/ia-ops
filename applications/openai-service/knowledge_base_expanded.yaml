@@ -1,0 +1,77 @@
+# =============================================================================
+# BASE DE CONOCIMIENTO EXPANDIDA - FASE 2
+# =============================================================================
+# Incluye templates, arquitecturas de referencia e inventario
+
+templates_backstage:
+  repository: "https://github.com/giovanemere/templates_backstage.git"
+  description: "Templates de Backstage para despliegues multi-cloud"
+  providers:
+    azure:
+      description: "Templates para Azure (App Service, AKS, Functions)"
+      use_cases: ["web_apps", "microservices", "serverless"]
+    aws:
+      description: "Templates para AWS (EC2, EKS, Lambda)"
+      use_cases: ["containers", "serverless", "data_processing"]
+    gcp:
+      description: "Templates para Google Cloud Platform"
+      use_cases: ["cloud_run", "gke", "cloud_functions"]
+    oci:
+      description: "Templates para Oracle Cloud Infrastructure"
+      use_cases: ["compute", "kubernetes", "database"]
+
+ia_ops_framework:
+  repository: "https://github.com/giovanemere/ia-ops-framework.git"
+  description: "Arquitecturas de referencia y patrones DevOps"
+  architectures:
+    - name: "DNS Architecture"
+      file: "docs/arquitecturas-referencia/01-dns-architecture.md"
+      use_case: "Gestión de DNS y dominios"
+    - name: "Deployment Strategies"
+      file: "docs/arquitecturas-referencia/02-deployment-strategies-architecture.md"
+      use_case: "Estrategias de despliegue"
+    - name: "Serverless Architecture"
+      file: "docs/arquitecturas-referencia/03-serverless-architecture.md"
+      use_case: "Arquitecturas serverless"
+    - name: "Infrastructure as Code"
+      file: "docs/arquitecturas-referencia/04-iac-architecture.md"
+      use_case: "IaC con Terraform"
+    - name: "On-Premise Architecture"
+      file: "docs/arquitecturas-referencia/05-onpremise-architecture.md"
+      use_case: "Arquitecturas on-premise"
+    - name: "GitOps Architecture"
+      file: "docs/arquitecturas-referencia/06-gitops-architecture.md"
+      use_case: "GitOps y CI/CD"
+    - name: "Database Architecture"
+      file: "docs/arquitecturas-referencia/07-database-architecture.md"
+      use_case: "Arquitecturas de base de datos"
+    - name: "WebLogic Architecture"
+      file: "docs/arquitecturas-referencia/08-weblogic-architecture.md"
+      use_case: "Sistemas WebLogic legacy"
+    - name: "Other Architectures"
+      file: "docs/arquitecturas-referencia/09-other-architectures.md"
+      use_case: "Patrones adicionales"
+    - name: "Diagrams as Code"
+      file: "docs/arquitecturas-referencia/10-diagrams-as-code-best-practices.md"
+      use_case: "Diagramas como código"
+
+applications_inventory:
+  source: "ia-ops-framework/apps/Listado Aplicaciones DevOps.xlsx"
+  description: "Inventario completo de aplicaciones DevOps"
+  purpose: "Automatización del chat OpenAI con datos reales"
+  integration: "OpenAI Service para análisis automático"
+
+integration_capabilities:
+  template_generation:
+    description: "Generación automática de templates basados en análisis"
+    providers: ["azure", "aws", "gcp", "oci"]
+    types: ["web_app", "microservice", "serverless", "database"]
+  
+  architecture_recommendation:
+    description: "Recomendación de arquitecturas basada en análisis de código"
+    patterns: ["microservices", "serverless", "monolithic", "event_driven"]
+    deployment_strategies: ["blue_green", "canary", "rolling", "recreate"]
+  
+  inventory_automation:
+    description: "Automatización de inventario con datos Excel"
+    features: ["bulk_analysis", "batch_cataloging", "automated_documentation"]

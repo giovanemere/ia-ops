@@ -1,0 +1,83 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: poc-billpay-back-mvp
+  title: BillPay Backend (MVP Demo)
+  description: Backend API para el sistema BillPay - Análisis generado por IA
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-back
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - poc
+    - billpay
+    - ia-ops
+    - mvp-demo
+    - java
+    - spring-boot
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-back
+      title: Repository
+      icon: github
+    - url: http://localhost:8003/analyze-repository
+      title: AI Analysis Service
+      icon: api
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: billpay-system
+  providesApis:
+    - billpay-api-mvp
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: billpay-api-mvp
+  title: BillPay API (MVP Demo)
+  description: API REST para el sistema de pagos BillPay - Análisis IA
+  annotations:
+    github.com/project-slug: giovanemere/poc-billpay-back
+spec:
+  type: openapi
+  lifecycle: experimental
+  owner: backend-team
+  system: billpay-system
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: BillPay API
+      version: 1.0.0
+      description: API para gestión de pagos (Análisis generado por IA)
+    paths:
+      /health:
+        get:
+          summary: Health check
+          responses:
+            '200':
+              description: Service is healthy
+      /api/v1/payments:
+        get:
+          summary: List payments
+          responses:
+            '200':
+              description: List of payments
+        post:
+          summary: Process payment
+          responses:
+            '201':
+              description: Payment processed
+      /api/v1/users:
+        get:
+          summary: List users
+          responses:
+            '200':
+              description: List of users
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: billpay-system
+  title: BillPay System
+  description: Sistema completo de pagos BillPay
+spec:
+  owner: platform-team

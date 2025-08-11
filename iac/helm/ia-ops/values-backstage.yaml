@@ -1,0 +1,57 @@
+backstage:
+  image:
+    registry: ghcr.io
+    repository: tu-organizacion/ia-ops/backstage
+    tag: "latest"
+    pullPolicy: Always
+  
+  replicaCount: 2
+  
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  
+  env:
+    NODE_ENV: production
+    LOG_LEVEL: info
+  
+  configMaps:
+    app-config:
+      app:
+        title: IA-Ops Platform
+        baseUrl: http://localhost:8080
+      backend:
+        baseUrl: http://localhost:8080
+        database:
+          client: pg
+          connection:
+            host: ${POSTGRES_HOST}
+            port: ${POSTGRES_PORT}
+            user: ${POSTGRES_USER}
+            password: ${POSTGRES_PASSWORD}
+            database: ${POSTGRES_DB}
+  
+  service:
+    type: ClusterIP
+    port: 7007
+  
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    hosts:
+      - host: backstage.local
+        paths:
+          - path: /
+            pathType: Prefix
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 70

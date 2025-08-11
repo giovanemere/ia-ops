@@ -1,0 +1,135 @@
+app:
+  title: IA-Ops Platform
+  baseUrl: ${BACKSTAGE_BASE_URL}
+
+organization:
+  name: IA-Ops Organization
+
+backend:
+  baseUrl: ${BACKSTAGE_BASE_URL}/api
+  listen:
+    port: 7007
+    host: 0.0.0.0
+  csp:
+    connect-src: ["'self'", 'http:', 'https:', 'ws:', 'wss:']
+  cors:
+    origin: 
+      - ${BACKSTAGE_BASE_URL}
+      - ${BACKSTAGE_FRONTEND_URL}
+      - http://localhost:8080
+      - http://localhost:3000
+      - http://localhost:7007
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DB}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template, Domain, Group]
+  locations:
+    # Archivos locales del catálogo
+    - type: file
+      target: ../../catalog-info.yaml
+    - type: file
+      target: ../../catalog-systems.yaml
+    
+    # Nuevos catálogos integrados
+    - type: file
+      target: ../../catalog-templates.yaml
+    - type: file
+      target: ../../catalog-framework.yaml
+    - type: file
+      target: ../../catalog-external-resources.yaml
+    
+    # Templates de Backstage (repositorio externo)
+    - type: url
+      target: https://github.com/giovanemere/templates_backstage/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Template, Component, System]
+    
+    # Framework de arquitecturas (repositorio externo)
+    - type: url
+      target: https://github.com/giovanemere/ia-ops-framework/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Documentation]
+    
+    # Repositorios de aplicaciones
+    - type: url
+      target: https://github.com/giovanemere/poc-icbs/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API, System]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-b/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-front-a/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component]
+    
+    - type: url
+      target: https://github.com/giovanemere/poc-billpay-back/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, API]
+    
+    # Variables de entorno adicionales
+    - type: url
+      target: ${CATALOG_LOCATIONS}
+      rules:
+        - allow: [Component, System, API, Resource, Location, Template]
+
+proxy:
+  '/openai':
+    target: ${OPENAI_SERVICE_URL}
+    changeOrigin: true
+    headers:
+      Authorization: Bearer ${OPENAI_API_KEY}
+      
+  '/proxy-health':
+    target: http://proxy-service:8080/health
+    changeOrigin: true
+    
+  '/templates':
+    target: http://localhost:8080/templates
+    changeOrigin: true
+    
+  '/framework':
+    target: http://localhost:8080/framework
+    changeOrigin: true
