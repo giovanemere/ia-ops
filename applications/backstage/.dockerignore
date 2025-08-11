@@ -1,8 +1,64 @@
+# Git
 .git
+.gitignore
+
+# Yarn cache y archivos temporales
 .yarn/cache
 .yarn/install-state.gz
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/global
+
+# Node modules (se instalan en el build)
 node_modules
-packages/*/src
 packages/*/node_modules
-plugins
+
+# Archivos de desarrollo
 *.local.yaml
+.env.local
+.env.development
+
+# Logs
+*.log
+logs/
+backstage.log
+backstage-backend.log
+frontend.log
+
+# Archivos de prueba
+*.test.*
+*.spec.*
+test/
+tests/
+__tests__/
+coverage/
+
+# Archivos de configuración local
+app-config.local.yaml
+playwright.config.ts
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+dist-types/
+
+# Scripts de desarrollo
+*.sh
+!start-*.sh
+
+# Documentación de desarrollo
+*.md
+!README.md
+docs/
+screenshots-simulation/
+
+# Archivos de backup
+*-backup*
+config-backups/
+
+# Archivos específicos del proyecto
+examples/
+plugins/
+templates/
+repo-docs/
