@@ -142,8 +142,26 @@ jobs:
           echo "✅ Documentation site generated"
           echo "📊 Site structure:"
           find site -type f -name "*.html" | head -10
+          echo "📈 Site statistics:"
+          echo "HTML files: $(find site -name "*.html" | wc -l)"
+          echo "Total size: $(du -sh site | cut -f1)"
         else
           echo "⚠️ No site directory generated"
+        fi
+
+    - name: 🔗 Check for broken links (basic)
+      run: |
+        if [ -d "site" ]; then
+          echo "🔍 Checking for basic link issues..."
+          # Check for empty href attributes
+          if grep -r 'href=""' site/ > /dev/null 2>&1; then
+            echo "⚠️ Found empty href attributes"
+          fi
+          # Check for missing anchor targets
+          if grep -r 'href="#"' site/ > /dev/null 2>&1; then
+            echo "⚠️ Found empty anchor links"
+          fi
+          echo "✅ Basic link validation completed"
         fi
 
   security-scan:
@@ -217,49 +235,6 @@ jobs:
         # Add your integration test commands here
         echo "✅ Integration tests completed"
 
-  deploy-docs:
-    name: 📚 Deploy Documentation
-    runs-on: ubuntu-latest
-    needs: [test-documentation]
-    if: github.ref == 'refs/heads/trunk'
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-
-    - name: 🐍 Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-
-    - name: 📦 Install MkDocs and dependencies
-      run: |
-        pip install --upgrade pip
-        pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
-
-    - name: 🚀 Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/trunk'
-      run: |
-        if [ -f "mkdocs.ci.yml" ]; then
-          echo "🚀 Deploying documentation to GitHub Pages with CI config..."
-          mkdocs gh-deploy --config-file mkdocs.ci.yml --force
-          echo "✅ Documentation deployed successfully with CI config"
-        elif [ -f "mkdocs.yml" ]; then
-          echo "🚀 Deploying documentation to GitHub Pages..."
-          # Handle techdocs-core gracefully for deployment
-          if mkdocs build 2>&1 | grep -q "techdocs-core"; then
-            echo "⚠️ Using alternative deployment approach due to techdocs-core"
-            sed 's/- techdocs-core/# - techdocs-core (disabled in CI)/' mkdocs.yml > mkdocs.temp.yml
-            mkdocs gh-deploy --config-file mkdocs.temp.yml --force
-            rm mkdocs.temp.yml
-          else
-            mkdocs gh-deploy --force
-          fi
-          echo "✅ Documentation deployed successfully"
-        else
-          echo "⚠️ MkDocs configuration not found, skipping deployment"
-        fi
-
   notify-success:
     name: 📢 Notify Success
     runs-on: ubuntu-latest
@@ -271,6 +246,10 @@ jobs:
       run: |
         echo "🎉 IA-Ops Platform CI/CD completed successfully!"
         echo "✅ All validations passed"
-        echo "✅ Documentation built"
+        echo "✅ Documentation built and validated"
         echo "✅ Security scan completed"
         echo "🚀 Platform is ready for deployment"
+        echo ""
+        echo "📚 Documentation deployment:"
+        echo "- Automatic deployment to GitHub Pages will be triggered by the deploy-docs workflow"
+        echo "- Manual deployment: Use the 'Deploy Documentation' workflow in Actions tab"
