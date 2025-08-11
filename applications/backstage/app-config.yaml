@@ -51,33 +51,63 @@ backend:
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
+      # Personal Access Token for GitHub integration
       token: ${GITHUB_TOKEN}
-      organization: ${GITHUB_ORG:-tu-organizacion}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+      organization: ${GITHUB_ORG:-giovanemere}
+      # Auto-discovery configuration
+      apps:
+        - $include: github-app-backstage-credentials.yaml
+      # API rate limiting
+      apiBaseUrl: https://api.github.com
+      rawBaseUrl: https://raw.githubusercontent.com
+      # Enable automatic discovery of repositories
+      discovery:
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
 
 proxy:
-  ### Example for how to add a proxy endpoint for the frontend.
-  ### A typical reason to do this is to handle HTTPS and CORS for internal services.
-  # endpoints:
-  #   '/test':
-  #     target: 'https://example.com'
-  #     changeOrigin: true
+  ### GitHub Actions API Proxy
+  endpoints:
+    '/github-actions':
+      target: 'https://api.github.com'
+      headers:
+        Authorization: 'token ${GITHUB_TOKEN}'
+      changeOrigin: true
+      pathRewrite:
+        '^/github-actions': ''
+    
+    ### GitHub API Proxy for Source Code
+    '/github-api':
+      target: 'https://api.github.com'
+      headers:
+        Authorization: 'token ${GITHUB_TOKEN}'
+      changeOrigin: true
+      pathRewrite:
+        '^/github-api': ''
+    
+    ### GitHub Raw Content Proxy
+    '/github-raw':
+      target: 'https://raw.githubusercontent.com'
+      changeOrigin: true
+      pathRewrite:
+        '^/github-raw': ''
 
-# Reference documentation http://backstage.io/docs/features/techdocs/configuration
-# Note: After experimenting with basic setup, use CI/CD to generate docs
-# and an external cloud storage when deploying TechDocs for production use-case.
-# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+# TechDocs Configuration for Automatic Documentation
 techdocs:
   builder: ${TECHDOCS_BUILDER:-local} # Alternatives - 'external'
   generator:
     runIn: ${TECHDOCS_GENERATOR_RUNIN:-docker} # Alternatives - 'local'
+    dockerImage: ${TECHDOCS_DOCKER_IMAGE:-spotify/techdocs}
+    pullImage: true
   publisher:
-    type: ${TECHDOCS_PUBLISHER_TYPE:-local} # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: ${TECHDOCS_PUBLISHER_TYPE:-local} # Alternatives - 'googleGcs' or 'awsS3'
+    local:
+      # Directory where generated docs are stored
+      publishDirectory: ${TECHDOCS_PUBLISH_DIR:-./techdocs}
+  # Auto-discovery configuration
+  requestUrl: http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}/api/techdocs
+  storageUrl: http://localhost:${BACKSTAGE_BACKEND_PORT:-7007}/api/techdocs/static/docs
 
 auth:
   # see https://backstage.io/docs/auth/ to learn about auth providers
@@ -100,12 +130,73 @@ catalog:
     pullRequestBranchName: backstage-integration
   rules:
     - allow: [Component, System, API, Resource, Location, Group, User, Domain]
+  
+  # Automatic discovery of repositories
+  providers:
+    github:
+      # GitHub Organization Discovery
+      giovanemere:
+        organization: 'giovanemere'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '.*'
+        schedule:
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }
+      # Specific repositories with custom paths
+      repositories:
+        - organization: 'giovanemere'
+          repository: 'ia-ops'
+          catalogPath: '/catalog-info.yaml'
+        - organization: 'giovanemere'
+          repository: 'poc-billpay-back'
+          catalogPath: '/catalog-info.yaml'
+        - organization: 'giovanemere'
+          repository: 'poc-billpay-front-a'
+          catalogPath: '/catalog-info.yaml'
+        - organization: 'giovanemere'
+          repository: 'poc-billpay-front-b'
+          catalogPath: '/catalog-info.yaml'
+        - organization: 'giovanemere'
+          repository: 'poc-billpay-front-feature-flags'
+          catalogPath: '/catalog-info.yaml'
+        - organization: 'giovanemere'
+          repository: 'poc-icbs'
+          catalogPath: '/catalog-info.yaml'
+  
   locations:
-    # IA-Ops Platform entities
+    # Auto-Discovery Catalog with all repositories
+    - type: file
+      target: ./catalog-auto-discovery.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Location, Group, User, Domain]
+
+    # GitHub Organization Auto-Discovery
+    - type: github-discovery
+      target: https://github.com/giovanemere/ia-ops/blob/main/catalog-info.yaml
+    - type: github-discovery
+      target: https://github.com/giovanemere/poc-billpay-back/blob/main/catalog-info.yaml
+    - type: github-discovery
+      target: https://github.com/giovanemere/poc-billpay-front-a/blob/main/catalog-info.yaml
+    - type: github-discovery
+      target: https://github.com/giovanemere/poc-billpay-front-b/blob/main/catalog-info.yaml
+    - type: github-discovery
+      target: https://github.com/giovanemere/poc-billpay-front-feature-flags/blob/main/catalog-info.yaml
+    - type: github-discovery
+      target: https://github.com/giovanemere/poc-icbs/blob/main/catalog-info.yaml
+
+    # IA-Ops Platform - Phase 2 Complete Catalog
+    - type: file
+      target: ./catalog-phase2-complete.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Location, Group, User, Domain]
+
+    # IA-Ops Platform entities (legacy)
     - type: file
       target: ./catalog-entities.yaml
 
-    # MVP Demo - AI Analyzed Application
+    # MVP Demo - AI Analyzed Application (legacy)
     - type: file
       target: ./catalog-mvp-demo.yaml
 
@@ -134,16 +225,6 @@ catalog:
       target: ../../examples/test-component.yaml
       rules:
         - allow: [Component, System, Group]
-
-    ## Uncomment these lines to add more example data
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
-
-    ## Uncomment these lines to add an example org
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-    #   rules:
-    #     - allow: [User, Group]
 
 kubernetes:
   serviceLocatorMethod:
@@ -201,8 +282,12 @@ github:
 
 # GitHub Actions Plugin Configuration
 githubActions:
-  # Optional: Configure specific repositories
+  # Automatic discovery of workflows
+  proxyPath: /github-actions
+  # Configure specific repositories for GitHub Actions
   repositories:
+    - owner: giovanemere
+      repo: ia-ops
     - owner: giovanemere
       repo: poc-billpay-back
     - owner: giovanemere
@@ -213,6 +298,10 @@ githubActions:
       repo: poc-billpay-front-feature-flags
     - owner: giovanemere
       repo: poc-icbs
+  # Auto-refresh configuration
+  schedule:
+    frequency: { minutes: 10 }
+    timeout: { minutes: 2 }
 
 # Azure DevOps Plugin Configuration (Disabled until properly configured)
 # azureDevOps:

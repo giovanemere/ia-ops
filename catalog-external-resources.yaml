@@ -1,0 +1,85 @@
+# =============================================================================
+# RECURSOS EXTERNOS - TEMPLATES Y ARQUITECTURAS
+# =============================================================================
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: templates-backstage
+  title: Backstage Templates Repository
+  description: Templates multi-cloud para despliegues en Azure, AWS, GCP, OCI
+  annotations:
+    github.com/project-slug: giovanemere/templates_backstage
+    ia-ops.resource-type: "templates"
+    ia-ops.providers: "azure,aws,gcp,oci"
+  tags:
+    - templates
+    - multi-cloud
+    - azure
+    - aws
+    - gcp
+    - oci
+    - scaffolding
+  links:
+    - url: https://github.com/giovanemere/templates_backstage
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/templates/providers
+      title: Available Providers
+      icon: catalog
+spec:
+  type: resource
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ia-ops-framework
+  title: IA-Ops Framework
+  description: Arquitecturas de referencia y patrones DevOps
+  annotations:
+    github.com/project-slug: giovanemere/ia-ops-framework
+    ia-ops.resource-type: "architectures"
+    ia-ops.architectures-count: "10"
+  tags:
+    - architectures
+    - reference
+    - devops
+    - patterns
+    - best-practices
+  links:
+    - url: https://github.com/giovanemere/ia-ops-framework
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8003/architectures/reference
+      title: Reference Architectures
+      icon: docs
+spec:
+  type: resource
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-platform
+  title: IA-Ops Platform Complete
+  description: Plataforma completa con templates, arquitecturas e inventario
+  annotations:
+    ia-ops.components-count: "5+"
+    ia-ops.resources-count: "2"
+spec:
+  owner: platform-team
+  domain: devops-automation
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: devops-automation
+  title: DevOps Automation Domain
+  description: Dominio de automatización DevOps y plataformas
+spec:
+  owner: platform-team
