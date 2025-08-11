@@ -4,50 +4,109 @@ metadata:
   name: ia-ops-platform
   title: IA-Ops Platform
   description: Plataforma integrada de IA y DevOps con Backstage
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops
   tags:
+    - platform
     - ai
     - devops
-    - platform
     - backstage
-  annotations:
-    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops
+  links:
+    - url: https://github.com/giovanemere/ia-ops
+      title: Main Repository
+      icon: github
+    - url: http://localhost:8080
+      title: Backstage Portal
+      icon: web
+    - url: http://localhost:8080/openai
+      title: OpenAI Service
+      icon: chat
+    - url: http://localhost:9090
+      title: Prometheus Metrics
+      icon: dashboard
+    - url: http://localhost:3001
+      title: Grafana Dashboards
+      icon: grafana
+    - url: https://github.com/giovanemere/ia-ops/wiki
+      title: Documentation Wiki
+      icon: docs
+    - url: https://github.com/giovanemere/ia-ops/issues
+      title: Issue Tracker
+      icon: bug
+      title: Live Platform
+      icon: web
 spec:
-  owner: devops-team
-  domain: platform
+  owner: platform-team
+  domain: ia-ops
+  lifecycle: production
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: backstage-portal
-  title: Backstage Portal
-  description: Portal de desarrolladores basado en Backstage
+  title: Backstage Developer Portal
+  description: Portal de desarrolladores con integración de IA
+  annotations:
+    backstage.io/techdocs-ref: dir:./applications/backstage
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops/tree/main/applications/backstage
+    github.com/workflows: ci.yml,deploy.yml,docs.yml
   tags:
     - frontend
+    - react
     - portal
-    - backstage
-  annotations:
-    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/backstage
+    - documentation
+  links:
+    - url: http://localhost:3002
+      title: Backstage Portal
+      icon: web
+    - url: http://localhost:3002/catalog
+      title: Service Catalog
+      icon: catalog
+    - url: http://localhost:3002/docs
+      title: Documentation
+      icon: docs
 spec:
   type: website
   lifecycle: production
-  owner: devops-team
+  owner: platform-team
   system: ia-ops-platform
   providesApis:
     - backstage-api
+  consumesApis:
+    - openai-api
+    - github-api
+  dependsOn:
+    - resource:postgresql-database
+    - resource:redis-cache
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: openai-service
-  title: OpenAI Service
-  description: Servicio nativo de IA integrado con OpenAI
-  tags:
-    - ai
-    - api
-    - openai
-    - fastapi
+  title: OpenAI Integration Service
+  description: Servicio de integración con OpenAI para funcionalidades de IA
   annotations:
-    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/openai-service
+    backstage.io/techdocs-ref: dir:./applications/openai-service
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops/tree/main/applications/openai-service
+    github.com/workflows: ci.yml,deploy.yml,test.yml
+  tags:
+    - backend
+    - ai
+    - fastapi
+    - python
+  links:
+    - url: http://localhost:8003
+      title: OpenAI Service
+      icon: web
+    - url: http://localhost:8003/docs
+      title: API Documentation
+      icon: docs
 spec:
   type: service
   lifecycle: production
@@ -55,83 +114,86 @@ spec:
   system: ia-ops-platform
   providesApis:
     - openai-api
+  dependsOn:
+    - resource:openai-api-key
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: proxy-service
-  title: Proxy Gateway
-  description: Gateway y proxy para todos los servicios de la plataforma
+  title: Proxy Gateway Service
+  description: Gateway y proxy para enrutamiento de servicios
+  annotations:
+    backstage.io/techdocs-ref: dir:./applications/proxy-service
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops/tree/main/applications/proxy-service
+    github.com/workflows: ci.yml,deploy.yml
   tags:
     - gateway
     - proxy
     - nginx
-  annotations:
-    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/proxy-service
+    - routing
+  links:
+    - url: http://localhost:8080
+      title: Main Gateway
+      icon: web
 spec:
   type: service
   lifecycle: production
-  owner: devops-team
+  owner: platform-team
   system: ia-ops-platform
-  dependsOn:
-    - component:backstage-portal
-    - component:openai-service
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: monitoring-stack
-  title: Monitoring Stack
-  description: Stack de monitoreo con Prometheus y Grafana
-  tags:
-    - monitoring
-    - prometheus
-    - grafana
-  annotations:
-    backstage.io/source-location: url:https://github.com/tu-organizacion/ia-ops/tree/main/applications/monitoring
-spec:
-  type: service
-  lifecycle: production
-  owner: devops-team
-  system: ia-ops-platform
+  providesApis:
+    - proxy-api
+  consumesApis:
+    - backstage-api
+    - openai-api
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: backstage-api
-  title: Backstage API
-  description: API del portal Backstage
-  tags:
-    - api
-    - backstage
+  title: Backstage Portal API
+  description: API del portal de desarrolladores Backstage
+  annotations:
+    backstage.io/techdocs-ref: dir:./applications/backstage/docs/apis
+    github.com/project-slug: giovanemere/ia-ops
 spec:
   type: openapi
   lifecycle: production
-  owner: devops-team
+  owner: platform-team
   system: ia-ops-platform
   definition: |
     openapi: 3.0.0
     info:
       title: Backstage API
       version: 1.0.0
+      description: API del portal de desarrolladores
     paths:
       /api/catalog/entities:
         get:
-          summary: Get catalog entities
+          summary: Obtener entidades del catálogo
           responses:
             '200':
-              description: List of entities
+              description: Lista de entidades
+      /api/techdocs:
+        get:
+          summary: Obtener documentación técnica
+          responses:
+            '200':
+              description: Documentación disponible
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
   name: openai-api
   title: OpenAI Service API
-  description: API del servicio de IA
-  tags:
-    - api
-    - ai
-    - openai
+  description: API del servicio de integración con OpenAI
+  annotations:
+    backstage.io/techdocs-ref: dir:./applications/openai-service/docs
+    github.com/project-slug: giovanemere/ia-ops
 spec:
   type: openapi
   lifecycle: production
@@ -142,40 +204,100 @@ spec:
     info:
       title: OpenAI Service API
       version: 1.0.0
+      description: Servicio de integración con OpenAI
     paths:
       /chat/completions:
         post:
-          summary: Chat completions
+          summary: Chat completions con OpenAI
           responses:
             '200':
-              description: AI response
+              description: Respuesta del chat
+      /health:
+        get:
+          summary: Health check
+          responses:
+            '200':
+              description: Servicio saludable
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: postgresql-database
+  title: PostgreSQL Database
+  description: Base de datos PostgreSQL para Backstage
+  annotations:
+    backstage.io/techdocs-ref: dir:./docs/resources
+spec:
+  type: database
+  owner: platform-team
+  system: ia-ops-platform
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: redis-cache
+  title: Redis Cache
+  description: Cache Redis para sesiones y datos temporales
+  annotations:
+    backstage.io/techdocs-ref: dir:./docs/resources
+spec:
+  type: cache
+  owner: platform-team
+  system: ia-ops-platform
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: openai-api-key
+  title: OpenAI API Key
+  description: Clave de API para OpenAI
+  annotations:
+    backstage.io/techdocs-ref: dir:./docs/resources
+spec:
+  type: secret
+  owner: ai-team
+  system: ia-ops-platform
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
-  name: devops-team
-  title: DevOps Team
-  description: Equipo de DevOps responsable de la plataforma
+  name: platform-team
+  title: Platform Team
+  description: Equipo responsable de la plataforma IA-Ops
 spec:
   type: team
   children: []
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
 metadata:
   name: ai-team
   title: AI Team
-  description: Equipo de IA responsable de los servicios de inteligencia artificial
+  description: Equipo responsable de los servicios de IA
 spec:
   type: team
   children: []
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: User
 metadata:
-  name: admin
+  name: platform-admin
   title: Platform Administrator
-  description: Administrador de la plataforma IA-Ops
 spec:
-  memberOf:
-    - devops-team
+  memberOf: [platform-team]
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: ia-ops
+  title: IA-Ops Domain
+  description: Dominio de la plataforma IA-Ops
+spec:
+  owner: platform-team

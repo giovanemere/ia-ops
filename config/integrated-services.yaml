@@ -1,0 +1,173 @@
+# =============================================================================
+# CONFIGURACIÓN DE SERVICIOS INTEGRADOS: IA-OPS + ICBS
+# =============================================================================
+# Descripción: Configuración centralizada para la integración de servicios
+# Fecha: 2025-08-11
+# =============================================================================
+
+integration:
+  name: "IA-Ops + ICBS Platform"
+  version: "2.1.0"
+  description: "Plataforma integrada de IA, DevOps y WebLogic"
+
+# =============================================================================
+# CONFIGURACIÓN DE SERVICIOS IA-OPS
+# =============================================================================
+ia_ops:
+  base_path: "/home/giovanemere/ia-ops/ia-ops"
+  services:
+    backstage:
+      path: "applications/backstage"
+      startup_script: "start-robust.sh"
+      health_check: "http://localhost:8080"
+      dependencies: ["postgresql", "redis"]
+      
+    openai_service:
+      path: "applications/openai-service"
+      health_check: "http://localhost:8080/openai"
+      dependencies: ["backstage"]
+      
+    proxy_service:
+      path: "applications/proxy-service"
+      health_check: "http://localhost:8080"
+      port: 8080
+      
+    monitoring:
+      grafana:
+        health_check: "http://localhost:3001"
+        port: 3001
+      prometheus:
+        health_check: "http://localhost:9090"
+        port: 9090
+
+# =============================================================================
+# CONFIGURACIÓN DE SERVICIOS ICBS
+# =============================================================================
+icbs:
+  base_path: "/home/giovanemere/periferia/icbs/docker-for-oracle-weblogic"
+  services:
+    weblogic:
+      health_check: "http://localhost:7001/console"
+      port: 7001
+      startup_time: 120  # segundos
+      
+    jenkins:
+      health_check: "http://localhost:8081"
+      port: 8081
+      startup_time: 60   # segundos
+      
+    haproxy:
+      health_check: "http://localhost:8404/stats"
+      port: 8404
+      config_path: "haproxy/haproxy.cfg"
+      
+  startup_script: "manage-services.sh"
+  management_commands:
+    start: "./manage-services.sh start"
+    stop: "./manage-services.sh stop"
+    status: "./manage-services.sh status"
+
+# =============================================================================
+# CONFIGURACIÓN DE INTEGRACIÓN
+# =============================================================================
+integration_config:
+  startup_order:
+    1: "icbs"      # Primero la infraestructura base
+    2: "ia_ops"    # Luego la plataforma principal
+    
+  health_checks:
+    timeout: 300   # 5 minutos máximo para health checks
+    interval: 10   # Verificar cada 10 segundos
+    retries: 30    # Máximo 30 intentos
+    
+  catalog_integration:
+    icbs_catalog_file: "catalog-poc-icbs.yaml"
+    auto_register: true
+    
+  networking:
+    shared_network: "ia-ops-network"
+    proxy_integration: true
+
+# =============================================================================
+# CONFIGURACIÓN DE PUERTOS
+# =============================================================================
+ports:
+  # IA-Ops Platform
+  ia_ops_proxy: 8080
+  backstage_frontend: 3002
+  backstage_backend: 7007
+  openai_service: 8003
+  grafana: 3001
+  prometheus: 9090
+  postgresql: 5432
+  redis: 6379
+  
+  # ICBS Platform
+  weblogic_admin: 7001
+  weblogic_managed: 7003
+  jenkins: 8081
+  haproxy_stats: 8404
+  haproxy_frontend: 80
+  
+  # Puertos de desarrollo
+  mkdocs: 8005
+  techdocs: 8006
+
+# =============================================================================
+# CONFIGURACIÓN DE MONITOREO INTEGRADO
+# =============================================================================
+monitoring:
+  unified_dashboard: true
+  metrics_collection:
+    - ia_ops_metrics
+    - icbs_metrics
+    - integration_metrics
+    
+  alerts:
+    service_down: true
+    high_resource_usage: true
+    integration_failures: true
+    
+  logging:
+    centralized: true
+    log_level: "info"
+    retention_days: 30
+
+# =============================================================================
+# CONFIGURACIÓN DE BACKUP Y RECUPERACIÓN
+# =============================================================================
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Diario a las 2 AM
+  retention: 7           # 7 días
+  
+  components:
+    - backstage_catalog
+    - icbs_configurations
+    - monitoring_dashboards
+    - integration_configs
+
+# =============================================================================
+# CONFIGURACIÓN DE DESARROLLO
+# =============================================================================
+development:
+  hot_reload: true
+  debug_mode: false
+  test_data: true
+  
+  mock_services:
+    enabled: false
+    external_apis: false
+
+# =============================================================================
+# CONFIGURACIÓN DE PRODUCCIÓN
+# =============================================================================
+production:
+  ssl_enabled: false
+  load_balancing: true
+  high_availability: false
+  
+  security:
+    authentication_required: true
+    authorization_enabled: true
+    audit_logging: true

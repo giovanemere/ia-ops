@@ -2,7 +2,7 @@
 
 **Plataforma integrada de IA y DevOps con Backstage**
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/tu-organizacion/ia-ops)
+[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/tu-organizacion/ia-ops)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 
@@ -10,8 +10,10 @@
 
 IA-Ops Platform es una solución completa que integra:
 - **🏛️ Backstage**: Portal de desarrolladores
-- **🤖 OpenAI Service**: Servicio nativo de IA
+- **🤖 OpenAI Service**: Servicio nativo de IA con conocimiento DevOps
 - **📚 Documentación Inteligente**: MkDocs + TechDocs
+- **🎯 Templates Multi-Cloud**: Catálogo de despliegues para Azure, AWS, OCI y GCP
+- **🏗️ Arquitecturas de Referencia**: Framework de patrones y mejores prácticas
 - **☸️ Infraestructura como Código**: Terraform + Kubernetes
 - **🔄 CI/CD Pipeline**: GitOps con ArgoCD
 
@@ -49,6 +51,16 @@ ia-ops/
 │   ├── proxy-service/       # Gateway y proxy
 │   ├── monitoring/          # Herramientas de monitoreo
 │   └── docs/               # Documentación MkDocs
+├── 🎯 templates/            # Templates multi-cloud (submódulo)
+│   ├── aws-infrastructure/  # Templates AWS
+│   ├── azure-messaging/     # Templates Azure
+│   ├── gcp-storage/        # Templates GCP
+│   ├── oci-networking/     # Templates OCI
+│   └── kubernetes-deployment/ # Templates K8s
+├── 🏗️ framework/            # Arquitecturas de referencia (submódulo)
+│   ├── docs/               # Documentación de arquitecturas
+│   ├── apps/               # Inventario de aplicaciones DevOps
+│   └── arquitectura-diagramas.md # Diagramas de referencia
 ├── 🏗️ iac/                  # Infraestructura como Código
 │   ├── terraform/          # Configuraciones Terraform
 │   ├── kubernetes/         # Manifiestos K8s
@@ -67,6 +79,26 @@ ia-ops/
 └── 🔐 .env                  # Variables de entorno
 ```
 
+## 🆕 Nuevas Funcionalidades v2.1.0
+
+### 🎯 Templates Multi-Cloud
+- **AWS Infrastructure**: Templates para EC2, RDS, S3, Lambda
+- **Azure Messaging**: Service Bus, Event Hubs, Logic Apps
+- **GCP Storage**: Cloud Storage, BigQuery, Pub/Sub
+- **OCI Networking**: VCN, Load Balancers, Security Lists
+- **Kubernetes**: Deployments, Services, Ingress
+
+### 🤖 OpenAI Service Mejorado
+- **Base de Conocimiento DevOps**: Integración con inventario de aplicaciones
+- **Recomendaciones Inteligentes**: Basadas en patrones existentes
+- **Selección de Templates**: Asistencia para elegir el template apropiado
+- **Troubleshooting Contextual**: Soluciones basadas en experiencias previas
+
+### 🏗️ Framework de Arquitecturas
+- **Patrones de Referencia**: Arquitecturas probadas y documentadas
+- **Mejores Prácticas**: Guías específicas por proveedor cloud
+- **Inventario Automatizado**: Catálogo de aplicaciones DevOps existentes
+
 ## 🚀 Inicio Rápido
 
 ### Prerrequisitos
@@ -79,6 +111,9 @@ ia-ops/
 ```bash
 git clone https://github.com/tu-organizacion/ia-ops.git
 cd ia-ops
+
+# Inicializar submódulos
+git submodule update --init --recursive
 ```
 
 ### 2. Configurar Variables de Entorno
@@ -88,7 +123,16 @@ cp .env.example .env
 # Editar .env con tus configuraciones
 ```
 
-### 3. Iniciar Servicios
+### 3. Configurar Integración OpenAI
+```bash
+# Instalar dependencias Python
+pip install pandas openpyxl
+
+# Ejecutar configuración de integración
+python scripts/setup-openai-inventory-integration.py
+```
+
+### 4. Iniciar Servicios
 ```bash
 # Iniciar todos los servicios
 docker-compose up -d
@@ -97,10 +141,12 @@ docker-compose up -d
 docker-compose ps
 ```
 
-### 4. Acceder a las Aplicaciones
+### 5. Acceder a las Aplicaciones
 - **🌐 Proxy Gateway**: http://localhost:8080 (Punto de entrada principal)
 - **🏛️ Backstage**: http://localhost:8080 (via proxy)
 - **🤖 OpenAI Service**: http://localhost:8080/openai (via proxy)
+- **🎯 Templates**: http://localhost:8080/templates (via proxy)
+- **🏗️ Framework**: http://localhost:8080/framework (via proxy)
 - **📊 Prometheus**: http://localhost:9090
 - **📈 Grafana**: http://localhost:3001
 - **📚 MkDocs**: http://localhost:8080
@@ -122,9 +168,62 @@ OPENAI_MODEL=gpt-4o-mini
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres123
 POSTGRES_DB=backstage
+
+# Repositorios Externos
+TEMPLATES_REPO=https://github.com/giovanemere/templates_backstage.git
+FRAMEWORK_REPO=https://github.com/giovanemere/ia-ops-framework.git
 ```
 
 Ver `.env` para configuración completa.
+
+## 🎯 Uso de Templates Multi-Cloud
+
+### Selección Inteligente de Templates
+```bash
+# Consultar templates disponibles via OpenAI
+curl -X POST http://localhost:8080/openai/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {
+        "role": "user", 
+        "content": "¿Qué template recomiendas para desplegar una aplicación web en AWS?"
+      }
+    ]
+  }'
+```
+
+### Templates Disponibles
+- **🔶 AWS**: `aws-infrastructure/template.yaml`
+- **🔷 Azure**: `azure-messaging/template.yaml`
+- **🟡 GCP**: `gcp-storage/template.yaml`
+- **🔴 OCI**: `oci-networking/template.yaml`
+- **☸️ Kubernetes**: `kubernetes-deployment/template.yaml`
+
+## 🤖 OpenAI Service con Contexto DevOps
+
+### Funcionalidades Mejoradas
+```python
+# Ejemplo de consulta contextual
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "Eres un asistente DevOps con acceso al inventario de aplicaciones"
+    },
+    {
+      "role": "user",
+      "content": "Necesito desplegar una aplicación similar a billpay-front-a"
+    }
+  ]
+}
+```
+
+### Capacidades del Asistente
+- **🎯 Recomendaciones de Arquitectura**: Basadas en patrones exitosos
+- **🔍 Análisis de Aplicaciones**: Comparación con inventario existente
+- **🛠️ Selección de Templates**: Matching inteligente de requisitos
+- **🚨 Troubleshooting**: Soluciones basadas en casos previos
 
 ## 📚 Documentación
 
@@ -132,6 +231,8 @@ Ver `.env` para configuración completa.
 - [📋 Plan de Implementación](docs/plan-implementacion.md)
 - [📊 Seguimiento de Progreso](docs/seguimiento-progreso.md)
 - [🚨 Plan de Acción Crítico](docs/plan-accion-critico.md)
+- [🎯 Guía de Templates](templates/README.md)
+- [🏗️ Framework de Arquitecturas](framework/README.md)
 
 ### Documentación por Componente
 - [🏛️ Backstage](applications/backstage/README.md)
@@ -146,6 +247,9 @@ Ver `.env` para configuración completa.
 # Desarrollo local
 docker-compose up -d
 
+# Actualizar submódulos
+git submodule update --remote
+
 # Logs
 docker-compose logs -f [servicio]
 
@@ -159,18 +263,25 @@ docker-compose build
 docker-compose down -v
 ```
 
-### Testing
+### Testing con Nuevas Funcionalidades
 ```bash
-# Test via Proxy (Recomendado)
-curl http://localhost:8080/health
-curl http://localhost:8080/api/catalog/entities
+# Test OpenAI con contexto DevOps
 curl -X POST http://localhost:8080/openai/chat/completions \
   -H "Content-Type: application/json" \
-  -d '{"messages":[{"role":"user","content":"Hello"}]}'
+  -d '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "¿Cuáles son las mejores prácticas para desplegar en Azure?"
+      }
+    ]
+  }'
 
-# Test Directo (Desarrollo)
-curl http://localhost:8000/health
-curl http://localhost:7007/api/catalog/entities
+# Test catálogo de templates
+curl http://localhost:8080/api/catalog/entities?filter=kind=template
+
+# Test framework de arquitecturas
+curl http://localhost:8080/api/catalog/entities?filter=kind=system,name=ia-ops-framework
 ```
 
 ## 🚀 Despliegue
@@ -199,14 +310,16 @@ kubectl apply -f gitops/argocd/application.yaml
 
 ### Métricas Disponibles
 - **Backstage**: Métricas de aplicación y uso
-- **OpenAI Service**: Requests, latencia, errores
+- **OpenAI Service**: Requests, latencia, errores, contexto DevOps
+- **Templates**: Uso y selección de templates
 - **PostgreSQL**: Performance y conexiones
 - **Redis**: Memoria y operaciones
 
 ### Dashboards Grafana
 - **Overview**: Vista general del sistema
 - **Backstage**: Métricas específicas de Backstage
-- **OpenAI**: Métricas del servicio de IA
+- **OpenAI**: Métricas del servicio de IA y recomendaciones
+- **Templates**: Uso de templates multi-cloud
 - **Infrastructure**: Métricas de infraestructura
 
 ## 🔒 Seguridad
@@ -217,22 +330,28 @@ kubectl apply -f gitops/argocd/application.yaml
 - **Secrets**: Gestión con Kubernetes Secrets
 - **Network**: Políticas de red definidas
 - **CORS**: Configurado para dominios específicos
+- **Submódulos**: Acceso controlado a repositorios externos
 
 ### Variables Sensibles
 Todas las variables sensibles están en `.env` y deben ser gestionadas de forma segura:
-- API Keys
+- API Keys (OpenAI, GitHub)
 - Passwords de BD
-- Tokens de GitHub
-- Secrets de autenticación
+- Tokens de autenticación
+- URLs de repositorios privados
 
 ## 🤝 Contribución
 
+### Repositorios Relacionados
+- **Templates**: [templates_backstage](https://github.com/giovanemere/templates_backstage.git)
+- **Framework**: [ia-ops-framework](https://github.com/giovanemere/ia-ops-framework.git)
+
 ### Proceso de Contribución
-1. Fork del repositorio
+1. Fork del repositorio principal
 2. Crear rama feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -am 'Añadir nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crear Pull Request
+3. Actualizar submódulos si es necesario
+4. Commit cambios (`git commit -am 'Añadir nueva funcionalidad'`)
+5. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+6. Crear Pull Request
 
 ### Estándares de Código
 - **Python**: PEP 8, Black formatter
@@ -265,4 +384,4 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 
 ---
 
-**🚀 IA-Ops Platform v2.0.0** - Construido con ❤️ por el equipo DevOps
+**🚀 IA-Ops Platform v2.1.0** - Construido con ❤️ por el equipo DevOps

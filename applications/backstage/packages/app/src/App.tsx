@@ -3,6 +3,8 @@ import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import { AiChatPage } from './components/AiChat';
 import { DarkModeDetector } from './components/DarkModeDetector';
 import { GitHubActionsPage } from './components/GitHubActions';
+import { CostInsightsPlaceholder } from './components/CostInsights/CostInsightsPlaceholder';
+import { Router as JenkinsRouter } from '@backstage/plugin-jenkins';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
@@ -24,7 +26,7 @@ import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
-import { ExampleFeatureFlagsPage } from '@internal/plugin-example-feature-flags';
+
 
 
 // import { AzurePullRequestsPage } from '@backstage/plugin-azure-devops';
@@ -104,8 +106,10 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/tech-radar" element={<TechRadarPage width={1500} height={800} />} />
     <Route path="/ai-chat" element={<AiChatPage />} />
-    <Route path="/feature-flags" element={<ExampleFeatureFlagsPage />} />
+
     <Route path="/github-actions" element={<GitHubActionsPage />} />
+    <Route path="/cost-insights" element={<CostInsightsPlaceholder />} />
+    <Route path="/jenkins/*" element={<JenkinsRouter />} />
 
     {/* <Route path="/azure-devops" element={<AzurePullRequestsPage />} /> */}
   </FlatRoutes>

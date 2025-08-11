@@ -22,6 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import './GitHubActionsPage.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,6 +75,24 @@ interface Repository {
 }
 
 const repositories: Repository[] = [
+  {
+    owner: 'giovanemere',
+    repo: 'ia-ops',
+    url: 'https://github.com/giovanemere/ia-ops',
+    description: 'IA-Ops Platform - Integrated AI and DevOps with Backstage',
+  },
+  {
+    owner: 'giovanemere',
+    repo: 'ia-ops-framework',
+    url: 'https://github.com/giovanemere/ia-ops-framework',
+    description: 'Reference architectures and DevOps application inventory framework',
+  },
+  {
+    owner: 'giovanemere',
+    repo: 'templates_backstage',
+    url: 'https://github.com/giovanemere/templates_backstage',
+    description: 'Multi-cloud templates for AWS, Azure, GCP, OCI and Kubernetes',
+  },
   {
     owner: 'giovanemere',
     repo: 'poc-billpay-back',
@@ -159,16 +178,13 @@ export const GitHubActionsPage = () => {
                   </Typography>
 
                   <Box 
+                    className="no-workflows-box"
                     style={{ 
                       marginTop: 16, 
                       marginBottom: 16, 
-                      padding: 12, 
-                      backgroundColor: '#e3f2fd', 
-                      borderRadius: 4,
-                      border: '1px solid #2196f3'
                     }}
                   >
-                    <Typography variant="body2" style={{ color: '#1976d2' }}>
+                    <Typography variant="body2" className="no-workflows-text">
                       No GitHub Actions workflows found in this repository.
                     </Typography>
                   </Box>
@@ -207,52 +223,46 @@ export const GitHubActionsPage = () => {
         </Grid>
 
         <Box style={{ marginTop: 32 }}>
-          <Box 
-            style={{ 
-              padding: 24, 
-              backgroundColor: '#e3f2fd', 
-              borderRadius: 4,
-              border: '1px solid #2196f3'
-            }}
-          >
-            <Typography variant="h6" gutterBottom style={{ color: '#1976d2' }}>
+          <Box className="github-actions-info-box">
+            <Typography variant="h6" gutterBottom className="github-actions-title">
               Getting Started with GitHub Actions
             </Typography>
-            <Typography variant="body2" paragraph style={{ color: '#1976d2' }}>
+            <Typography variant="body2" paragraph className="github-actions-description">
               GitHub Actions help you automate your software development workflows. Here's how to get started:
             </Typography>
             <List dense>
-              <ListItem>
+              <ListItem className="github-actions-list-item">
                 <ListItemIcon>
                   <CheckCircleIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText 
-                  primary="Create a .github/workflows directory in your repository"
-                  secondary="This is where your workflow files will live"
+                  primary={<span className="github-actions-list-primary">Create a .github/workflows directory in your repository</span>}
+                  secondary={<span className="github-actions-list-secondary">This is where your workflow files will live</span>}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem className="github-actions-list-item">
                 <ListItemIcon>
                   <CheckCircleIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText 
-                  primary="Add a YAML workflow file"
-                  secondary="Define your CI/CD pipeline with jobs and steps"
+                  primary={<span className="github-actions-list-primary">Add a YAML workflow file</span>}
+                  secondary={<span className="github-actions-list-secondary">Define your CI/CD pipeline with jobs and steps</span>}
                 />
               </ListItem>
-              <ListItem>
+              <ListItem className="github-actions-list-item">
                 <ListItemIcon>
                   <CheckCircleIcon color="primary" />
                 </ListItemIcon>
                 <ListItemText 
-                  primary="Commit and push your changes"
-                  secondary="GitHub will automatically run your workflows"
+                  primary={<span className="github-actions-list-primary">Commit and push your changes</span>}
+                  secondary={<span className="github-actions-list-secondary">GitHub will automatically run your workflows</span>}
                 />
               </ListItem>
             </List>
             <Button
               variant="contained"
               color="primary"
+              className="github-actions-button"
               style={{ marginTop: 16 }}
               onClick={() => window.open('https://docs.github.com/en/actions/quickstart', '_blank')}
             >

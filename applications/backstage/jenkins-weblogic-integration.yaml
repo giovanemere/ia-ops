@@ -1,0 +1,94 @@
+# =============================================================================
+# CONFIGURACIÓN JENKINS + WEBLOGIC PARA BACKSTAGE
+# =============================================================================
+# Agregar esta configuración a app-config.yaml de Backstage
+
+jenkins:
+  instances:
+    - name: weblogic-jenkins
+      baseUrl: http://localhost:8091
+      username: admin
+      apiKey: ${JENKINS_API_KEY:-admin123}
+      
+proxy:
+  '/jenkins-api':
+    target: http://localhost:8091
+    changeOrigin: true
+    headers:
+      Authorization: Basic ${JENKINS_AUTH_TOKEN}
+      
+  '/nexus-api':
+    target: http://localhost:8092
+    changeOrigin: true
+    
+  '/sonarqube-api':
+    target: http://localhost:9000
+    changeOrigin: true
+
+# =============================================================================
+# CATALOG LOCATIONS - Agregar a catalog.locations
+# =============================================================================
+catalog:
+  locations:
+    # Template Jenkins-WebLogic
+    - type: file
+      target: ../../../periferia/icbs/docker-for-oracle-weblogic/backstage-templates/jenkins-weblogic-deployment/template.yaml
+      rules:
+        - allow: [Template]
+
+# =============================================================================
+# ANOTACIONES PARA CATALOG-INFO.YAML
+# =============================================================================
+# Agregar estas anotaciones al catalog-info.yaml del proyecto ICBS:
+
+annotations:
+  # Jenkins Integration
+  jenkins.io/job-full-name: weblogic-deployment
+  jenkins.io/github-folder: poc-icbs
+  backstage.io/jenkins-url: http://localhost:8091
+  
+  # WebLogic Integration
+  weblogic.io/admin-console-a: http://localhost:7001/console
+  weblogic.io/admin-console-b: http://localhost:7002/console
+  weblogic.io/deployment-target: both
+  
+  # HAProxy Integration
+  haproxy.io/stats-url: http://localhost:8404/stats
+  haproxy.io/load-balancer: http://localhost:8083
+  
+  # Quality Gates
+  sonarqube.io/project-key: poc-icbs
+  nexus.io/repository: maven-releases
+
+links:
+  # CI/CD Tools
+  - url: http://localhost:8091
+    title: Jenkins Pipeline
+    icon: jenkins
+  - url: http://localhost:8092
+    title: Nexus Repository
+    icon: nexus
+  - url: http://localhost:9000
+    title: SonarQube Quality Gate
+    icon: sonarqube
+    
+  # WebLogic Consoles
+  - url: http://localhost:7001/console
+    title: WebLogic Server A
+    icon: weblogic
+  - url: http://localhost:7002/console
+    title: WebLogic Server B
+    icon: weblogic
+    
+  # Load Balancer
+  - url: http://localhost:8083
+    title: Application Load Balancer
+    icon: haproxy
+  - url: http://localhost:8404/stats
+    title: HAProxy Statistics
+    icon: dashboard
+    
+  # Monitoring
+  - url: http://localhost:9080
+    title: Container Management
+    icon: portainer

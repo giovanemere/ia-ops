@@ -1,0 +1,131 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: ia-ops-framework
+  description: Framework de arquitecturas de referencia IA-Ops
+spec:
+  targets:
+    # Documentación del framework
+    - ./framework/docs/
+    
+    # Arquitecturas de referencia
+    - ./framework/arquitectura-diagramas.md
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: ia-ops-framework
+  description: Framework de arquitecturas de referencia para IA-Ops Platform
+  tags:
+    - framework
+    - architecture
+    - reference
+    - devops
+    - ai-ops
+spec:
+  owner: platform-team
+  domain: platform
+links:
+  - url: https://github.com/giovanemere/ia-ops-framework
+    title: Framework Repository
+    icon: github
+  - url: http://localhost:8080/framework
+    title: Architecture Documentation
+    icon: docs
+  - url: https://github.com/giovanemere/ia-ops-framework/blob/trunk/arquitectura-diagramas.md
+    title: Architecture Diagrams
+    icon: diagram
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: reference-architectures
+  description: Arquitecturas de referencia documentadas
+  tags:
+    - architecture
+    - documentation
+    - patterns
+    - best-practices
+spec:
+  type: documentation
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-framework
+  providesApis:
+    - architecture-patterns-api
+links:
+  - url: https://github.com/giovanemere/ia-ops-framework/tree/trunk/docs
+    title: Architecture Documentation
+    icon: docs
+  - url: https://github.com/giovanemere/ia-ops-framework/blob/trunk/arquitectura-diagramas.md
+    title: Architecture Diagrams
+    icon: diagram
+  - url: https://github.com/giovanemere/ia-ops-framework/blob/trunk/README.md
+    title: Framework Guide
+    icon: docs
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: architecture-patterns-api
+  description: API de patrones de arquitectura
+  tags:
+    - patterns
+    - architecture
+    - api
+spec:
+  type: openapi
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-framework
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Architecture Patterns API
+      version: 1.0.0
+      description: API para consultar patrones de arquitectura de referencia
+    paths:
+      /patterns:
+        get:
+          summary: Obtener patrones disponibles
+          responses:
+            '200':
+              description: Lista de patrones de arquitectura
+links:
+  - url: https://github.com/giovanemere/ia-ops-framework/tree/trunk/docs
+    title: API Documentation
+    icon: docs
+  - url: http://localhost:8080/openai
+    title: AI-Powered Recommendations
+    icon: chat
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: devops-applications-inventory
+  description: Inventario de aplicaciones DevOps (Excel)
+  tags:
+    - inventory
+    - applications
+    - devops
+    - automation
+spec:
+  type: data
+  owner: platform-team
+  system: ia-ops-framework
+  dependsOn:
+    - component:reference-architectures
+links:
+  - url: https://github.com/giovanemere/ia-ops-framework/tree/trunk/apps
+    title: Applications Inventory
+    icon: catalog
+  - url: https://github.com/giovanemere/ia-ops-framework/blob/trunk/apps/Listado%20Aplicaciones%20DevOps.xlsx
+    title: DevOps Applications Excel
+    icon: catalog
+  - url: http://localhost:8080/openai
+    title: AI Analysis of Applications
+    icon: chat

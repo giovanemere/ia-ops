@@ -1,0 +1,38 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: poc-billpay-front-b
+  description: Frontend B for billpay application
+  annotations:
+    # Documentación automática
+    backstage.io/techdocs-ref: dir:.
+    
+    # GitHub integration
+    github.com/project-slug: giovanemere/poc-billpay-front-b
+    backstage.io/source-location: url:https://github.com/giovanemere/poc-billpay-front-b
+    
+    # CI/CD integration
+    github.com/workflows: .github/workflows/
+    
+    # View Source
+    backstage.io/view-url: https://github.com/giovanemere/poc-billpay-front-b
+    backstage.io/edit-url: https://github.com/giovanemere/poc-billpay-front-b/edit/main/catalog-info.yaml
+    
+  tags:
+    - component
+    - service
+  links:
+    - url: https://github.com/giovanemere/poc-billpay-front-b
+      title: Repository
+      icon: github
+    - url: https://github.com/giovanemere/poc-billpay-front-b/actions
+      title: GitHub Actions
+      icon: github
+    - url: https://github.com/giovanemere/poc-billpay-front-b/blob/main/README.md
+      title: Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: ia-ops-platform

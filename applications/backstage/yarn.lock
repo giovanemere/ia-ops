@@ -4290,6 +4290,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-jenkins-common@npm:^0.1.26":
+  version: 0.1.26
+  resolution: "@backstage/plugin-jenkins-common@npm:0.1.26"
+  dependencies:
+    "@backstage/plugin-catalog-common": "npm:^1.0.22"
+    "@backstage/plugin-permission-common": "npm:^0.7.13"
+  checksum: 10c0/ea02c911a72f881e559557794b45244491ba6dc6b8e1d933b115566c89f550d38736dd2337ee0206c34148a2d14256fd51af4592a8c78cb5efb5815a819e5f16
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-jenkins@npm:^0.9.10":
+  version: 0.9.10
+  resolution: "@backstage/plugin-jenkins@npm:0.9.10"
+  dependencies:
+    "@backstage/catalog-model": "npm:^1.4.5"
+    "@backstage/core-components": "npm:^0.14.4"
+    "@backstage/core-plugin-api": "npm:^1.9.2"
+    "@backstage/errors": "npm:^1.2.4"
+    "@backstage/plugin-catalog-react": "npm:^1.11.3"
+    "@backstage/plugin-jenkins-common": "npm:^0.1.26"
+    "@material-ui/core": "npm:^4.12.2"
+    "@material-ui/icons": "npm:^4.9.1"
+    "@types/react": "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
+    luxon: "npm:^3.0.0"
+    react-use: "npm:^17.2.4"
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: 10c0/f17b5b9132f1ac6d2dca9cb8c985330e87de010b7b88b297f085c1c084c5fa2b176aae7b91c6da88f2d35009911b20df50be770b9005a519e60bd5049886e23b
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-kubernetes-backend@npm:^0.19.8":
   version: 0.19.8
   resolution: "@backstage/plugin-kubernetes-backend@npm:0.19.8"
@@ -6866,7 +6899,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@internal/plugin-example-feature-flags@npm:^0.1.0, @internal/plugin-example-feature-flags@workspace:plugins/example-feature-flags":
+"@internal/plugin-example-feature-flags@workspace:plugins/example-feature-flags":
   version: 0.0.0-use.local
   resolution: "@internal/plugin-example-feature-flags@workspace:plugins/example-feature-flags"
   dependencies:
@@ -15704,6 +15737,7 @@ __metadata:
     "@backstage/plugin-catalog-react": "npm:^1.19.1"
     "@backstage/plugin-cost-insights": "npm:^0.12.24"
     "@backstage/plugin-github-actions": "npm:^0.6.16"
+    "@backstage/plugin-jenkins": "npm:^0.9.10"
     "@backstage/plugin-kubernetes": "npm:^0.12.9"
     "@backstage/plugin-org": "npm:^0.6.41"
     "@backstage/plugin-permission-react": "npm:^0.4.36"
@@ -15718,7 +15752,6 @@ __metadata:
     "@backstage/test-utils": "npm:^1.7.10"
     "@backstage/theme": "npm:^0.6.7"
     "@backstage/ui": "npm:^0.6.0"
-    "@internal/plugin-example-feature-flags": "npm:^0.1.0"
     "@material-ui/core": "npm:^4.12.2"
     "@material-ui/icons": "npm:^4.9.1"
     "@playwright/test": "npm:^1.32.3"

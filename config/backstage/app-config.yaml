@@ -63,11 +63,25 @@ catalog:
     - type: file
       target: ../../catalog-systems.yaml
     
-    # Templates de Backstage
+    # Nuevos catálogos integrados
+    - type: file
+      target: ../../catalog-templates.yaml
+    - type: file
+      target: ../../catalog-framework.yaml
+    - type: file
+      target: ../../catalog-external-resources.yaml
+    
+    # Templates de Backstage (repositorio externo)
     - type: url
       target: https://github.com/giovanemere/templates_backstage/blob/trunk/catalog-info.yaml
       rules:
-        - allow: [Template]
+        - allow: [Template, Component, System]
+    
+    # Framework de arquitecturas (repositorio externo)
+    - type: url
+      target: https://github.com/giovanemere/ia-ops-framework/blob/trunk/catalog-info.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Documentation]
     
     # Repositorios de aplicaciones
     - type: url
@@ -110,4 +124,12 @@ proxy:
       
   '/proxy-health':
     target: http://proxy-service:8080/health
+    changeOrigin: true
+    
+  '/templates':
+    target: http://localhost:8080/templates
+    changeOrigin: true
+    
+  '/framework':
+    target: http://localhost:8080/framework
     changeOrigin: true

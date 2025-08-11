@@ -1,0 +1,6 @@
+[submodule "templates"]
+	path = templates
+	url = https://github.com/giovanemere/templates_backstage.git
+[submodule "framework"]
+	path = framework
+	url = https://github.com/giovanemere/ia-ops-framework.git
