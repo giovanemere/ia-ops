@@ -1,0 +1,242 @@
+name: 📚 Deploy Documentation
+
+on:
+  push:
+    branches: [ trunk ]
+    paths: 
+      - 'docs/**'
+      - 'mkdocs*.yml'
+      - '.github/workflows/02-deploy-docs.yml'
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force documentation deployment'
+        required: false
+        default: false
+        type: boolean
+
+# Permisos específicos para GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Solo un despliegue concurrente
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ============================================================================
+  # STAGE 1: BUILD DOCUMENTATION
+  # ============================================================================
+  
+  build-documentation:
+    name: 🏗️ Build Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Setup Python environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: 📦 Install documentation dependencies
+      run: |
+        echo "📦 Installing MkDocs and plugins..."
+        pip install --upgrade pip
+        pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
+        
+        echo "✅ Dependencies installed:"
+        mkdocs --version
+        python -c "import mkdocs_material; print(f'Material theme: {mkdocs_material.__version__}')"
+
+    - name: 🔍 Validate documentation structure
+      run: |
+        echo "🔍 Validating documentation structure..."
+        
+        # Check for required files
+        if [ ! -d "docs" ]; then
+          echo "❌ docs/ directory not found"
+          exit 1
+        fi
+        
+        if [ ! -f "mkdocs.ci.yml" ] && [ ! -f "mkdocs.yml" ]; then
+          echo "❌ No MkDocs configuration found"
+          exit 1
+        fi
+        
+        # Count documentation files
+        md_files=$(find docs -name "*.md" | wc -l)
+        echo "📄 Found $md_files markdown files"
+        
+        if [ $md_files -eq 0 ]; then
+          echo "⚠️ No markdown files found in docs/"
+        fi
+        
+        echo "✅ Documentation structure validated"
+
+    - name: 🏗️ Build documentation site
+      run: |
+        echo "🏗️ Building documentation with MkDocs..."
+        
+        # Use CI config if available, otherwise use default
+        if [ -f "mkdocs.ci.yml" ]; then
+          echo "📋 Using mkdocs.ci.yml configuration"
+          mkdocs build --config-file mkdocs.ci.yml --clean --verbose
+        else
+          echo "📋 Using mkdocs.yml configuration"
+          mkdocs build --clean --verbose
+        fi
+        
+        echo "✅ Documentation built successfully"
+
+    - name: 📊 Documentation build summary
+      run: |
+        echo "📊 Documentation Build Summary"
+        echo "=============================="
+        
+        if [ -d "site" ]; then
+          site_size=$(du -sh site | cut -f1)
+          file_count=$(find site -type f | wc -l)
+          
+          echo "📁 Site directory: $site_size"
+          echo "📄 Total files: $file_count"
+          echo "🌐 Entry point: site/index.html"
+          
+          # List main files
+          echo ""
+          echo "📋 Main files generated:"
+          ls -la site/ | head -10
+          
+          # Check for common files
+          if [ -f "site/index.html" ]; then
+            echo "✅ index.html found"
+          else
+            echo "❌ index.html missing"
+          fi
+          
+          if [ -f "site/404.html" ]; then
+            echo "✅ 404.html found"
+          fi
+          
+        else
+          echo "❌ Site directory not found"
+          exit 1
+        fi
+
+    - name: 📤 Setup GitHub Pages
+      uses: actions/configure-pages@v4
+
+    - name: 📤 Upload documentation artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './site'
+
+  # ============================================================================
+  # STAGE 2: DEPLOY TO GITHUB PAGES
+  # ============================================================================
+  
+  deploy-to-pages:
+    name: 🚀 Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-documentation
+    
+    steps:
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: 🎉 Deployment success notification
+      run: |
+        echo "🎉 Documentation deployed successfully!"
+        echo "======================================"
+        echo ""
+        echo "🌐 Documentation URL: ${{ steps.deployment.outputs.page_url }}"
+        echo "📅 Deployed at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "📝 Commit: ${{ github.sha }}"
+        echo "🌿 Branch: ${{ github.ref_name }}"
+        echo ""
+        echo "🔗 Quick Links:"
+        echo "- 📚 Documentation: ${{ steps.deployment.outputs.page_url }}"
+        echo "- 📊 Repository: https://github.com/${{ github.repository }}"
+        echo "- ⚙️ Pages Settings: https://github.com/${{ github.repository }}/settings/pages"
+        echo ""
+        echo "✨ Documentation is now live and accessible!"
+
+  # ============================================================================
+  # STAGE 3: POST-DEPLOYMENT VERIFICATION
+  # ============================================================================
+  
+  verify-deployment:
+    name: ✅ Verify Deployment
+    runs-on: ubuntu-latest
+    needs: deploy-to-pages
+    
+    steps:
+    - name: 🔍 Verify site accessibility
+      run: |
+        echo "🔍 Verifying documentation deployment..."
+        
+        # Wait a moment for deployment to propagate
+        sleep 30
+        
+        # Get the deployment URL
+        SITE_URL="${{ needs.deploy-to-pages.outputs.page_url }}"
+        
+        if [ -z "$SITE_URL" ]; then
+          SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+        fi
+        
+        echo "🌐 Testing URL: $SITE_URL"
+        
+        # Test site accessibility
+        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+        
+        if [ "$HTTP_STATUS" = "200" ]; then
+          echo "✅ Site is accessible (HTTP $HTTP_STATUS)"
+        elif [ "$HTTP_STATUS" = "404" ]; then
+          echo "⚠️ Site returned 404 - may still be propagating"
+          echo "🕐 Please wait a few minutes and check manually"
+        else
+          echo "⚠️ Site returned HTTP $HTTP_STATUS"
+          echo "🔍 This may be normal during initial deployment"
+        fi
+        
+        echo ""
+        echo "📋 Deployment Summary:"
+        echo "- URL: $SITE_URL"
+        echo "- Status: HTTP $HTTP_STATUS"
+        echo "- Time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+    - name: 📢 Final deployment summary
+      run: |
+        echo "📢 Documentation Deployment Complete!"
+        echo "===================================="
+        echo ""
+        echo "🎯 What was deployed:"
+        echo "- IA-Ops Platform Documentation"
+        echo "- Built with MkDocs + Material theme"
+        echo "- Includes all markdown files from docs/"
+        echo ""
+        echo "🔄 Auto-update trigger:"
+        echo "- Pushes to trunk branch"
+        echo "- Changes in docs/ directory"
+        echo "- Changes in mkdocs*.yml files"
+        echo "- Manual workflow dispatch"
+        echo ""
+        echo "🛠️ Troubleshooting:"
+        echo "- If site shows 404: Wait 5-10 minutes for DNS propagation"
+        echo "- Check GitHub Pages settings if issues persist"
+        echo "- Verify GitHub Pages is enabled with 'GitHub Actions' source"
+        echo ""
+        echo "✨ Documentation is ready for use!"

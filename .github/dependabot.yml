@@ -1,0 +1,54 @@
+version: 2
+updates:
+  # Enable version updates for npm (Node.js)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "giovanemere"
+    assignees:
+      - "giovanemere"
+    commit-message:
+      prefix: "⬆️"
+      include: "scope"
+
+  # Enable version updates for npm in applications/backstage
+  - package-ecosystem: "npm"
+    directory: "/applications/backstage"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "giovanemere"
+    assignees:
+      - "giovanemere"
+    commit-message:
+      prefix: "⬆️ [backstage]"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "giovanemere"
+    assignees:
+      - "giovanemere"
+    commit-message:
+      prefix: "⬆️ [docker]"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    reviewers:
+      - "giovanemere"
+    assignees:
+      - "giovanemere"
+    commit-message:
+      prefix: "⬆️ [actions]"
