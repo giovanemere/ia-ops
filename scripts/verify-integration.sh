@@ -69,14 +69,52 @@ check_port() {
     fi
 }
 
+# Función para verificar imágenes ICBS
+check_icbs_images() {
+    log "🔍 Verificando imágenes ICBS..."
+    
+    local icbs_images=(
+        "haproxy-advanced:latest"
+        "weblogic-feature-flags:latest"
+        "jenkins-weblogic:latest"
+    )
+    
+    local missing_images=()
+    
+    for image in "${icbs_images[@]}"; do
+        if docker images -q "$image" >/dev/null 2>&1; then
+            log "✅ Imagen ICBS disponible: $image"
+        else
+            log_warning "⚠️ Imagen ICBS faltante: $image"
+            missing_images+=("$image")
+        fi
+    done
+    
+    if [ ${#missing_images[@]} -gt 0 ]; then
+        echo -e "\n${YELLOW}🔧 Para corregir imágenes faltantes:${NC}"
+        echo -e "${YELLOW}./scripts/integrated-startup.sh fix-icbs${NC}"
+    fi
+    
+    return ${#missing_images[@]}
+}
+
 # Función principal de verificación
 main_verification() {
     show_banner
     
-    log "🚀 Iniciando verificación completa de la plataforma integrada..."
+    log "🚀 Iniciando verificación completa de la plataforma integrada con auto-corrección..."
     
     local failed_checks=0
     local total_checks=0
+    
+    echo -e "\n${BLUE}🔧 VERIFICACIÓN DE IMÁGENES ICBS${NC}"
+    echo "=================================================="
+    
+    # Verificar imágenes ICBS primero
+    total_checks=$((total_checks + 1))
+    if ! check_icbs_images; then
+        failed_checks=$((failed_checks + 1))
+    fi
     
     echo -e "\n${BLUE}📊 VERIFICACIÓN DE SERVICIOS IA-OPS${NC}"
     echo "=================================================="
@@ -99,14 +137,16 @@ main_verification() {
         fi
     done
     
-    echo -e "\n${BLUE}🏗️ VERIFICACIÓN DE SERVICIOS ICBS${NC}"
+    echo -e "\n${BLUE}🏗️ VERIFICACIÓN DE SERVICIOS ICBS (CON AUTO-CORRECCIÓN)${NC}"
     echo "=================================================="
     
     # Verificar servicios ICBS
     services_icbs=(
-        "http://localhost:7001/console|WebLogic Admin Console|20"
+        "http://localhost:8404/stats|HAProxy Stats (CORREGIDO)|15"
+        "http://localhost:8083|HAProxy Frontend|10"
+        "http://localhost:7001/console|WebLogic A Admin Console|20"
+        "http://localhost:7002/console|WebLogic B Admin Console|20"
         "http://localhost:8081|Jenkins|15"
-        "http://localhost:8404/stats|HAProxy Stats|10"
     )
     
     for service in "${services_icbs[@]}"; do
@@ -120,12 +160,15 @@ main_verification() {
     echo -e "\n${BLUE}🔌 VERIFICACIÓN DE PUERTOS${NC}"
     echo "=================================================="
     
-    # Verificar puertos críticos
+    # Verificar puertos críticos (incluyendo ICBS)
     ports=(
         "8080|IA-Ops Proxy"
         "3002|Backstage Frontend"
         "7007|Backstage Backend"
-        "7001|WebLogic Admin"
+        "8404|HAProxy Stats"
+        "8083|HAProxy Frontend"
+        "7001|WebLogic A"
+        "7002|WebLogic B"
         "8081|Jenkins"
         "3001|Grafana"
         "9090|Prometheus"
@@ -149,6 +192,7 @@ main_verification() {
         "/home/giovanemere/ia-ops/ia-ops/applications/backstage/catalog-poc-icbs.yaml|Catálogo ICBS en Backstage"
         "/home/giovanemere/periferia/icbs/docker-for-oracle-weblogic/catalog-info.yaml|Catálogo ICBS"
         "/home/giovanemere/ia-ops/ia-ops/config/integrated-services.yaml|Configuración Integrada"
+        "/home/giovanemere/periferia/icbs/docker-for-oracle-weblogic/haproxy/config/haproxy-simple.cfg|HAProxy Config (Auto-corregido)"
     )
     
     for file_info in "${integration_files[@]}"; do
@@ -164,13 +208,21 @@ main_verification() {
     
     # Verificar conectividad entre servicios
     log "🔍 Verificando conectividad entre servicios..."
-    total_checks=$((total_checks + 1))
+    total_checks=$((total_checks + 2))
     
     # Test: Backstage puede acceder a OpenAI Service
     if curl -s "http://localhost:8080/openai/health" > /dev/null 2>&1; then
         log "✅ Backstage → OpenAI Service: Conectividad OK"
     else
         log_warning "⚠️ Backstage → OpenAI Service: Sin conectividad"
+        failed_checks=$((failed_checks + 1))
+    fi
+    
+    # Test: HAProxy Stats accesible (verificación de auto-corrección)
+    if curl -s "http://localhost:8404/stats" > /dev/null 2>&1; then
+        log "✅ HAProxy Stats: Auto-corrección exitosa"
+    else
+        log_warning "⚠️ HAProxy Stats: Puede necesitar corrección manual"
         failed_checks=$((failed_checks + 1))
     fi
     
@@ -187,14 +239,21 @@ main_verification() {
     if [ $failed_checks -eq 0 ]; then
         echo -e "\n${GREEN}🎉 ¡VERIFICACIÓN COMPLETA EXITOSA!${NC}"
         echo -e "${GREEN}✅ Todos los servicios están funcionando correctamente${NC}"
+        echo -e "${GREEN}🔧 Auto-corrección de ICBS funcionando perfectamente${NC}"
         return 0
     elif [ $success_rate -ge 80 ]; then
         echo -e "\n${YELLOW}⚠️ VERIFICACIÓN PARCIALMENTE EXITOSA${NC}"
         echo -e "${YELLOW}La mayoría de servicios están funcionando, pero hay algunos problemas${NC}"
+        echo -e "\n${CYAN}🔧 Para corregir problemas de ICBS:${NC}"
+        echo -e "${YELLOW}./scripts/integrated-startup.sh fix-icbs${NC}"
         return 1
     else
         echo -e "\n${RED}❌ VERIFICACIÓN FALLIDA${NC}"
         echo -e "${RED}Múltiples servicios no están funcionando correctamente${NC}"
+        echo -e "\n${CYAN}🔧 Para corrección completa:${NC}"
+        echo -e "${YELLOW}./scripts/integrated-startup.sh stop${NC}"
+        echo -e "${YELLOW}./scripts/integrated-startup.sh fix-icbs${NC}"
+        echo -e "${YELLOW}./scripts/integrated-startup.sh start${NC}"
         return 2
     fi
 }

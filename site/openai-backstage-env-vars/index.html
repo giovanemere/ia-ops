@@ -26,6 +26,9 @@
     
       <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
       
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
       
 
 
@@ -53,7 +56,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -107,6 +117,34 @@
       </div>
     </div>
     
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -854,471 +892,285 @@
 <p>Esta documentación describe todas las variables de entorno necesarias para la integración entre OpenAI y Backstage en la plataforma IA-Ops.</p>
 <h2 id="variables-criticas-para-la-integracion">Variables Críticas para la Integración<a class="headerlink" href="#variables-criticas-para-la-integracion" title="Permanent link">&para;</a></h2>
 <h3 id="openai-service-configuration">🤖 OpenAI Service Configuration<a class="headerlink" href="#openai-service-configuration" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-0-10">10</a></span>
-<span class="normal"><a href="#__codelineno-0-11">11</a></span>
-<span class="normal"><a href="#__codelineno-0-12">12</a></span>
-<span class="normal"><a href="#__codelineno-0-13">13</a></span>
-<span class="normal"><a href="#__codelineno-0-14">14</a></span>
-<span class="normal"><a href="#__codelineno-0-15">15</a></span>
-<span class="normal"><a href="#__codelineno-0-16">16</a></span>
-<span class="normal"><a href="#__codelineno-0-17">17</a></span>
-<span class="normal"><a href="#__codelineno-0-18">18</a></span>
-<span class="normal"><a href="#__codelineno-0-19">19</a></span>
-<span class="normal"><a href="#__codelineno-0-20">20</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1"># API Key de OpenAI (REQUERIDA para producción)</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>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
-<a id="__codelineno-0-3" name="__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1"># Modelo de OpenAI a utilizar</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
-<a id="__codelineno-0-6" name="__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1"># Máximo número de tokens por respuesta</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="nv">OPENAI_MAX_TOKENS</span><span class="o">=</span><span class="m">2000</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1"># Temperatura para la creatividad de las respuestas (0.0-2.0)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="nv">OPENAI_TEMPERATURE</span><span class="o">=</span><span class="m">0</span>.7
-<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c1"># Modo demo (true/false) - usar cuando no hay API key válida</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="c1"># Límite de requests por minuto</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18"></a>
-<a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="c1"># Timeout en segundos para requests a OpenAI</span>
-<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># API Key de OpenAI (REQUERIDA para producción)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>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
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Modelo de OpenAI a utilizar</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Máximo número de tokens por respuesta</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nv">OPENAI_MAX_TOKENS</span><span class="o">=</span><span class="m">2000</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Temperatura para la creatividad de las respuestas (0.0-2.0)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="nv">OPENAI_TEMPERATURE</span><span class="o">=</span><span class="m">0</span>.7
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Modo demo (true/false) - usar cuando no hay API key válida</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Límite de requests por minuto</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># Timeout en segundos para requests a OpenAI</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
+</code></pre></div>
 <h3 id="backstage-integration">🏛️ Backstage Integration<a class="headerlink" href="#backstage-integration" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-1-10">10</a></span>
-<span class="normal"><a href="#__codelineno-1-11">11</a></span>
-<span class="normal"><a href="#__codelineno-1-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="c1"># URL base de Backstage (acceso público)</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="c1"># URL del backend de Backstage</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="nv">BACKSTAGE_BACKEND_URL</span><span class="o">=</span>http://localhost:8080/api
-<a id="__codelineno-1-6" name="__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="c1"># URL del frontend de Backstage</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="nv">BACKSTAGE_FRONTEND_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-1-9" name="__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="c1"># URLs internas para comunicación entre servicios</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="nv">BACKSTAGE_INTERNAL_FRONTEND_URL</span><span class="o">=</span>http://backstage-frontend:3000
-<a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="nv">BACKSTAGE_INTERNAL_BACKEND_URL</span><span class="o">=</span>http://backstage-backend:7007
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># URL base de Backstage (acceso público)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># URL del backend de Backstage</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nv">BACKSTAGE_BACKEND_URL</span><span class="o">=</span>http://localhost:8080/api
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># URL del frontend de Backstage</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="nv">BACKSTAGE_FRONTEND_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># URLs internas para comunicación entre servicios</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nv">BACKSTAGE_INTERNAL_FRONTEND_URL</span><span class="o">=</span>http://backstage-frontend:3000
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="nv">BACKSTAGE_INTERNAL_BACKEND_URL</span><span class="o">=</span>http://backstage-backend:7007
+</code></pre></div>
 <h3 id="service-urls">🌐 Service URLs<a class="headerlink" href="#service-urls" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span>
-<span class="normal"><a href="#__codelineno-2-6">6</a></span>
-<span class="normal"><a href="#__codelineno-2-7">7</a></span>
-<span class="normal"><a href="#__codelineno-2-8">8</a></span>
-<span class="normal"><a href="#__codelineno-2-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># URL del servicio OpenAI (interno)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1"># Host y puerto del servicio OpenAI</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nv">OPENAI_SERVICE_HOST</span><span class="o">=</span>openai-service
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="nv">OPENAI_SERVICE_PORT</span><span class="o">=</span><span class="m">8000</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="c1"># URL del proxy service</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="nv">PROXY_SERVICE_URL</span><span class="o">=</span>http://proxy-service:8080
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># URL del servicio OpenAI (interno)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Host y puerto del servicio OpenAI</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nv">OPENAI_SERVICE_HOST</span><span class="o">=</span>openai-service
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nv">OPENAI_SERVICE_PORT</span><span class="o">=</span><span class="m">8000</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># URL del proxy service</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nv">PROXY_SERVICE_URL</span><span class="o">=</span>http://proxy-service:8080
+</code></pre></div>
 <h2 id="configuracion-por-ambiente">Configuración por Ambiente<a class="headerlink" href="#configuracion-por-ambiente" title="Permanent link">&para;</a></h2>
 <h3 id="desarrollo-local">Desarrollo Local<a class="headerlink" href="#desarrollo-local" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span>
-<span class="normal"><a href="#__codelineno-3-6">6</a></span>
-<span class="normal"><a href="#__codelineno-3-7">7</a></span>
-<span class="normal"><a href="#__codelineno-3-8">8</a></span>
-<span class="normal"><a href="#__codelineno-3-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1"># OpenAI</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>demo-key-for-development
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">50</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="c1"># Backstage</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>debug
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># OpenAI</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>demo-key-for-development
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">50</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># Backstage</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>debug
+</code></pre></div>
 <h3 id="staging">Staging<a class="headerlink" href="#staging" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span>
-<span class="normal"><a href="#__codelineno-4-3">3</a></span>
-<span class="normal"><a href="#__codelineno-4-4">4</a></span>
-<span class="normal"><a href="#__codelineno-4-5">5</a></span>
-<span class="normal"><a href="#__codelineno-4-6">6</a></span>
-<span class="normal"><a href="#__codelineno-4-7">7</a></span>
-<span class="normal"><a href="#__codelineno-4-8">8</a></span>
-<span class="normal"><a href="#__codelineno-4-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># OpenAI</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-staging-key-here
-<a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="c1"># Backstage</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>https://staging.ia-ops.com
-<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
-<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># OpenAI</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-staging-key-here
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># Backstage</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>https://staging.ia-ops.com
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
+</code></pre></div>
 <h3 id="produccion">Producción<a class="headerlink" href="#produccion" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-5-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># OpenAI</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-production-key-here
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">200</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="c1"># Backstage</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>https://ia-ops.com
-<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>warn
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># OpenAI</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-production-key-here
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">200</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Backstage</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>https://ia-ops.com
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>warn
+</code></pre></div>
 <h2 id="variables-de-seguridad">Variables de Seguridad<a class="headerlink" href="#variables-de-seguridad" title="Permanent link">&para;</a></h2>
 <h3 id="cors-configuration">CORS Configuration<a class="headerlink" href="#cors-configuration" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span>
-<span class="normal"><a href="#__codelineno-6-5">5</a></span>
-<span class="normal"><a href="#__codelineno-6-6">6</a></span>
-<span class="normal"><a href="#__codelineno-6-7">7</a></span>
-<span class="normal"><a href="#__codelineno-6-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># Orígenes permitidos para CORS</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="nv">CORS_ORIGIN</span><span class="o">=</span>http://localhost:3000,http://localhost:7007,http://localhost:8080
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="c1"># Métodos HTTP permitidos</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="nv">CORS_METHODS</span><span class="o">=</span>GET,POST,PUT,DELETE,OPTIONS
-<a id="__codelineno-6-6" name="__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="c1"># Headers permitidos</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="nv">CORS_HEADERS</span><span class="o">=</span>Content-Type,Authorization,X-Requested-With
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Orígenes permitidos para CORS</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nv">CORS_ORIGIN</span><span class="o">=</span>http://localhost:3000,http://localhost:7007,http://localhost:8080
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Métodos HTTP permitidos</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nv">CORS_METHODS</span><span class="o">=</span>GET,POST,PUT,DELETE,OPTIONS
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Headers permitidos</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="nv">CORS_HEADERS</span><span class="o">=</span>Content-Type,Authorization,X-Requested-With
+</code></pre></div>
 <h3 id="rate-limiting">Rate Limiting<a class="headerlink" href="#rate-limiting" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1">1</a></span>
-<span class="normal"><a href="#__codelineno-7-2">2</a></span>
-<span class="normal"><a href="#__codelineno-7-3">3</a></span>
-<span class="normal"><a href="#__codelineno-7-4">4</a></span>
-<span class="normal"><a href="#__codelineno-7-5">5</a></span>
-<span class="normal"><a href="#__codelineno-7-6">6</a></span>
-<span class="normal"><a href="#__codelineno-7-7">7</a></span>
-<span class="normal"><a href="#__codelineno-7-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># Ventana de tiempo para rate limiting (minutos)</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="nv">RATE_LIMIT_WINDOW</span><span class="o">=</span><span class="m">15</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="c1"># Máximo número de requests por ventana</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="nv">RATE_LIMIT_MAX_REQUESTS</span><span class="o">=</span><span class="m">100</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="c1"># Rate limit específico para OpenAI</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Ventana de tiempo para rate limiting (minutos)</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nv">RATE_LIMIT_WINDOW</span><span class="o">=</span><span class="m">15</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Máximo número de requests por ventana</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nv">RATE_LIMIT_MAX_REQUESTS</span><span class="o">=</span><span class="m">100</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Rate limit específico para OpenAI</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
+</code></pre></div>
 <h2 id="variables-de-base-de-datos">Variables de Base de Datos<a class="headerlink" href="#variables-de-base-de-datos" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1">1</a></span>
-<span class="normal"><a href="#__codelineno-8-2">2</a></span>
-<span class="normal"><a href="#__codelineno-8-3">3</a></span>
-<span class="normal"><a href="#__codelineno-8-4">4</a></span>
-<span class="normal"><a href="#__codelineno-8-5">5</a></span>
-<span class="normal"><a href="#__codelineno-8-6">6</a></span>
-<span class="normal"><a href="#__codelineno-8-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1"># PostgreSQL para Backstage</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="nv">POSTGRES_HOST</span><span class="o">=</span>ia-ops-postgres
-<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="nv">POSTGRES_PORT</span><span class="o">=</span><span class="m">5432</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres
-<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>postgres123
-<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="nv">POSTGRES_DB</span><span class="o">=</span>backstage
-<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql://postgres:postgres123@ia-ops-postgres:5432/backstage
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># PostgreSQL para Backstage</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nv">POSTGRES_HOST</span><span class="o">=</span>ia-ops-postgres
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nv">POSTGRES_PORT</span><span class="o">=</span><span class="m">5432</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>postgres123
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nv">POSTGRES_DB</span><span class="o">=</span>backstage
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nv">DATABASE_URL</span><span class="o">=</span>postgresql://postgres:postgres123@ia-ops-postgres:5432/backstage
+</code></pre></div>
 <h2 id="variables-de-monitoreo">Variables de Monitoreo<a class="headerlink" href="#variables-de-monitoreo" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1">1</a></span>
-<span class="normal"><a href="#__codelineno-9-2">2</a></span>
-<span class="normal"><a href="#__codelineno-9-3">3</a></span>
-<span class="normal"><a href="#__codelineno-9-4">4</a></span>
-<span class="normal"><a href="#__codelineno-9-5">5</a></span>
-<span class="normal"><a href="#__codelineno-9-6">6</a></span>
-<span class="normal"><a href="#__codelineno-9-7">7</a></span>
-<span class="normal"><a href="#__codelineno-9-8">8</a></span>
-<span class="normal"><a href="#__codelineno-9-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="c1"># Logging</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
-<a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="nv">VERBOSE</span><span class="o">=</span><span class="m">1</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5"></a>
-<a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="c1"># Health checks</span>
-<a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="nv">HEALTH_CHECK_INTERVAL</span><span class="o">=</span><span class="m">30</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="nv">HEALTH_CHECK_TIMEOUT</span><span class="o">=</span><span class="m">5</span>
-<a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="nv">HEALTH_CHECK_RETRIES</span><span class="o">=</span><span class="m">3</span>
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Logging</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="nv">VERBOSE</span><span class="o">=</span><span class="m">1</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="c1"># Health checks</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="nv">HEALTH_CHECK_INTERVAL</span><span class="o">=</span><span class="m">30</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="nv">HEALTH_CHECK_TIMEOUT</span><span class="o">=</span><span class="m">5</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="nv">HEALTH_CHECK_RETRIES</span><span class="o">=</span><span class="m">3</span>
+</code></pre></div>
 <h2 id="validacion-de-variables">Validación de Variables<a class="headerlink" href="#validacion-de-variables" title="Permanent link">&para;</a></h2>
 <h3 id="script-de-validacion">Script de Validación<a class="headerlink" href="#script-de-validacion" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-10-10">10</a></span>
-<span class="normal"><a href="#__codelineno-10-11">11</a></span>
-<span class="normal"><a href="#__codelineno-10-12">12</a></span>
-<span class="normal"><a href="#__codelineno-10-13">13</a></span>
-<span class="normal"><a href="#__codelineno-10-14">14</a></span>
-<span class="normal"><a href="#__codelineno-10-15">15</a></span>
-<span class="normal"><a href="#__codelineno-10-16">16</a></span>
-<span class="normal"><a href="#__codelineno-10-17">17</a></span>
-<span class="normal"><a href="#__codelineno-10-18">18</a></span>
-<span class="normal"><a href="#__codelineno-10-19">19</a></span>
-<span class="normal"><a href="#__codelineno-10-20">20</a></span>
-<span class="normal"><a href="#__codelineno-10-21">21</a></span>
-<span class="normal"><a href="#__codelineno-10-22">22</a></span>
-<span class="normal"><a href="#__codelineno-10-23">23</a></span>
-<span class="normal"><a href="#__codelineno-10-24">24</a></span>
-<span class="normal"><a href="#__codelineno-10-25">25</a></span>
-<span class="normal"><a href="#__codelineno-10-26">26</a></span>
-<span class="normal"><a href="#__codelineno-10-27">27</a></span>
-<span class="normal"><a href="#__codelineno-10-28">28</a></span>
-<span class="normal"><a href="#__codelineno-10-29">29</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="ch">#!/bin/bash</span>
-<a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="c1"># validate-env.sh</span>
-<a id="__codelineno-10-3" name="__codelineno-10-3"></a>
-<a id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔍 Validando variables de entorno para integración OpenAI-Backstage...&quot;</span>
-<a id="__codelineno-10-5" name="__codelineno-10-5"></a>
-<a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="c1"># Verificar variables críticas</span>
-<a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="nv">required_vars</span><span class="o">=(</span>
-<a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">    </span><span class="s2">&quot;OPENAI_API_KEY&quot;</span>
-<a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">    </span><span class="s2">&quot;BACKSTAGE_BASE_URL&quot;</span>
-<a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">    </span><span class="s2">&quot;POSTGRES_HOST&quot;</span>
-<a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">    </span><span class="s2">&quot;POSTGRES_PASSWORD&quot;</span>
-<a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="o">)</span>
-<a id="__codelineno-10-13" name="__codelineno-10-13"></a>
-<a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="k">for</span><span class="w"> </span>var<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">required_vars</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="p">!var</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ ERROR: Variable </span><span class="nv">$var</span><span class="s2"> no está definida&quot;</span>
-<a id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="w">    </span><span class="k">else</span>
-<a id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ </span><span class="nv">$var</span><span class="s2"> está definida&quot;</span>
-<a id="__codelineno-10-20" name="__codelineno-10-20"></a><span class="w">    </span><span class="k">fi</span>
-<a id="__codelineno-10-21" name="__codelineno-10-21"></a><span class="k">done</span>
-<a id="__codelineno-10-22" name="__codelineno-10-22"></a>
-<a id="__codelineno-10-23" name="__codelineno-10-23"></a><span class="c1"># Verificar conectividad OpenAI</span>
-<a id="__codelineno-10-24" name="__codelineno-10-24"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$OPENAI_DEMO_MODE</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
-<a id="__codelineno-10-25" name="__codelineno-10-25"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔑 Verificando API Key de OpenAI...&quot;</span>
-<a id="__codelineno-10-26" name="__codelineno-10-26"></a><span class="w">    </span><span class="c1"># Aquí iría la verificación real de la API key</span>
-<a id="__codelineno-10-27" name="__codelineno-10-27"></a><span class="k">fi</span>
-<a id="__codelineno-10-28" name="__codelineno-10-28"></a>
-<a id="__codelineno-10-29" name="__codelineno-10-29"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Todas las variables están correctamente configuradas&quot;</span>
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="c1"># validate-env.sh</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔍 Validando variables de entorno para integración OpenAI-Backstage...&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># Verificar variables críticas</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="nv">required_vars</span><span class="o">=(</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="s2">&quot;OPENAI_API_KEY&quot;</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="s2">&quot;BACKSTAGE_BASE_URL&quot;</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="s2">&quot;POSTGRES_HOST&quot;</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="s2">&quot;POSTGRES_PASSWORD&quot;</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="o">)</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="k">for</span><span class="w"> </span>var<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">required_vars</span><span class="p">[@]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="p">!var</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ ERROR: Variable </span><span class="nv">$var</span><span class="s2"> no está definida&quot;</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="k">else</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ </span><span class="nv">$var</span><span class="s2"> está definida&quot;</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="w">    </span><span class="k">fi</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="k">done</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="c1"># Verificar conectividad OpenAI</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$OPENAI_DEMO_MODE</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;🔑 Verificando API Key de OpenAI...&quot;</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="c1"># Aquí iría la verificación real de la API key</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="k">fi</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Todas las variables están correctamente configuradas&quot;</span>
+</code></pre></div>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="problemas-comunes">Problemas Comunes<a class="headerlink" href="#problemas-comunes" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
 <p><strong>OpenAI API Key inválida</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span>
-<span class="normal"><a href="#__codelineno-11-2">2</a></span>
-<span class="normal"><a href="#__codelineno-11-3">3</a></span>
-<span class="normal"><a href="#__codelineno-11-4">4</a></span>
-<span class="normal"><a href="#__codelineno-11-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="c1"># Verificar la variable</span>
-<a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$OPENAI_API_KEY</span>
-<a id="__codelineno-11-3" name="__codelineno-11-3"></a>
-<a id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="c1"># Activar modo demo temporalmente</span>
-<a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Verificar la variable</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$OPENAI_API_KEY</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Activar modo demo temporalmente</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Error de CORS</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
-<span class="normal"><a href="#__codelineno-12-2">2</a></span>
-<span class="normal"><a href="#__codelineno-12-3">3</a></span>
-<span class="normal"><a href="#__codelineno-12-4">4</a></span>
-<span class="normal"><a href="#__codelineno-12-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="c1"># Verificar configuración CORS</span>
-<a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$CORS_ORIGIN</span>
-<a id="__codelineno-12-3" name="__codelineno-12-3"></a>
-<a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="c1"># Agregar origen faltante</span>
-<a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CORS_ORIGIN</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CORS_ORIGIN</span><span class="s2">,http://nuevo-origen:puerto&quot;</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Verificar configuración CORS</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$CORS_ORIGIN</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Agregar origen faltante</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">CORS_ORIGIN</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CORS_ORIGIN</span><span class="s2">,http://nuevo-origen:puerto&quot;</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Timeout en requests</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
-<span class="normal"><a href="#__codelineno-13-2">2</a></span>
-<span class="normal"><a href="#__codelineno-13-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="c1"># Aumentar timeout</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PROXY_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Aumentar timeout</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PROXY_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
+</code></pre></div></p>
 </li>
 </ol>
 <h3 id="comandos-de-diagnostico">Comandos de Diagnóstico<a class="headerlink" href="#comandos-de-diagnostico" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
-<span class="normal"><a href="#__codelineno-14-2">2</a></span>
-<span class="normal"><a href="#__codelineno-14-3">3</a></span>
-<span class="normal"><a href="#__codelineno-14-4">4</a></span>
-<span class="normal"><a href="#__codelineno-14-5">5</a></span>
-<span class="normal"><a href="#__codelineno-14-6">6</a></span>
-<span class="normal"><a href="#__codelineno-14-7">7</a></span>
-<span class="normal"><a href="#__codelineno-14-8">8</a></span>
-<span class="normal"><a href="#__codelineno-14-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="c1"># Verificar todas las variables OpenAI</span>
-<a id="__codelineno-14-2" name="__codelineno-14-2"></a>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>OPENAI
-<a id="__codelineno-14-3" name="__codelineno-14-3"></a>
-<a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="c1"># Verificar todas las variables Backstage</span>
-<a id="__codelineno-14-5" name="__codelineno-14-5"></a>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>BACKSTAGE
-<a id="__codelineno-14-6" name="__codelineno-14-6"></a>
-<a id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="c1"># Test de conectividad</span>
-<a id="__codelineno-14-8" name="__codelineno-14-8"></a>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:8000/health
-<a id="__codelineno-14-9" name="__codelineno-14-9"></a>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Verificar todas las variables OpenAI</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>OPENAI
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Verificar todas las variables Backstage</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>env<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>BACKSTAGE
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Test de conectividad</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:8000/health
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>curl<span class="w"> </span>-f<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
+</code></pre></div>
 <h2 id="mejores-practicas">Mejores Prácticas<a class="headerlink" href="#mejores-practicas" title="Permanent link">&para;</a></h2>
 <h3 id="seguridad">Seguridad<a class="headerlink" href="#seguridad" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
 <p><strong>Nunca commitear API keys reales</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
-<span class="normal"><a href="#__codelineno-15-2">2</a></span>
-<span class="normal"><a href="#__codelineno-15-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="c1"># Usar archivos .env.local para desarrollo</span>
-<a id="__codelineno-15-2" name="__codelineno-15-2"></a>cp<span class="w"> </span>.env<span class="w"> </span>.env.local
-<a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="c1"># Agregar .env.local al .gitignore</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Usar archivos .env.local para desarrollo</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>cp<span class="w"> </span>.env<span class="w"> </span>.env.local
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="c1"># Agregar .env.local al .gitignore</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Rotar API keys regularmente</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1">1</a></span>
-<span class="normal"><a href="#__codelineno-16-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="c1"># Programar rotación mensual</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="c1"># Usar secretos de Kubernetes en producción</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Programar rotación mensual</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="c1"># Usar secretos de Kubernetes en producción</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Usar variables específicas por ambiente</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">1</a></span>
-<span class="normal"><a href="#__codelineno-17-2">2</a></span>
-<span class="normal"><a href="#__codelineno-17-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="c1"># .env.development</span>
-<a id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="c1"># .env.staging  </span>
-<a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="c1"># .env.production</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># .env.development</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="c1"># .env.staging  </span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="c1"># .env.production</span>
+</code></pre></div></p>
 </li>
 </ol>
 <h3 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h3>
 <ol>
 <li>
 <p><strong>Configurar timeouts apropiados</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-18-1">1</a></span>
-<span class="normal"><a href="#__codelineno-18-2">2</a></span>
-<span class="normal"><a href="#__codelineno-18-3">3</a></span>
-<span class="normal"><a href="#__codelineno-18-4">4</a></span>
-<span class="normal"><a href="#__codelineno-18-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="c1"># Desarrollo: timeouts cortos</span>
-<a id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
-<a id="__codelineno-18-3" name="__codelineno-18-3"></a>
-<a id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="c1"># Producción: timeouts más largos</span>
-<a id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Desarrollo: timeouts cortos</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># Producción: timeouts más largos</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">60</span>
+</code></pre></div></p>
 </li>
 <li>
 <p><strong>Ajustar rate limits según uso</strong>
-   <div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span>
-<span class="normal"><a href="#__codelineno-19-2">2</a></span>
-<span class="normal"><a href="#__codelineno-19-3">3</a></span>
-<span class="normal"><a href="#__codelineno-19-4">4</a></span>
-<span class="normal"><a href="#__codelineno-19-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="c1"># Desarrollo: límites bajos</span>
-<a id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">50</span>
-<a id="__codelineno-19-3" name="__codelineno-19-3"></a>
-<a id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="c1"># Producción: límites altos</span>
-<a id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">200</span>
-</code></pre></div></td></tr></table></div></p>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Desarrollo: límites bajos</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">50</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Producción: límites altos</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">200</span>
+</code></pre></div></p>
 </li>
 </ol>
 <h2 id="template-de-variables">Template de Variables<a class="headerlink" href="#template-de-variables" title="Permanent link">&para;</a></h2>
 <h3 id="envtemplate">.env.template<a class="headerlink" href="#envtemplate" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-20-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-20-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-20-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-20-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-20-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-20-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-20-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-20-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-20-10">10</a></span>
-<span class="normal"><a href="#__codelineno-20-11">11</a></span>
-<span class="normal"><a href="#__codelineno-20-12">12</a></span>
-<span class="normal"><a href="#__codelineno-20-13">13</a></span>
-<span class="normal"><a href="#__codelineno-20-14">14</a></span>
-<span class="normal"><a href="#__codelineno-20-15">15</a></span>
-<span class="normal"><a href="#__codelineno-20-16">16</a></span>
-<span class="normal"><a href="#__codelineno-20-17">17</a></span>
-<span class="normal"><a href="#__codelineno-20-18">18</a></span>
-<span class="normal"><a href="#__codelineno-20-19">19</a></span>
-<span class="normal"><a href="#__codelineno-20-20">20</a></span>
-<span class="normal"><a href="#__codelineno-20-21">21</a></span>
-<span class="normal"><a href="#__codelineno-20-22">22</a></span>
-<span class="normal"><a href="#__codelineno-20-23">23</a></span>
-<span class="normal"><a href="#__codelineno-20-24">24</a></span>
-<span class="normal"><a href="#__codelineno-20-25">25</a></span>
-<span class="normal"><a href="#__codelineno-20-26">26</a></span>
-<span class="normal"><a href="#__codelineno-20-27">27</a></span>
-<span class="normal"><a href="#__codelineno-20-28">28</a></span>
-<span class="normal"><a href="#__codelineno-20-29">29</a></span>
-<span class="normal"><a href="#__codelineno-20-30">30</a></span>
-<span class="normal"><a href="#__codelineno-20-31">31</a></span>
-<span class="normal"><a href="#__codelineno-20-32">32</a></span>
-<span class="normal"><a href="#__codelineno-20-33">33</a></span>
-<span class="normal"><a href="#__codelineno-20-34">34</a></span>
-<span class="normal"><a href="#__codelineno-20-35">35</a></span>
-<span class="normal"><a href="#__codelineno-20-36">36</a></span>
-<span class="normal"><a href="#__codelineno-20-37">37</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="c1"># =============================================================================</span>
-<a id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="c1"># OPENAI-BACKSTAGE INTEGRATION - TEMPLATE</span>
-<a id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="c1"># =============================================================================</span>
-<a id="__codelineno-20-4" name="__codelineno-20-4"></a>
-<a id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="c1"># OpenAI Configuration</span>
-<a id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>your-openai-api-key-here
-<a id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
-<a id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="nv">OPENAI_MAX_TOKENS</span><span class="o">=</span><span class="m">2000</span>
-<a id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="nv">OPENAI_TEMPERATURE</span><span class="o">=</span><span class="m">0</span>.7
-<a id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
-<a id="__codelineno-20-11" name="__codelineno-20-11"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
-<a id="__codelineno-20-12" name="__codelineno-20-12"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
-<a id="__codelineno-20-13" name="__codelineno-20-13"></a>
-<a id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="c1"># Backstage Configuration</span>
-<a id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-20-16" name="__codelineno-20-16"></a><span class="nv">BACKSTAGE_BACKEND_URL</span><span class="o">=</span>http://localhost:8080/api
-<a id="__codelineno-20-17" name="__codelineno-20-17"></a><span class="nv">BACKSTAGE_FRONTEND_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-20-18" name="__codelineno-20-18"></a>
-<a id="__codelineno-20-19" name="__codelineno-20-19"></a><span class="c1"># Service URLs</span>
-<a id="__codelineno-20-20" name="__codelineno-20-20"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
-<a id="__codelineno-20-21" name="__codelineno-20-21"></a><span class="nv">OPENAI_SERVICE_HOST</span><span class="o">=</span>openai-service
-<a id="__codelineno-20-22" name="__codelineno-20-22"></a><span class="nv">OPENAI_SERVICE_PORT</span><span class="o">=</span><span class="m">8000</span>
-<a id="__codelineno-20-23" name="__codelineno-20-23"></a>
-<a id="__codelineno-20-24" name="__codelineno-20-24"></a><span class="c1"># Database</span>
-<a id="__codelineno-20-25" name="__codelineno-20-25"></a><span class="nv">POSTGRES_HOST</span><span class="o">=</span>ia-ops-postgres
-<a id="__codelineno-20-26" name="__codelineno-20-26"></a><span class="nv">POSTGRES_PORT</span><span class="o">=</span><span class="m">5432</span>
-<a id="__codelineno-20-27" name="__codelineno-20-27"></a><span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres
-<a id="__codelineno-20-28" name="__codelineno-20-28"></a><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>your-postgres-password
-<a id="__codelineno-20-29" name="__codelineno-20-29"></a><span class="nv">POSTGRES_DB</span><span class="o">=</span>backstage
-<a id="__codelineno-20-30" name="__codelineno-20-30"></a>
-<a id="__codelineno-20-31" name="__codelineno-20-31"></a><span class="c1"># Security</span>
-<a id="__codelineno-20-32" name="__codelineno-20-32"></a><span class="nv">CORS_ORIGIN</span><span class="o">=</span>http://localhost:3000,http://localhost:7007,http://localhost:8080
-<a id="__codelineno-20-33" name="__codelineno-20-33"></a><span class="nv">RATE_LIMIT_MAX_REQUESTS</span><span class="o">=</span><span class="m">100</span>
-<a id="__codelineno-20-34" name="__codelineno-20-34"></a>
-<a id="__codelineno-20-35" name="__codelineno-20-35"></a><span class="c1"># Monitoring</span>
-<a id="__codelineno-20-36" name="__codelineno-20-36"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
-<a id="__codelineno-20-37" name="__codelineno-20-37"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># =============================================================================</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1"># OPENAI-BACKSTAGE INTEGRATION - TEMPLATE</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1"># =============================================================================</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="c1"># OpenAI Configuration</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>your-openai-api-key-here
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="nv">OPENAI_MAX_TOKENS</span><span class="o">=</span><span class="m">2000</span>
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="nv">OPENAI_TEMPERATURE</span><span class="o">=</span><span class="m">0</span>.7
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="nv">OPENAI_DEMO_MODE</span><span class="o">=</span><span class="nb">false</span>
+<a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="nv">OPENAI_RATE_LIMIT</span><span class="o">=</span><span class="m">100</span>
+<a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="nv">OPENAI_TIMEOUT</span><span class="o">=</span><span class="m">30</span>
+<a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>
+<a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a><span class="c1"># Backstage Configuration</span>
+<a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a><span class="nv">BACKSTAGE_BACKEND_URL</span><span class="o">=</span>http://localhost:8080/api
+<a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="nv">BACKSTAGE_FRONTEND_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a>
+<a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a><span class="c1"># Service URLs</span>
+<a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
+<a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a><span class="nv">OPENAI_SERVICE_HOST</span><span class="o">=</span>openai-service
+<a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a><span class="nv">OPENAI_SERVICE_PORT</span><span class="o">=</span><span class="m">8000</span>
+<a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a>
+<a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a><span class="c1"># Database</span>
+<a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a><span class="nv">POSTGRES_HOST</span><span class="o">=</span>ia-ops-postgres
+<a id="__codelineno-20-26" name="__codelineno-20-26" href="#__codelineno-20-26"></a><span class="nv">POSTGRES_PORT</span><span class="o">=</span><span class="m">5432</span>
+<a id="__codelineno-20-27" name="__codelineno-20-27" href="#__codelineno-20-27"></a><span class="nv">POSTGRES_USER</span><span class="o">=</span>postgres
+<a id="__codelineno-20-28" name="__codelineno-20-28" href="#__codelineno-20-28"></a><span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span>your-postgres-password
+<a id="__codelineno-20-29" name="__codelineno-20-29" href="#__codelineno-20-29"></a><span class="nv">POSTGRES_DB</span><span class="o">=</span>backstage
+<a id="__codelineno-20-30" name="__codelineno-20-30" href="#__codelineno-20-30"></a>
+<a id="__codelineno-20-31" name="__codelineno-20-31" href="#__codelineno-20-31"></a><span class="c1"># Security</span>
+<a id="__codelineno-20-32" name="__codelineno-20-32" href="#__codelineno-20-32"></a><span class="nv">CORS_ORIGIN</span><span class="o">=</span>http://localhost:3000,http://localhost:7007,http://localhost:8080
+<a id="__codelineno-20-33" name="__codelineno-20-33" href="#__codelineno-20-33"></a><span class="nv">RATE_LIMIT_MAX_REQUESTS</span><span class="o">=</span><span class="m">100</span>
+<a id="__codelineno-20-34" name="__codelineno-20-34" href="#__codelineno-20-34"></a>
+<a id="__codelineno-20-35" name="__codelineno-20-35" href="#__codelineno-20-35"></a><span class="c1"># Monitoring</span>
+<a id="__codelineno-20-36" name="__codelineno-20-36" href="#__codelineno-20-36"></a><span class="nv">LOG_LEVEL</span><span class="o">=</span>info
+<a id="__codelineno-20-37" name="__codelineno-20-37" href="#__codelineno-20-37"></a><span class="nv">DEBUG_MODE</span><span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
 <h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://platform.openai.com/docs">OpenAI API Documentation</a></li>
@@ -1355,8 +1207,6 @@
       </main>
       
         <footer class="md-footer">
-  
-    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1395,12 +1245,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "navigation.footer", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
-      
-        <script src="../search/main.js"></script>
       
     
   </body>

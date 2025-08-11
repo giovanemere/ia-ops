@@ -108,18 +108,42 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: 📦 Install MkDocs
+    - name: 📦 Install MkDocs and dependencies
       run: |
+        pip install --upgrade pip
         pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
 
     - name: 🏗️ Build documentation
       run: |
-        if [ -f "mkdocs.yml" ]; then
-          echo "📚 Building MkDocs documentation..."
-          mkdocs build --strict
+        if [ -f "mkdocs.ci.yml" ]; then
+          echo "📚 Building MkDocs documentation with CI configuration..."
+          mkdocs build --config-file mkdocs.ci.yml --strict
+          echo "✅ Documentation built successfully with CI config"
+        elif [ -f "mkdocs.yml" ]; then
+          echo "📚 Building MkDocs documentation with default configuration..."
+          # Try to build with default config, but handle techdocs-core gracefully
+          if mkdocs build --strict 2>&1 | grep -q "techdocs-core"; then
+            echo "⚠️ techdocs-core plugin not available in CI, using alternative approach"
+            # Create a temporary config without techdocs-core
+            sed 's/- techdocs-core/# - techdocs-core (disabled in CI)/' mkdocs.yml > mkdocs.temp.yml
+            mkdocs build --config-file mkdocs.temp.yml --strict
+            rm mkdocs.temp.yml
+          else
+            mkdocs build --strict
+          fi
           echo "✅ Documentation built successfully"
         else
-          echo "⚠️ MkDocs configuration not found, skipping documentation build"
+          echo "⚠️ No MkDocs configuration found, skipping documentation build"
+        fi
+
+    - name: 📋 Validate documentation structure
+      run: |
+        if [ -d "site" ]; then
+          echo "✅ Documentation site generated"
+          echo "📊 Site structure:"
+          find site -type f -name "*.html" | head -10
+        else
+          echo "⚠️ No site directory generated"
         fi
 
   security-scan:
@@ -208,16 +232,29 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: 📦 Install MkDocs
+    - name: 📦 Install MkDocs and dependencies
       run: |
+        pip install --upgrade pip
         pip install mkdocs mkdocs-material mkdocs-mermaid2-plugin
 
     - name: 🚀 Deploy to GitHub Pages
       if: github.ref == 'refs/heads/trunk'
       run: |
-        if [ -f "mkdocs.yml" ]; then
+        if [ -f "mkdocs.ci.yml" ]; then
+          echo "🚀 Deploying documentation to GitHub Pages with CI config..."
+          mkdocs gh-deploy --config-file mkdocs.ci.yml --force
+          echo "✅ Documentation deployed successfully with CI config"
+        elif [ -f "mkdocs.yml" ]; then
           echo "🚀 Deploying documentation to GitHub Pages..."
-          mkdocs gh-deploy --force
+          # Handle techdocs-core gracefully for deployment
+          if mkdocs build 2>&1 | grep -q "techdocs-core"; then
+            echo "⚠️ Using alternative deployment approach due to techdocs-core"
+            sed 's/- techdocs-core/# - techdocs-core (disabled in CI)/' mkdocs.yml > mkdocs.temp.yml
+            mkdocs gh-deploy --config-file mkdocs.temp.yml --force
+            rm mkdocs.temp.yml
+          else
+            mkdocs gh-deploy --force
+          fi
           echo "✅ Documentation deployed successfully"
         else
           echo "⚠️ MkDocs configuration not found, skipping deployment"

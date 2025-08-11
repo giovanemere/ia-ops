@@ -1,8 +1,9 @@
 #!/bin/bash
 # =============================================================================
-# SCRIPT INTEGRADO DE INICIO: IA-OPS + ICBS
+# SCRIPT INTEGRADO DE INICIO: IA-OPS + ICBS (CON AUTO-CORRECCIÓN)
 # =============================================================================
-# Descripción: Inicia todos los servicios de forma coordinada
+# Descripción: Inicia todos los servicios de forma coordinada con auto-corrección
+# Incluye: Corrección automática de HAProxy y otras imágenes ICBS
 # Autor: IA-Ops Team
 # Fecha: $(date +"%Y-%m-%d")
 # =============================================================================
@@ -26,8 +27,10 @@ BACKSTAGE_DIR="$IA_OPS_DIR/applications/backstage"
 show_banner() {
     echo -e "${CYAN}"
     echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║                    IA-OPS + ICBS PLATFORM                   ║"
-    echo "║              Startup Integrado y Coordinado                 ║"
+    echo "║                IA-OPS + ICBS PLATFORM v2.1                  ║"
+    echo "║          Startup Integrado con Auto-Corrección              ║"
+    echo "║                                                              ║"
+    echo "║  🔧 Incluye corrección automática de HAProxy e imágenes     ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 }

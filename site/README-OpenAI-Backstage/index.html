@@ -26,6 +26,9 @@
     
       <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
       
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
       
 
 
@@ -53,7 +56,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -107,6 +117,34 @@
       </div>
     </div>
     
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
     
@@ -913,41 +951,31 @@
 </ul>
 <h2 id="scripts-disponibles">🛠️ Scripts Disponibles<a class="headerlink" href="#scripts-disponibles" title="Permanent link">&para;</a></h2>
 <h3 id="1-validacion-de-configuracion">1. Validación de Configuración<a class="headerlink" href="#1-validacion-de-configuracion" title="Permanent link">&para;</a></h3>
-<p><div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a>./scripts/validate-openai-backstage-env.sh
-</code></pre></div></td></tr></table></div>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/validate-openai-backstage-env.sh
+</code></pre></div>
 - ✅ <strong>Funcional</strong>: Sí
 - 🔍 <strong>Valida</strong>: Variables críticas, formatos, conectividad
 - 📊 <strong>Resultado</strong>: ✅ Todas las validaciones pasaron</p>
 <h3 id="2-tests-de-integracion">2. Tests de Integración<a class="headerlink" href="#2-tests-de-integracion" title="Permanent link">&para;</a></h3>
-<p><div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a>./scripts/test-openai-backstage-integration.sh
-</code></pre></div></td></tr></table></div>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/test-openai-backstage-integration.sh
+</code></pre></div>
 - ✅ <strong>Funcional</strong>: Sí
 - 🧪 <strong>Prueba</strong>: Servicios, conectividad, funcionalidad, seguridad
 - 📊 <strong>Cobertura</strong>: Tests HTTP, JSON, CORS, rate limiting</p>
 <h2 id="archivos-de-configuracion">📁 Archivos de Configuración<a class="headerlink" href="#archivos-de-configuracion" title="Permanent link">&para;</a></h2>
 <h3 id="1-variables-de-entorno-env">1. Variables de Entorno (<code>.env</code>)<a class="headerlink" href="#1-variables-de-entorno-env" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-2-10">10</a></span>
-<span class="normal"><a href="#__codelineno-2-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Variables críticas configuradas ✅</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-proj-...
-<a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
-<a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
-<a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
-<a id="__codelineno-2-6" name="__codelineno-2-6"></a>
-<a id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="c1"># Nuevas variables agregadas ✅</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="nv">OPENAI_BACKSTAGE_PROXY_PATH</span><span class="o">=</span>/openai
-<a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="nv">OPENAI_BACKSTAGE_ENABLED</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="nv">OPENAI_KNOWLEDGE_BASE_ENABLED</span><span class="o">=</span><span class="nb">true</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="nv">OPENAI_EMBEDDINGS_MODEL</span><span class="o">=</span>text-embedding-3-small
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Variables críticas configuradas ✅</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-proj-...
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nv">OPENAI_MODEL</span><span class="o">=</span>gpt-4o-mini
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">BACKSTAGE_BASE_URL</span><span class="o">=</span>http://localhost:8080
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nv">OPENAI_SERVICE_URL</span><span class="o">=</span>http://openai-service:8000
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Nuevas variables agregadas ✅</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nv">OPENAI_BACKSTAGE_PROXY_PATH</span><span class="o">=</span>/openai
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nv">OPENAI_BACKSTAGE_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="nv">OPENAI_KNOWLEDGE_BASE_ENABLED</span><span class="o">=</span><span class="nb">true</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="nv">OPENAI_EMBEDDINGS_MODEL</span><span class="o">=</span>text-embedding-3-small
+</code></pre></div>
 <h3 id="2-configuracion-del-proxy-configbackstageproxy-configyaml">2. Configuración del Proxy (<code>config/backstage/proxy-config.yaml</code>)<a class="headerlink" href="#2-configuracion-del-proxy-configbackstageproxy-configyaml" title="Permanent link">&para;</a></h3>
 <ul>
 <li>✅ <strong>Estado</strong>: Creada</li>
@@ -961,33 +989,28 @@
 </ul>
 <h2 id="estado-de-la-integracion">🚀 Estado de la Integración<a class="headerlink" href="#estado-de-la-integracion" title="Permanent link">&para;</a></h2>
 <h3 id="completado">✅ Completado<a class="headerlink" href="#completado" title="Permanent link">&para;</a></h3>
-<ul class="task-list">
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Documentación completa</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Scripts de validación y testing</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Configuración de variables de entorno</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Configuración del proxy de Backstage</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Health checks y monitoreo</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Modo demo para desarrollo</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Seguridad y CORS</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Rate limiting</li>
+<ul>
+<li>[x] Documentación completa</li>
+<li>[x] Scripts de validación y testing</li>
+<li>[x] Configuración de variables de entorno</li>
+<li>[x] Configuración del proxy de Backstage</li>
+<li>[x] Health checks y monitoreo</li>
+<li>[x] Modo demo para desarrollo</li>
+<li>[x] Seguridad y CORS</li>
+<li>[x] Rate limiting</li>
 </ul>
 <h3 id="configuracion-actual">🔄 Configuración Actual<a class="headerlink" href="#configuracion-actual" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
-<span class="normal"><a href="#__codelineno-3-2">2</a></span>
-<span class="normal"><a href="#__codelineno-3-3">3</a></span>
-<span class="normal"><a href="#__codelineno-3-4">4</a></span>
-<span class="normal"><a href="#__codelineno-3-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a>🤖 OpenAI Service: http://localhost:8000
-<a id="__codelineno-3-2" name="__codelineno-3-2"></a>🏛️ Backstage: http://localhost:8080
-<a id="__codelineno-3-3" name="__codelineno-3-3"></a>🔗 Proxy OpenAI: http://localhost:7007/api/proxy/openai
-<a id="__codelineno-3-4" name="__codelineno-3-4"></a>📊 Modo Demo: Activado (desarrollo)
-<a id="__codelineno-3-5" name="__codelineno-3-5"></a>🔑 API Key: Configurada
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>🤖 OpenAI Service: http://localhost:8000
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>🏛️ Backstage: http://localhost:8080
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>🔗 Proxy OpenAI: http://localhost:7007/api/proxy/openai
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>📊 Modo Demo: Activado (desarrollo)
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>🔑 API Key: Configurada
+</code></pre></div>
 <h2 id="proximos-pasos-recomendados">🎯 Próximos Pasos Recomendados<a class="headerlink" href="#proximos-pasos-recomendados" title="Permanent link">&para;</a></h2>
 <h3 id="1-desarrollo-de-plugins">1. Desarrollo de Plugins<a class="headerlink" href="#1-desarrollo-de-plugins" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
-<span class="normal"><a href="#__codelineno-4-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1"># Crear plugin de Backstage con integración OpenAI</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2"></a>npx<span class="w"> </span>@backstage/create-app<span class="w"> </span>--path<span class="w"> </span>./backstage-plugins/openai-assistant
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Crear plugin de Backstage con integración OpenAI</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>npx<span class="w"> </span>@backstage/create-app<span class="w"> </span>--path<span class="w"> </span>./backstage-plugins/openai-assistant
+</code></pre></div>
 <h3 id="2-casos-de-uso-especificos">2. Casos de Uso Específicos<a class="headerlink" href="#2-casos-de-uso-especificos" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Asistente de Documentación</strong>: Generar docs automáticamente</li>
@@ -1002,35 +1025,23 @@
 </ul>
 <h2 id="comandos-de-mantenimiento">🔧 Comandos de Mantenimiento<a class="headerlink" href="#comandos-de-mantenimiento" title="Permanent link">&para;</a></h2>
 <h3 id="validacion-rapida">Validación Rápida<a class="headerlink" href="#validacion-rapida" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
-<span class="normal"><a href="#__codelineno-5-2">2</a></span>
-<span class="normal"><a href="#__codelineno-5-3">3</a></span>
-<span class="normal"><a href="#__codelineno-5-4">4</a></span>
-<span class="normal"><a href="#__codelineno-5-5">5</a></span>
-<span class="normal"><a href="#__codelineno-5-6">6</a></span>
-<span class="normal"><a href="#__codelineno-5-7">7</a></span>
-<span class="normal"><a href="#__codelineno-5-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1"># Validar configuración</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2"></a>./scripts/validate-openai-backstage-env.sh
-<a id="__codelineno-5-3" name="__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="c1"># Test completo</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5"></a>./scripts/test-openai-backstage-integration.sh
-<a id="__codelineno-5-6" name="__codelineno-5-6"></a>
-<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="c1"># Ver logs</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8"></a>docker<span class="w"> </span>logs<span class="w"> </span>ia-ops-openai-service
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Validar configuración</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>./scripts/validate-openai-backstage-env.sh
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Test completo</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>./scripts/test-openai-backstage-integration.sh
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Ver logs</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>docker<span class="w"> </span>logs<span class="w"> </span>ia-ops-openai-service
+</code></pre></div>
 <h3 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
-<span class="normal"><a href="#__codelineno-6-2">2</a></span>
-<span class="normal"><a href="#__codelineno-6-3">3</a></span>
-<span class="normal"><a href="#__codelineno-6-4">4</a></span>
-<span class="normal"><a href="#__codelineno-6-5">5</a></span>
-<span class="normal"><a href="#__codelineno-6-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1"># Reiniciar servicios</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2"></a>docker-compose<span class="w"> </span>restart<span class="w"> </span>openai-service<span class="w"> </span>backstage-backend
-<a id="__codelineno-6-3" name="__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="c1"># Verificar conectividad</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5"></a>curl<span class="w"> </span>http://localhost:8000/health
-<a id="__codelineno-6-6" name="__codelineno-6-6"></a>curl<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Reiniciar servicios</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>docker-compose<span class="w"> </span>restart<span class="w"> </span>openai-service<span class="w"> </span>backstage-backend
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Verificar conectividad</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>curl<span class="w"> </span>http://localhost:8000/health
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>curl<span class="w"> </span>http://localhost:7007/api/proxy/openai/health
+</code></pre></div>
 <h2 id="metricas-de-calidad">📊 Métricas de Calidad<a class="headerlink" href="#metricas-de-calidad" title="Permanent link">&para;</a></h2>
 <h3 id="documentacion">Documentación<a class="headerlink" href="#documentacion" title="Permanent link">&para;</a></h3>
 <ul>
@@ -1063,28 +1074,18 @@
 <li><strong>🚀 Listo</strong>: Para desarrollo y producción</li>
 </ol>
 <h3 id="comandos-de-inicio-rapido">Comandos de Inicio Rápido<a class="headerlink" href="#comandos-de-inicio-rapido" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
-<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
-<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
-<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
-<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
-<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
-<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
-<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
-<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
-<span class="normal"><a href="#__codelineno-7-10">10</a></span>
-<span class="normal"><a href="#__codelineno-7-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1"># 1. Validar todo</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2"></a>./scripts/validate-openai-backstage-env.sh
-<a id="__codelineno-7-3" name="__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="c1"># 2. Iniciar servicios</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
-<a id="__codelineno-7-6" name="__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="c1"># 3. Probar integración</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8"></a>./scripts/test-openai-backstage-integration.sh
-<a id="__codelineno-7-9" name="__codelineno-7-9"></a>
-<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="c1"># 4. Acceder a Backstage</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11"></a>open<span class="w"> </span>http://localhost:8080
-</code></pre></div></td></tr></table></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># 1. Validar todo</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>./scripts/validate-openai-backstage-env.sh
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># 2. Iniciar servicios</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># 3. Probar integración</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>./scripts/test-openai-backstage-integration.sh
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="c1"># 4. Acceder a Backstage</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>open<span class="w"> </span>http://localhost:8080
+</code></pre></div>
 <p>¡La integración está lista para usar! 🎊</p>
 
 
@@ -1115,8 +1116,6 @@
       </main>
       
         <footer class="md-footer">
-  
-    
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1155,12 +1154,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "navigation.footer", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
       <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
-      
-        <script src="../search/main.js"></script>
       
     
   </body>
