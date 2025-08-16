@@ -1,32 +1,25 @@
 apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ia-ops
+  description: Plataforma principal IA-Ops con Backstage
+  annotations:
+    github.com/project-slug: giovanemere/ia-ops
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - platform
+    - framework
+    - ia-ops
+spec:
+  type: library
+  lifecycle: production
+  owner: ia-ops-team
+  system: ia-ops-platform
+---
+apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: ia-ops-platform
-  title: IA-Ops Platform
-  description: Plataforma integrada de IA y DevOps con Backstage
-  annotations:
-    backstage.io/techdocs-ref: dir:.
-    github.com/project-slug: giovanemere/ia-ops
-    backstage.io/source-location: url:https://github.com/giovanemere/ia-ops
-  tags:
-    - platform
-    - ai
-    - devops
-    - backstage
-  links:
-    - url: https://github.com/giovanemere/ia-ops
-      title: Main Repository
-      icon: github
-    - url: http://localhost:8080
-      title: Backstage Portal
-      icon: web
-    - url: http://localhost:8080/openai
-      title: OpenAI Service
-      icon: chat
-    - url: https://giovanemere.github.io/ia-ops/
-      title: Documentation
-      icon: docs
+  description: Plataforma integrada de IA y DevOps
 spec:
-  owner: platform-team
-  domain: ia-ops
-  lifecycle: production
+  owner: ia-ops-team
