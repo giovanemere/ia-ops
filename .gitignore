@@ -1,0 +1,58 @@
+# IA-Ops Portal - Excluir subdirectorios de repositorios
+ia-ops-*/
+!ia-ops-*/.gitkeep
+
+# Archivos temporales
+*.tmp
+*.log
+*.pid
+*.lock
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Backups
+*.backup
+*.bak
+*.old
+backups/
+backups-root/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+.env.local
+.env.production

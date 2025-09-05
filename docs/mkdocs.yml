@@ -1,0 +1,57 @@
+site_name: IA-Ops Portal Documentation
+site_description: Portal principal para gestión inteligente de proyectos y operaciones
+
+nav:
+  - Home: index.md
+  - Architecture:
+    - Overview: architecture/overview.md
+    - Components: architecture/components.md
+    - Data Flow: architecture/data-flow.md
+  - Modules:
+    - Business Ideas: modules/business-ideas.md
+    - Provider Connectors: modules/providers.md
+    - Task Structure: modules/task-structure.md
+    - Refinement Workspace: modules/refinement.md
+    - Submission & Tracking: modules/submission.md
+  - Providers:
+    - Jira Integration: providers/jira.md
+    - Azure DevOps: providers/azure.md
+    - GitHub: providers/github.md
+    - Custom Providers: providers/custom.md
+  - Configuration:
+    - Setup: config/setup.md
+    - Environment: config/environment.md
+    - Organizational Structure: config/org-structure.md
+  - API Reference:
+    - Business Ideas API: api/business-ideas.md
+    - Providers API: api/providers.md
+    - Tasks API: api/tasks.md
+  - Deployment:
+    - Development: deployment/development.md
+    - Production: deployment/production.md
+    - Docker: deployment/docker.md
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+
+plugins:
+  - search
+  - mermaid2
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
