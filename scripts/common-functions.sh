@@ -38,7 +38,8 @@ show_service_urls() {
     
     # Servicios principales
     echo "  🎭 Backstage: http://localhost:3000 $(is_port_active 3000 && echo "✅" || echo "❌")"
-    echo "  📚 Portal Docs: http://localhost:8845 $(is_port_active 8845 && echo "✅" || echo "❌")"
+    echo "  📚 Portal Docs (Frontend): http://localhost:8845 $(is_port_active 8845 && echo "✅" || echo "❌")"
+    echo "  🔧 Docs Backend: http://localhost:8846 $(is_port_active 8846 && echo "✅" || echo "❌")"
     echo "  🚀 Dev-Core API: http://localhost:8801 $(is_port_active 8801 && echo "✅" || echo "❌")"
     
     # Microservicios
@@ -120,10 +121,15 @@ show_help() {
     echo "  check         - Verificar puertos activos"
     echo "  check-restart - Verificar políticas de reinicio en docker-compose"
     echo "  diagnose      - Diagnóstico completo del sistema"
+    echo ""
+    echo "Comandos de repositorios:"
+    echo "  update-repos  - Actualizar todos los repositorios y crear release"
+    echo "  check-repos   - Verificar estado de todos los repositorios"
+    echo ""
     echo "  help          - Mostrar esta ayuda"
     echo ""
     echo "Ejemplos:"
     echo "  ./scripts/manage.sh start"
-    echo "  ./scripts/manage.sh diagnose"
+    echo "  ./scripts/manage.sh update-repos"
     echo "  ./scripts/manage.sh check-restart"
 }

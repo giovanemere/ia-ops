@@ -44,6 +44,14 @@ case "$1" in
         echo "🔍 Verificando políticas de reinicio..."
         $SCRIPTS_DIR/check-restart-policies.sh
         ;;
+    "update-repos")
+        echo "🚀 Actualizando todos los repositorios..."
+        $SCRIPTS_DIR/update-all-repos.sh
+        ;;
+    "check-repos")
+        echo "🔍 Verificando estado de repositorios..."
+        $SCRIPTS_DIR/check-repos-status.sh
+        ;;
     # "guard")
     #     case "$2" in
     #         "start"|"stop"|"restart"|"status"|"logs")
