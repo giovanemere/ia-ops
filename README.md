@@ -2,6 +2,29 @@
 
 Portal principal que integra todos los módulos de la solución IA-Ops para gestión inteligente de proyectos y operaciones.
 
+## 📦 Repositorios Requeridos
+
+Para que el sistema funcione correctamente, debes clonar los siguientes repositorios en el directorio base:
+
+```bash
+# Clonar repositorio principal
+git clone https://github.com/giovanemere/ia-ops.git
+cd ia-ops
+
+# Clonar módulos de servicios
+git clone https://github.com/giovanemere/ia-ops-postgress.git
+git clone https://github.com/giovanemere/ia-ops-minio.git
+git clone https://github.com/giovanemere/ia-ops-dev-core.git
+git clone https://github.com/giovanemere/ia-ops-openai.git
+git clone https://github.com/giovanemere/ia-ops-veritas.git
+git clone https://github.com/giovanemere/ia-ops-docs.git
+git clone https://github.com/giovanemere/ia-ops-backstage.git
+
+# Módulos adicionales (opcionales)
+git clone https://github.com/giovanemere/ia-ops-framework.git
+git clone https://github.com/giovanemere/ia-ops-guard.git
+```
+
 ## 🚀 Gestión de Servicios
 
 ```bash
