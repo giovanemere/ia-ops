@@ -30,7 +30,7 @@ for service in "${SERVICES[@]}"; do
                 ./scripts/manage.sh start
                 ;;
             "ia-ops-dev-core")
-                ./manage-complete.sh start
+                ./scripts/start.sh
                 ;;
             "openai-service")
                 ./start-isolated.sh
