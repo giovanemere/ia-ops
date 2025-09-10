@@ -3,7 +3,7 @@
 set -e
 
 BASE_DIR="/home/giovanemere/ia-ops"
-# Orden por dependencias de red: DB -> Storage -> Core -> Apps
+# Orden por dependencias de red: DB -> Storage -> Core -> Apps -> Frontend
 SERVICES=(
     "ia-ops-postgress"
     "ia-ops-minio"
@@ -12,6 +12,11 @@ SERVICES=(
     "ia-ops-veritas"
     "ia-ops-docs"
 )
+
+# Servicios opcionales (se inician solo si se solicita)
+# OPTIONAL_SERVICES=(
+#     "ia-ops-guard"  # Temporalmente deshabilitado
+# )
 
 echo "🔍 Verificando red..."
 docker network create iaops-network 2>/dev/null || true
@@ -33,13 +38,16 @@ for service in "${SERVICES[@]}"; do
                 ./scripts/start.sh
                 ;;
             "openai-service")
-                ./start-isolated.sh
+                ./start-integrated.sh start
                 ;;
             "ia-ops-veritas")
-                ./scripts/start-unified.sh
+                ./scripts/manage.sh start
                 ;;
             "ia-ops-docs")
                 ./start_portal.sh
+                ;;
+            "ia-ops-guard")
+                ./manage-integrated.sh start
                 ;;
         esac
         
@@ -47,12 +55,14 @@ for service in "${SERVICES[@]}"; do
     fi
 done
 
-echo "🎭 Backstage..."
+echo "✅ Servicios principales iniciados"
+
+echo "🎭 Iniciando Backstage (en segundo plano)..."
 cd "$BASE_DIR/ia-ops-backstage"
 if [ -f "./scripts/start-development.sh" ]; then
-    ./scripts/start-development.sh
+    nohup ./scripts/start-development.sh > backstage.log 2>&1 &
 else
-    yarn dev
+    nohup yarn dev > backstage.log 2>&1 &
 fi
 
-echo "✅ Servicios iniciados (volúmenes preservados)"
+echo "✅ Todos los servicios iniciados (volúmenes preservados)"

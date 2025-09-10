@@ -1,78 +1,50 @@
 #!/bin/bash
 
+# Cargar funciones comunes
+source "$(dirname "$0")/common-functions.sh"
+
 echo "🚀 INICIANDO SERVICIOS FALTANTES"
 echo "================================="
 
-BASE_DIR="/home/giovanemere/ia-ops"
-
-# Función para verificar si un puerto está activo
-is_port_active() {
-    ss -tln | grep -q ":$1 "
-}
-
-# Función para iniciar servicio si no está activo
-start_if_needed() {
-    local port=$1
-    local name=$2
-    local dir=$3
-    local script=$4
-    
-    if is_port_active $port; then
-        echo "✅ $name ya está activo (puerto $port)"
-    else
-        echo "🔄 Iniciando $name..."
-        cd "$BASE_DIR/$dir"
-        if [ -f "$script" ]; then
-            ./$script
-            sleep 5
-            if is_port_active $port; then
-                echo "✅ $name iniciado correctamente"
-            else
-                echo "❌ Error al iniciar $name"
-            fi
-        else
-            echo "❌ Script no encontrado: $script"
-        fi
-    fi
-}
+echo ""
+echo "1️⃣ Iniciando Dev-Core API..."
+start_if_needed 8801 "Dev-Core API" "ia-ops-dev-core" "start.sh"
 
 echo ""
-echo "1️⃣ Iniciando Portal de Documentación..."
+echo "2️⃣ Iniciando Portal de Documentación..."
 start_if_needed 8845 "Docs Portal" "ia-ops-docs" "start_portal.sh"
 
 echo ""
-echo "2️⃣ Iniciando Backstage Frontend..."
-start_if_needed 3000 "Backstage" "ia-ops-backstage" "scripts/start-development.sh"
+echo "3️⃣ Iniciando Veritas (Testing)..."
+start_if_needed 8869 "Veritas" "ia-ops-veritas" "scripts/manage.sh start"
 
 echo ""
-echo "3️⃣ Iniciando Veritas (Testing)..."
-start_if_needed 8869 "Veritas" "ia-ops-veritas" "scripts/start-unified.sh"
+echo "4️⃣ Iniciando Backstage Frontend (en segundo plano)..."
+if ! is_port_active 3000; then
+    echo "🔄 Iniciando Backstage..."
+    cd "$BASE_DIR/ia-ops-backstage"
+    if [ -f "./scripts/start-development.sh" ]; then
+        nohup ./scripts/start-development.sh > backstage.log 2>&1 &
+    else
+        nohup yarn dev > backstage.log 2>&1 &
+    fi
+    echo "✅ Backstage iniciado en segundo plano"
+else
+    echo "✅ Backstage ya está activo (puerto 3000)"
+fi
 
 echo ""
 echo "🔍 Verificando estado final..."
-sleep 3
+sleep 5
 
 echo ""
 echo "📊 ESTADO FINAL:"
 echo "================"
 
-if is_port_active 8845; then
-    echo "✅ Portal Docs: http://localhost:8845"
-else
-    echo "❌ Portal Docs: No disponible"
-fi
-
-if is_port_active 3000; then
-    echo "✅ Backstage: http://localhost:3000"
-else
-    echo "❌ Backstage: No disponible"
-fi
-
-if is_port_active 8869; then
-    echo "✅ Veritas: http://localhost:8869"
-else
-    echo "❌ Veritas: No disponible"
-fi
+is_port_active 8801 && echo "✅ Dev-Core API: http://localhost:8801" || echo "❌ Dev-Core API: No disponible"
+is_port_active 8845 && echo "✅ Portal Docs: http://localhost:8845" || echo "❌ Portal Docs: No disponible"
+is_port_active 8869 && echo "✅ Veritas: http://localhost:8869" || echo "❌ Veritas: No disponible"
+is_port_active 3000 && echo "✅ Backstage: http://localhost:3000" || echo "🔄 Backstage: Iniciando..."
 
 echo ""
 echo "🎯 URLs principales disponibles:"

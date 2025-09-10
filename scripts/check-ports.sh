@@ -47,7 +47,7 @@ check_service 8861 "Task Manager" ""
 check_service 8862 "Log Manager" ""
 check_service 8863 "DataSync Manager" ""
 check_service 8864 "GitHub Runner Manager" ""
-check_service 8865 "TechDocs Builder" ""
+# Eliminar línea de TechDocs Builder
 
 echo ""
 echo "📚 Documentación:"

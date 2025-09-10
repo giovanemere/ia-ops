@@ -2,5 +2,5 @@
 
 echo "🔄 Reiniciando Veritas..."
 cd ia-ops-veritas
-./scripts/restart.sh
+./scripts/manage.sh restart
 echo "✅ Veritas reiniciado"

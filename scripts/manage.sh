@@ -1,58 +1,74 @@
 #!/bin/bash
 
+# Directorio base
 BASE_DIR="/home/giovanemere/ia-ops"
-SCRIPTS_DIR="$BASE_DIR/scripts"
 
-show_help() {
-    echo "🔧 IA-Ops Management Script"
-    echo "=========================="
-    echo ""
-    echo "Uso: ./scripts/manage.sh [comando]"
-    echo ""
-    echo "Comandos disponibles:"
-    echo "  start      - Inicio inteligente (todos si no hay, faltantes si hay algunos)"
-    echo "  start-missing - Iniciar solo servicios faltantes"
-    echo "  restart    - Reinicio completo (stop + start) solo si hay servicios activos"
-    echo "  stop       - Detener todos los servicios"
-    echo "  status     - Estado detallado de servicios"
-    echo "  check      - Verificar puertos activos"
-    echo "  diagnose   - Diagnóstico completo del sistema"
-    echo "  help       - Mostrar esta ayuda"
-    echo ""
-    echo "Ejemplos:"
-    echo "  ./scripts/manage.sh start"
-    echo "  ./scripts/manage.sh diagnose"
-    echo "  ./scripts/manage.sh check"
-}
+# Cargar funciones comunes
+source "$(dirname "$0")/common-functions.sh"
 
 case "$1" in
     "start")
         echo "🚀 Iniciando servicios inteligentemente..."
         $SCRIPTS_DIR/smart-start.sh
+        show_service_urls
         ;;
     "start-missing")
         echo "🔄 Iniciando servicios faltantes..."
         $SCRIPTS_DIR/start-missing-services.sh
+        show_service_urls
         ;;
     "restart")
         echo "🔄 Reinicio inteligente de servicios..."
         $SCRIPTS_DIR/smart-restart.sh
+        echo ""
+        echo "⏳ Verificando servicios después del reinicio..."
+        sleep 5
+        show_service_urls
         ;;
     "stop")
         echo "🛑 Deteniendo servicios..."
         $SCRIPTS_DIR/stop.sh
+        show_service_urls
         ;;
     "status")
         echo "📊 Estado de servicios..."
         $SCRIPTS_DIR/status.sh
+        show_service_urls
         ;;
     "check")
         echo "🔍 Verificando puertos..."
         $SCRIPTS_DIR/check-ports.sh
+        show_service_urls
         ;;
+    "check-restart")
+        echo "🔍 Verificando políticas de reinicio..."
+        $SCRIPTS_DIR/check-restart-policies.sh
+        ;;
+    # "guard")
+    #     case "$2" in
+    #         "start"|"stop"|"restart"|"status"|"logs")
+    #             echo "🛡️ Gestionando IA-Ops Guard..."
+    #             cd "$BASE_DIR/ia-ops-guard"
+    #             ./manage-integrated.sh "$2"
+    #             ;;
+    #         *)
+    #             echo "🛡️ IA-Ops Guard Commands"
+    #             echo "========================"
+    #             echo "Uso: ./scripts/manage.sh guard [comando]"
+    #             echo ""
+    #             echo "Comandos:"
+    #             echo "  start   - Iniciar servicios de seguridad"
+    #             echo "  stop    - Detener servicios"
+    #             echo "  restart - Reiniciar servicios"
+    #             echo "  status  - Ver estado"
+    #             echo "  logs    - Ver logs"
+    #             ;;
+    #     esac
+    #     ;;
     "diagnose")
         echo "🔍 Diagnóstico completo..."
         $SCRIPTS_DIR/diagnose-services.sh
+        show_service_urls
         ;;
     "help"|"--help"|"-h"|"")
         show_help

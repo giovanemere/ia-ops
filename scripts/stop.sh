@@ -41,7 +41,7 @@ for ((i=${#SERVICES[@]}-1; i>=0; i--)); do
                 echo "  ✅ Docs portal detenido"
                 ;;
             "ia-ops-veritas")
-                docker-compose down 2>/dev/null || true
+                ./scripts/manage.sh stop 2>/dev/null || true
                 echo "  ✅ Veritas detenido"
                 ;;
             "ia-ops-openai")
@@ -49,7 +49,10 @@ for ((i=${#SERVICES[@]}-1; i>=0; i--)); do
                 echo "  ✅ OpenAI service detenido"
                 ;;
             "ia-ops-dev-core")
+                # Detener Service Layer principal
                 docker-compose down 2>/dev/null || true
+                # Detener microservicios
+                cd docker && docker-compose down 2>/dev/null || true
                 echo "  ✅ Dev-Core detenido"
                 ;;
             "ia-ops-minio")

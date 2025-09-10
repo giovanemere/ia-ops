@@ -65,7 +65,7 @@ check_port 8861 "Task Manager" && ((active_micro++))
 check_port 8862 "Log Manager" && ((active_micro++))
 check_port 8863 "DataSync Manager" && ((active_micro++))
 check_port 8864 "GitHub Runner Manager" && ((active_micro++))
-check_port 8865 "TechDocs Builder" && ((active_micro++))
+# TechDocs Builder eliminado de la solución
 
 echo ""
 echo "📚 DOCUMENTACIÓN:"
