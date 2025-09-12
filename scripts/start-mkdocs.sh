@@ -1,31 +1,34 @@
 #!/bin/bash
+# Script para iniciar MkDocs Multi-Repositorio
 
-# Script para iniciar el servidor MkDocs TechDocs desde el sistema principal
-# Integrado con el sistema de gestión IA-Ops
+MKDOCS_DIR="/home/giovanemere/ia-ops/ia-ops-mkdocs"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE_DIR="$(dirname "$SCRIPT_DIR")"
-MKDOCS_DIR="$BASE_DIR/ia-ops-mkdocs"
-
-echo "🚀 Iniciando MkDocs TechDocs Portal..."
-
-# Verificar que existe el directorio
-if [ ! -d "$MKDOCS_DIR" ]; then
-    echo "❌ Directorio ia-ops-mkdocs no encontrado en: $MKDOCS_DIR"
-    exit 1
-fi
-
-# Cambiar al directorio y ejecutar
-cd "$MKDOCS_DIR"
+echo "🚀 Iniciando MkDocs Multi-Repositorio..."
 
 # Verificar si ya está corriendo
-if lsof -i:8845 >/dev/null 2>&1; then
-    echo "⚠️  El servidor MkDocs ya está corriendo en puerto 8845"
-    echo "🌐 Acceso directo: http://localhost:8845"
-    echo "🔗 TechDocs URL: http://localhost:8845/techdocs"
+if pgrep -f "mkdocs-server.py" > /dev/null; then
+    echo "✅ MkDocs ya está corriendo"
+    echo "🌐 Disponible en: http://localhost:8854/"
     exit 0
 fi
 
-# Iniciar servidor
-echo "📖 Iniciando servidor en puerto 8845..."
-./start-server.sh
+# Iniciar servicio
+cd "$MKDOCS_DIR"
+if [ -f "mkdocs-env/bin/activate" ]; then
+    source mkdocs-env/bin/activate
+    nohup python3 mkdocs-server.py > mkdocs.log 2>&1 &
+    sleep 3
+    
+    if pgrep -f "mkdocs-server.py" > /dev/null; then
+        echo "✅ MkDocs iniciado correctamente"
+        echo "🌐 URL: http://localhost:8854/"
+        echo "📖 Repositorios: http://localhost:8854/{repo}/"
+    else
+        echo "❌ Error iniciando MkDocs"
+        exit 1
+    fi
+else
+    echo "❌ Entorno virtual no encontrado"
+    echo "💡 Ejecuta: cd $MKDOCS_DIR && python3 -m venv mkdocs-env"
+    exit 1
+fi
