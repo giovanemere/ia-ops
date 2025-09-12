@@ -40,6 +40,11 @@ git clone https://github.com/giovanemere/ia-ops-guard.git
 ./scripts/manage.sh diagnose       # Diagnóstico completo
 ./scripts/manage.sh check          # Verificar puertos
 ./scripts/manage.sh help           # Ayuda completa
+
+# Servidor MkDocs TechDocs (integrado con MinIO)
+./scripts/start-mkdocs.sh          # Iniciar servidor de documentación
+./scripts/start-full-portal.sh     # Iniciar portal completo (MinIO + MkDocs + Backstage)
+./scripts/start-integrated-portal.sh # Portal web integrado (todos los servicios en una interfaz)
 ```
 
 ## 🧠 Comportamiento Inteligente
@@ -56,13 +61,22 @@ git clone https://github.com/giovanemere/ia-ops-guard.git
 
 ## 📊 URLs Principales
 
+- **Portal Integrado**: http://localhost:8844 ✨
 - **Backstage**: http://localhost:3000
 - **Portal Docs**: http://localhost:8845 ✅
+- **TechDocs MkDocs**: http://localhost:8845/techdocs ✅ 
 - **Dev-Core API**: http://localhost:8801
 - **OpenAI API**: http://localhost:8000
 - **MinIO Console**: http://localhost:9899
 
 ## 🔧 Últimas Mejoras
+
+### v1.3.0 - MkDocs TechDocs Integrado
+- ✅ **MkDocs dinámico**: Sincronización automática desde MinIO
+- ✅ **Detección de repositorios**: Detecta automáticamente folders en MinIO
+- ✅ **Servidor integrado**: http://localhost:8845/techdocs
+- ✅ **Navegación dinámica**: Se genera automáticamente según contenido
+- ✅ **Entorno virtual**: Dependencias aisladas para MkDocs
 
 ### v1.2.0 - Gestión Inteligente de Servicios
 - ✅ **Inicio inteligente**: Detecta automáticamente qué servicios iniciar

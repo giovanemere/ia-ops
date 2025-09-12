@@ -1,0 +1,3 @@
+[submodule "ia-ops-mkdocs"]
+	path = ia-ops-mkdocs
+	url = https://github.com/giovanemere/ia-ops-mkdocs.git
